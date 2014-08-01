@@ -1,13 +1,31 @@
 package mgr.network;
 
+import java.util.Random;
+
 public class Dendrite{
 
     private Neuron inputNeuron;
     private Neuron outputNeuron;
     private double weight;
 
+    //dendrite between input and hidden neuron
+    public Dendrite(Neuron outputN){
+        this.outputNeuron = outputN;
+        setRandomWeigth();
+    }
+
+    public Dendrite(Neuron inputN, Neuron outputN){
+        this(outputN);
+        this.inputNeuron = inputN;
+    }
+
     public void setWeight(double w){
         this.weight = w;
+    }
+
+    public void setRandomWeigth(){
+        Random rand = new Random();
+        setWeight(rand.nextDouble());
     }
 
     public double getWeight(){
