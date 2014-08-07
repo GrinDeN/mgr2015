@@ -19,13 +19,13 @@ public class Dendrite{
         this.inputNeuron = inputN;
     }
 
-    public void setWeight(double w){
-        this.weight = w;
-    }
-
     public void setRandomWeigth(){
         Random rand = new Random();
         setWeight(rand.nextDouble());
+    }
+
+    public void setWeight(double w){
+        this.weight = w;
     }
 
     public double getWeight(){

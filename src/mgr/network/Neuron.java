@@ -10,20 +10,18 @@ public class Neuron{
     private double inputWeigthSum;
     private double output;
     private String name;
-    private final int inputSize;
     private double[] input;
 
     private ArrayList<Dendrite> connections;
 
     private static int neuronCount = 0;
 
-    public Neuron(int inputSize){
-        this.inputSize = inputSize + 1; // miejsce na "1"
-        this.input = new double[this.inputSize];
-        this.connections = new ArrayList<Dendrite>(this.inputSize);
+    public Neuron(){
         Neuron.neuronCount++;
         this.setName("Neuron " + neuronCount);
+        this.connections = new ArrayList<Dendrite>();
     }
+
 
     public String toString(){
         return name;
@@ -36,13 +34,14 @@ public class Neuron{
     private void calculateInputWeigthSum(){
         this.inputWeigthSum = 0;
         double sumResult = 0;
-        Dendrite[] connsArray = new Dendrite[connections.size()];
+        Dendrite[] connsArray = new Dendrite[this.connections.size()];
+        for (Dendrite den : this.connections) System.out.println("Waga dendrytu: " + den.getWeight());
         if (input.length != connsArray.length){
             throw new ArrayStoreException(
                     "Niewłaściwy rozmiar tablic - input: " + input.length
                             + " Dendrite: " + connsArray.length);
         }
-        connections.toArray(connsArray);
+        this.connections.toArray(connsArray);
         for (int i = 0; i < input.length; i++) {
             sumResult += input[i] * connsArray[i].getWeight();
         }
@@ -89,6 +88,7 @@ public class Neuron{
     }
 
     public void setInput(double[] input){
+        this.input = new double[input.length];
         this.input = input.clone();
     }
 

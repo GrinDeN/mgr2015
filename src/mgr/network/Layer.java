@@ -14,8 +14,6 @@ public abstract class Layer{
 
     public abstract void initialize();
 
-    protected double outputLayer;
-
     public abstract void updateWeights();
 
     public int getNumOfNeurons(){
@@ -26,7 +24,7 @@ public abstract class Layer{
         return this.name;
     }
 
-    public void setInput(double[] inputLayer){
+    public void setInput(final double[] inputLayer){
         this.inputToLayer = inputLayer.clone();
     }
 
