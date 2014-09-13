@@ -17,15 +17,13 @@ public class OutputLayer extends Layer {
 
     @Override
     public void initialize(){
-        for (int i = 1; i < this.getNumOfNeurons()+1; i++) {
-            this.neurons[i] = new Neuron();
-            for (int j = 1; j < hiddLayer.getNumOfNeurons()+1; j++) {
-                for (int k = 0; k < hiddLayer.getNumOfNeurons(); k++) {
-                    if (k == 0){
-                        this.neurons[i].addConnection(new Dendrite(this.neurons[i]));   //BIAS connection
-                    } else {
-                        this.neurons[i].addConnection(new Dendrite(hiddLayer.getNeuronAtIndex(k), this.neurons[i]));
-                    }
+        for (int neur = 1; neur < this.getNumOfNeurons()+1; neur++) {
+            this.neurons[neur] = new Neuron();
+            for (int k = 0; k <= hiddLayer.getNumOfNeurons(); k++) {
+                if (k == 0){
+                    this.neurons[neur].addConnection(new Dendrite(this.neurons[neur]));   //BIAS connection
+                } else {
+                    this.neurons[neur].addConnection(new Dendrite(hiddLayer.getNeuronAtIndex(k), this.neurons[neur]));
                 }
             }
         }
@@ -36,14 +34,13 @@ public class OutputLayer extends Layer {
 
     }
 
-    public double calculateOutput(){
+    public double getCalculateOutput(){
         this.outputOfLayer = 0;
-        for (int i = 1; i < this.getNumOfNeurons()+1; i++) {
-            for (int j = 0; j < this.inputToLayer.length; j++){
-                this.neurons[i].setInput(inputToLayer);
-                this.outputOfLayer += this.inputToLayer[j]*this.neurons[i].getConnWeigthAtIndex(j);
-            }
+        for (int neur = 1; neur < this.getNumOfNeurons()+1; neur++) {
+            this.neurons[neur].setInput(inputToLayer);
+            this.outputOfLayer += this.neurons[neur].getOutputNeuronResult();
         }
         return this.outputOfLayer;
     }
+
 }

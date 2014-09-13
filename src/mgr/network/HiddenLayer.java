@@ -24,11 +24,11 @@ public class HiddenLayer extends Layer{
         }
     }
 
-    public double[] calculateOutputArray(){
+    public double[] getCalculateOutputArray(){
         this.outputArray[0] = BIAS;     //setting the BIAS to further layer
         for (int i = 1; i < this.getNumOfNeurons()+1; i++){
             this.neurons[i].setInput(inputToLayer);
-            setOutputValue(i, this.neurons[i].getFinalOutput(ACTIVATE_FUNCTION));
+            this.setOutputValue(i, this.neurons[i].getHiddenNeuronResult(ACTIVATE_FUNCTION));
         }
         return this.outputArray;
     }
@@ -36,10 +36,6 @@ public class HiddenLayer extends Layer{
     private void setOutputValue(int index, double value){
         this.outputArray[index] = value;
     }
-
-//    public double[] getOutputArray(){
-//        return this.outputArray;
-//    }
 
     @Override
     public void updateWeights(){

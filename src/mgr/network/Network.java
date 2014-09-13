@@ -1,6 +1,7 @@
 package mgr.network;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static mgr.config.Config.*;
 
@@ -12,8 +13,10 @@ public class Network {
     private ArrayList<Layer> layers;
     private HiddenLayer hiddLayer;
     private OutputLayer outLayer;
+    private double[] networkInput;
 
-    public Network(){
+    public Network(final double[] input){
+        this.networkInput = Arrays.copyOf(input, input.length);
         this.layers = new ArrayList<Layer>(NUM_OF_LAYERS);
         this.hiddLayer = new HiddenLayer(HIDD_NEURONS);
         this.outLayer = new OutputLayer(OUT_NEURONS, this.hiddLayer);
@@ -32,10 +35,10 @@ public class Network {
         }
     }
 
-    public double calculateOutput(final double[] argValues){
-        this.hiddLayer.setInput(argValues);
-        this.outLayer.setInput(this.hiddLayer.calculateOutputArray());
-        return this.outLayer.calculateOutput();
+    public double calculateOutput(){
+        this.hiddLayer.setInput(networkInput);
+        this.outLayer.setInput(this.hiddLayer.getCalculateOutputArray());
+        return this.outLayer.getCalculateOutput();
     }
 
 }

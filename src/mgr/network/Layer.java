@@ -2,6 +2,8 @@ package mgr.network;
 
 import mgr.math.utils.ActivateFunc;
 
+import java.util.Arrays;
+
 public abstract class Layer{
 
     public final double BIAS = 1.0;
@@ -25,7 +27,7 @@ public abstract class Layer{
     }
 
     public void setInput(final double[] inputLayer){
-        this.inputToLayer = inputLayer.clone();
+        this.inputToLayer = Arrays.copyOf(inputLayer, inputLayer.length);
     }
 
     public Neuron getNeuronAtIndex(int index){
