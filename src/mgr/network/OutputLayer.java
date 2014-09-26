@@ -20,8 +20,8 @@ public class OutputLayer extends Layer {
         for (int neur = 1; neur < this.getNumOfNeurons()+1; neur++) {
             this.neurons[neur] = new Neuron();
             for (int k = 0; k <= hiddLayer.getNumOfNeurons(); k++) {
-                if (k == 0){
-                    this.neurons[neur].addConnection(new Dendrite(this.neurons[neur]));   //BIAS connection
+                if (k == BIAS_POSITION){
+                    this.neurons[neur].addConnection(new Dendrite(this.neurons[neur]));
                 } else {
                     this.neurons[neur].addConnection(new Dendrite(hiddLayer.getNeuronAtIndex(k), this.neurons[neur]));
                 }

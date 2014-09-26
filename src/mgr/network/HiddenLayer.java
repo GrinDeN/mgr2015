@@ -25,7 +25,7 @@ public class HiddenLayer extends Layer{
     }
 
     public double[] getCalculateOutputArray(){
-        this.outputArray[0] = BIAS;     //setting the BIAS to further layer
+        this.outputArray[BIAS_POSITION] = BIAS;
         for (int i = 1; i < this.getNumOfNeurons()+1; i++){
             this.neurons[i].setInput(inputToLayer);
             this.setOutputValue(i, this.neurons[i].getHiddenNeuronResult(ACTIVATE_FUNCTION));
