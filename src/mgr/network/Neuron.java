@@ -25,7 +25,6 @@ public class Neuron{
         this.connections = new ArrayList<Dendrite>();
     }
 
-
     public String toString(){
         return name;
     }

@@ -30,10 +30,6 @@ public class MathUtils{
         return result;
     }
 
-    private static double power(double first, double sec){
-        return Math.pow(first, sec);
-    }
-
     private static double uniSigmoid(double arg){
         return 1 / (1 + power(E, -BETA * arg));
     }
@@ -50,5 +46,9 @@ public class MathUtils{
     private static double biSigmoidDeriv(double arg){
         double mainResult = biSigmoid(arg);
         return 1-(power(mainResult, 2));
+    }
+
+    private static double power(double first, double sec){
+        return Math.pow(first, sec);
     }
 }
