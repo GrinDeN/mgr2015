@@ -35,6 +35,10 @@ public class Network {
         }
     }
 
+    public void setNetworkInput(double[] input){
+        this.networkInput = Arrays.copyOf(input, input.length);
+    }
+
     public double calculateOutput(){
         this.hiddLayer.setInput(networkInput);
         this.outLayer.setInput(this.hiddLayer.getCalculateOutputArray());

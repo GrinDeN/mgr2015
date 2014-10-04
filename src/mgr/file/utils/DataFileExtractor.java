@@ -1,6 +1,7 @@
 package mgr.file.utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -10,11 +11,11 @@ public class DataFileExtractor {
 
     //singleton IMHO, tak samo moze z DataFileReader
 
-    private ArrayList<Double> dataValues;
+    private ArrayList<ArrayList<Double>> dataValues;
     private ArrayList<Double> demandValues;
 
     public DataFileExtractor(List<String> allData){
-        dataValues = new ArrayList<Double>();
+        dataValues = new ArrayList<ArrayList<Double>>();
         demandValues = new ArrayList<Double>();
         extractData(allData);
     }
@@ -23,17 +24,39 @@ public class DataFileExtractor {
         List<String> allDataList = allData;
         for (String eachLine : allDataList){
             String[] lineValues = eachLine.split(" ");
-            setValuesToLists(lineValues);
+            int numOfLineElements = lineValues.length;
+            int positionOfDemandValue = getPositionOfDemand(numOfLineElements);
+            int numOfDataValues = getNumElementsOfData(numOfLineElements);
+            ArrayList<Double> innerElementOfDataList = new ArrayList<Double>();
+            for (int elem = 0; elem < numOfDataValues; elem++){
+                Double dataValue = Double.valueOf(lineValues[elem]);
+                innerElementOfDataList.add(dataValue);
+            }
+            addDataValues(innerElementOfDataList);
+            String demandValue = lineValues[positionOfDemandValue];
+            addDemandValue(demandValue);
         }
     }
 
-    private void setValuesToLists(String[] valuesArray){
-        dataValues.add(Double.valueOf(valuesArray[0]));
-        demandValues.add(Double.valueOf(valuesArray[1]));
+    private int getPositionOfDemand(int numOfAllElements){
+        return numOfAllElements-1;
     }
 
-    public ArrayList<Double> getDataValues(){
-        return this.dataValues;
+    private int getNumElementsOfData(int numOfAllElements){
+        return numOfAllElements-1;
+    }
+
+    private void addDataValues(ArrayList<Double> innerDataList){
+        dataValues.add(innerDataList);
+    }
+
+    private void addDemandValue(String demand){
+        Double demandVal = Double.valueOf(demand);
+        demandValues.add(demandVal);
+    }
+
+    public Iterator<ArrayList<Double>> getDataListIterator(){
+        return dataValues.iterator();
     }
 
     public ArrayList<Double> getDemandValues(){

@@ -6,6 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,8 +43,16 @@ public class DataFileReader {
         dfr.readData();
         System.out.println("Rozmiar wczytanej listy: "+ dfr.getValueList().size());
         DataFileExtractor dfe = new DataFileExtractor(dfr.getValueList());
-        System.out.println("Pierwszy element data: " + dfe.getDataValues().get(0));
-        System.out.println("Pierwszy element demand: " + dfe.getDemandValues().get(0));
+//        System.out.println("Pierwszy element data: " + dfe.getDataValueAtIndexes(0, 0));
+//        System.out.println("Pierwszy element demand: " + dfe.getDemandValues().get(0));
+        Iterator<ArrayList<Double>> dataIter = dfe.getDataListIterator();
+        while (dataIter.hasNext()){
+            Iterator<Double> valuesIter = dataIter.next().iterator();
+            while (valuesIter.hasNext()){
+                Double value = valuesIter.next();
+                System.out.println("Wartość sygnału: " + value);
+            }
+        }
     }
 
 }
