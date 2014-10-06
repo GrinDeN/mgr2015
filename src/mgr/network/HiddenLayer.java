@@ -1,6 +1,8 @@
 package mgr.network;
 
 import static mgr.config.Config.INPUT_SIZE;
+import static mgr.config.Config.BIAS_POSITION;
+import static mgr.config.Config.BIAS_VALUE;
 
 public class HiddenLayer extends Layer{
 
@@ -25,7 +27,7 @@ public class HiddenLayer extends Layer{
     }
 
     public double[] getCalculateOutputArray(){
-        this.outputArray[BIAS_POSITION] = BIAS;
+        this.outputArray[BIAS_POSITION] = BIAS_VALUE;
         for (int i = 1; i < this.getNumOfNeurons()+1; i++){
             this.neurons[i].setInput(inputToLayer);
             this.setOutputValue(i, this.neurons[i].getHiddenNeuronResult(ACTIVATE_FUNCTION));

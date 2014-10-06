@@ -38,13 +38,14 @@ public class DataFileReader {
     }
 
     public static void main(String[] args){
-        String filename = "dane_spr_grad.txt";
+        String filename = "dane.txt";
         DataFileReader dfr = new DataFileReader(filename);
         dfr.readData();
         System.out.println("Rozmiar wczytanej listy: "+ dfr.getValueList().size());
         DataFileExtractor dfe = new DataFileExtractor(dfr.getValueList());
+        dfe.extractData();
 //        System.out.println("Pierwszy element data: " + dfe.getDataValueAtIndexes(0, 0));
-//        System.out.println("Pierwszy element demand: " + dfe.getDemandValues().get(0));
+        System.out.println("Pierwszy element demand: " + dfe.getDemandValues().get(0));
         Iterator<ArrayList<Double>> dataIter = dfe.getDataListIterator();
         while (dataIter.hasNext()){
             Iterator<Double> valuesIter = dataIter.next().iterator();
@@ -52,6 +53,7 @@ public class DataFileReader {
                 Double value = valuesIter.next();
                 System.out.println("Wartość sygnału: " + value);
             }
+            System.out.println("-------------------------------------------");
         }
     }
 

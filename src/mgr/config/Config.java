@@ -10,6 +10,9 @@ public class Config {
     public static final int OUT_NEURONS = 1;
     public static final int INPUT_SIZE = 4;
 
+    public static final double BIAS_VALUE = 1.0;
+    public static final int BIAS_POSITION = 0;
+
     public static final boolean DEBUG = true;
 
 }

@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 public abstract class Layer{
 
-    protected final static double BIAS = 1.0;
-    protected final static int BIAS_POSITION = 0;
     public final ActivateFunc ACTIVATE_FUNCTION = ActivateFunc.SIGMOID_BI;
 
     protected int numOfNeurons;

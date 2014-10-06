@@ -11,28 +11,41 @@ public class DataFileExtractor {
 
     //singleton IMHO, tak samo moze z DataFileReader
 
+    private List<String> allFileData;
     private ArrayList<ArrayList<Double>> dataValues;
     private ArrayList<Double> demandValues;
+    private int numOfFileCols;
 
     public DataFileExtractor(List<String> allData){
+        allFileData = allData;
         dataValues = new ArrayList<ArrayList<Double>>();
         demandValues = new ArrayList<Double>();
-        extractData(allData);
+        numOfFileCols = getNumOfFileColumns();
+        allocateInnerDataLists();
     }
 
-    private void extractData(List<String> allData){
-        List<String> allDataList = allData;
-        for (String eachLine : allDataList){
+    private void allocateInnerDataLists(){
+        int correctSize = numOfFileCols-1;   //without last column - demand values
+        for (int i = 0; i < correctSize; i++) {
+            dataValues.add(new ArrayList<Double>());
+        }
+    }
+
+    private int getNumOfFileColumns(){
+        String[] firstLine = allFileData.get(0).split(" ");
+        int numOfFileCols = firstLine.length;
+        return numOfFileCols;
+    }
+
+    public void extractData(){
+        int positionOfDemandValue = getPositionOfDemand(numOfFileCols);
+        int numOfDataValues = getNumElementsOfData(numOfFileCols);
+        for (String eachLine : allFileData){
             String[] lineValues = eachLine.split(" ");
-            int numOfLineElements = lineValues.length;
-            int positionOfDemandValue = getPositionOfDemand(numOfLineElements);
-            int numOfDataValues = getNumElementsOfData(numOfLineElements);
-            ArrayList<Double> innerElementOfDataList = new ArrayList<Double>();
             for (int elem = 0; elem < numOfDataValues; elem++){
-                Double dataValue = Double.valueOf(lineValues[elem]);
-                innerElementOfDataList.add(dataValue);
+                int listPosition = elem;
+                addDataValues(listPosition, lineValues[elem]);
             }
-            addDataValues(innerElementOfDataList);
             String demandValue = lineValues[positionOfDemandValue];
             addDemandValue(demandValue);
         }
@@ -46,8 +59,9 @@ public class DataFileExtractor {
         return numOfAllElements-1;
     }
 
-    private void addDataValues(ArrayList<Double> innerDataList){
-        dataValues.add(innerDataList);
+    private void addDataValues(int numOfList, String data){
+        Double eachValue = Double.valueOf(data);
+        dataValues.get(numOfList).add(eachValue);
     }
 
     private void addDemandValue(String demand){

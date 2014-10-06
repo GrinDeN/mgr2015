@@ -1,8 +1,7 @@
 package mgr.network;
 
-/**
- * Created by Lukasz on 2014-08-01.
- */
+import static mgr.config.Config.BIAS_POSITION;
+
 public class OutputLayer extends Layer {
 
     private HiddenLayer hiddLayer;
