@@ -1,26 +1,23 @@
 package mgr.file.utils;
 
+import mgr.input.builder.InputBuilder;
+import mgr.input.builder.ParamPair;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by Lukasz on 2014-09-29.
- */
 public class DataFileReader {
 
     private String filename;
-    private ArrayList<ArrayList<Double>> values;
     private List<String> strValuesList;
 
     public DataFileReader(String filename){
         this.filename = filename;
-        values = new ArrayList<ArrayList<Double>>();
         strValuesList = new ArrayList<String>();
     }
 
@@ -38,22 +35,25 @@ public class DataFileReader {
     }
 
     public static void main(String[] args){
-        String filename = "dane.txt";
+        String filename = "dane_spr_grad.txt";
         DataFileReader dfr = new DataFileReader(filename);
         dfr.readData();
-        System.out.println("Rozmiar wczytanej listy: "+ dfr.getValueList().size());
         DataFileExtractor dfe = new DataFileExtractor(dfr.getValueList());
         dfe.extractData();
-//        System.out.println("Pierwszy element data: " + dfe.getDataValueAtIndexes(0, 0));
-        System.out.println("Pierwszy element demand: " + dfe.getDemandValues().get(0));
-        Iterator<ArrayList<Double>> dataIter = dfe.getDataListIterator();
-        while (dataIter.hasNext()){
-            Iterator<Double> valuesIter = dataIter.next().iterator();
-            while (valuesIter.hasNext()){
-                Double value = valuesIter.next();
-                System.out.println("Wartość sygnału: " + value);
-            }
-            System.out.println("-------------------------------------------");
+        ArrayList<ArrayList<Double>> dataValues = dfe.getDataValues();
+        ArrayList<Double> networkOutputs = new ArrayList<Double>();
+        networkOutputs.add(1.0);
+        networkOutputs.add(2.0);
+        networkOutputs.add(3.0);
+        networkOutputs.add(4.0);
+        ArrayList<ParamPair> params = new ArrayList<ParamPair>();
+        params.add(new ParamPair(1, 3));
+        params.add(new ParamPair(2));
+        InputBuilder inputBuild = new InputBuilder(dataValues, params);
+        inputBuild.build(4, networkOutputs);
+        ArrayList<Double> input = inputBuild.getInput();
+        for (int i = 0; i < input.size(); i++) {
+            System.out.println(i+". element wektora wejsciowego: "+input.get(i));
         }
     }
 

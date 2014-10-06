@@ -1,12 +1,8 @@
 package mgr.file.utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by Lukasz on 2014-09-30.
- */
 public class DataFileExtractor {
 
     //singleton IMHO, tak samo moze z DataFileReader
@@ -69,8 +65,8 @@ public class DataFileExtractor {
         demandValues.add(demandVal);
     }
 
-    public Iterator<ArrayList<Double>> getDataListIterator(){
-        return dataValues.iterator();
+    public ArrayList<ArrayList<Double>> getDataValues(){
+        return this.dataValues;
     }
 
     public ArrayList<Double> getDemandValues(){

@@ -1,56 +1,77 @@
 package mgr.input.builder;
 
 import java.util.ArrayList;
-import static mgr.config.Config.BIAS_POSITION;
+
 import static mgr.config.Config.BIAS_VALUE;
 
-/**
- * Created by Lukasz on 2014-10-05.
- */
 public class InputBuilder {
 
     private int currentIter;
     private ArrayList<ArrayList<Double>> dataList;
     private ArrayList<ParamPair> inputParamList;
     private ArrayList<Double> networkOutputs;
-    private double[] input;
+    private ArrayList<Double> input;
 
-    public  InputBuilder(int iter, ArrayList<ArrayList<Double>> dataList, ArrayList<ParamPair> params){
-        this.currentIter = iter;
+    public InputBuilder(ArrayList<ArrayList<Double>> dataList, ArrayList<ParamPair> params){
+        this.currentIter = 0;
         this.dataList = dataList;
         this.inputParamList = params;
-        int inputLength = calcInputLength();
-        this.input = new double[inputLength];
+        this.input = new ArrayList<Double>();
         this.networkOutputs = null;
     }
 
-    private int calcInputLength(){
-        int inputLength = inputParamList.size();
-        inputLength = inputLength + 1; //BIAS
-        return inputLength;
+    public void build(int iter, ArrayList<Double> networkOutputs){
+        setCurrentIter(iter);
+        setNetworkOutputs(networkOutputs);
+        addBIASToInput();
+        addValuesToInputFromDataFile();
+        addValuesToInputFromNetworkOutputs();
     }
 
-    public void build(){
-        input[BIAS_POSITION] = BIAS_VALUE;
-        int inputPositionCounter = BIAS_POSITION+1;
-        int pairCounter = 0;
-//        for (ParamPair pair : inputParamList){
-//            int firstParam = pair.getFirstValue();
-//            int secParam = pair.getSecondValue();
-//            for (int i = firstParam; i <= secParam; i++){
-//                input[inputPositionCounter]
-//                inputPositionCounter++;
-//            }
-//            pairCounter++;
-//        }
+    private void setCurrentIter(int iter){
+        this.currentIter = iter;
     }
 
-    public double[] getInput(){
-        return this.input;
-    }
-
-    public void setNetworkOutputs(ArrayList<Double> outputValues){
+    private void setNetworkOutputs(ArrayList<Double> outputValues){
         this.networkOutputs = null;
         this.networkOutputs = outputValues;
+    }
+
+    private void addBIASToInput(){
+        input.add(BIAS_VALUE);
+    }
+
+    private void addValuesToInputFromDataFile(){
+        int numOfPairsWithoutDemand = getNumOfPairsWithoutDemand();
+        for (int pairCounter = 0; pairCounter < numOfPairsWithoutDemand; pairCounter++){
+            ParamPair pair = inputParamList.get(pairCounter);
+            int firstParam = pair.getFirstValue();
+            int secParam = pair.getSecondValue();
+            ArrayList<Double> currentColumn = dataList.get(pairCounter);
+            for (int delay = firstParam; delay <= secParam; delay++){
+                input.add(currentColumn.get(currentIter-delay));
+            }
+        }
+    }
+
+    private int getNumOfPairsWithoutDemand(){
+        return inputParamList.size()-1;
+    }
+
+    private void addValuesToInputFromNetworkOutputs(){
+        ParamPair networkOutputsPairOfParams = getNetworkOutputs();
+        int firstParam = networkOutputsPairOfParams.getFirstValue();
+        int secParam = networkOutputsPairOfParams.getSecondValue();
+        for (int delay = firstParam; delay <= secParam; delay++){
+            input.add(networkOutputs.get(currentIter-delay));
+        }
+    }
+
+    private ParamPair getNetworkOutputs(){
+        return inputParamList.get(inputParamList.size()-1);
+    }
+
+    public ArrayList<Double> getInput(){
+        return this.input;
     }
 }
