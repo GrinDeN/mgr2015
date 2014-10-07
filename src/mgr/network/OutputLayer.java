@@ -6,11 +6,13 @@ public class OutputLayer extends Layer {
 
     private HiddenLayer hiddLayer;
     private double outputOfLayer;
+    private Dendrite[] layerDendrites;
 
     public OutputLayer(int neurons, HiddenLayer hiddLayer){
         this.numOfNeurons = neurons;
         this.hiddLayer = hiddLayer;
-        this.neurons = new Neuron[this.numOfNeurons + 1]; // numeracja od 1
+        this.neurons = new Neuron[this.numOfNeurons+1]; // numeracja od 1
+        this.layerDendrites = new Dendrite[hiddLayer.getNumOfNeurons()+1];
         this.name = "Warstwa wyjściowa";
     }
 
@@ -20,12 +22,20 @@ public class OutputLayer extends Layer {
             this.neurons[neur] = new Neuron();
             for (int k = 0; k <= hiddLayer.getNumOfNeurons(); k++) {
                 if (k == BIAS_POSITION){
-                    this.neurons[neur].addConnection(new Dendrite(this.neurons[neur]));
+                    Dendrite BIASdendrite = new Dendrite(this.neurons[neur]);
+                    this.neurons[neur].addConnection(BIASdendrite);
+                    this.layerDendrites[k] = BIASdendrite;
                 } else {
-                    this.neurons[neur].addConnection(new Dendrite(hiddLayer.getNeuronAtIndex(k), this.neurons[neur]));
+                    Dendrite hiddNeuronDendrite = new Dendrite(hiddLayer.getNeuronAtIndex(k), this.neurons[neur]);
+                    this.neurons[neur].addConnection(hiddNeuronDendrite);
+                    this.layerDendrites[k] = hiddNeuronDendrite;
                 }
             }
         }
+    }
+
+    public Dendrite[] getLayerDendrites(){
+        return this.layerDendrites;
     }
 
     @Override
@@ -36,10 +46,14 @@ public class OutputLayer extends Layer {
     public double getCalculateOutput(){
         this.outputOfLayer = 0;
         for (int neur = 1; neur < this.getNumOfNeurons()+1; neur++) {
-            this.neurons[neur].setInput(inputToLayer);
+            this.neurons[neur].setCurrentInput(inputToLayer);
             this.outputOfLayer += this.neurons[neur].getOutputNeuronResult();
         }
         return this.outputOfLayer;
+    }
+
+    protected double[] getInputToLayer(int index){
+        return this.neurons[this.numOfNeurons].getInputAtIndex(index);
     }
 
 }

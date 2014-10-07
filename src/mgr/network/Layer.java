@@ -1,12 +1,8 @@
 package mgr.network;
 
-import mgr.math.utils.ActivateFunc;
-
 import java.util.Arrays;
 
 public abstract class Layer{
-
-    public final ActivateFunc ACTIVATE_FUNCTION = ActivateFunc.SIGMOID_BI;
 
     protected int numOfNeurons;
     protected Neuron[] neurons;
@@ -31,5 +27,9 @@ public abstract class Layer{
 
     public Neuron getNeuronAtIndex(int index){
         return this.neurons[index];
+    }
+
+    protected double getNeuronZt(int iter, int neuron){
+        return this.neurons[neuron].getInputWeigthSum(iter);
     }
 }

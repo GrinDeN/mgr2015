@@ -47,8 +47,8 @@ public class DataFileReader {
         networkOutputs.add(3.0);
         networkOutputs.add(4.0);
         ArrayList<ParamPair> params = new ArrayList<ParamPair>();
-        params.add(new ParamPair(1, 3));
-        params.add(new ParamPair(2));
+        params.add(new ParamPair(1, 2));
+        params.add(new ParamPair(1));
         InputBuilder inputBuild = new InputBuilder(dataValues, params);
         inputBuild.build(4, networkOutputs);
         ArrayList<Double> input = inputBuild.getInput();
