@@ -3,6 +3,7 @@ package mgr.gradient;
 import mgr.math.utils.MathUtils;
 import mgr.network.Dendrite;
 import mgr.network.Network;
+import mgr.teacher.NetworkTeacher;
 
 import static mgr.config.Config.*;
 
@@ -22,29 +23,40 @@ public class OutputGradient {
         Dendrite[][] w1 = network.getHiddLayer().getLayerDendrites();
         double result = 0.0;
         for (int t0 = 1; t0 <= N2; t0++){
-            result += w1[n][N1+t0].getWeight()*compute_dYdW2(t-t0, i);
+//            if (t-t0 <= S){
+//                result += w1[n][N1+t0].getWeight()*0;
+//            } else {
+                result += w1[n][N1+t0].getWeight()*gradient.getElementdYdW2AtIndex(t-t0, i);
+//            }
         }
         return result;
     }
 
+    //tu pytanie czy nie powinienem brac tego dZdW2 juz obliczonego, po chuj to liczyc w nieskonocznosc?
     public double compute_dVdW2(int t, int n, int i){
-        double result = MathUtils.getDerivResult(network.getHiddLayerNeuronZt(t, n), ACTIVATE_FUNCTION)*compute_dZdW2(t, n, i);
+        double hiddLayerNeuronZt = network.getHiddLayerNeuronZt(n);
+//        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*compute_dZdW2(t, n, i);
+        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW2();
         return result;
     }
 
+    // to samo tu
     public double compute_dYdW2(int t, int i){
         Dendrite[] w2 = network.getOutLayer().getLayerDendrites();
         double result = 0.0;
-        double[] v = network.getOutputLayerInputAtIndex(t);
+        double[] v = network.getOutputLayerInput();
         for (int n = 1; n <= HIDD_NEURONS; n++) {
-            result += w2[n].getWeight()*compute_dVdW2(t, n, i);
+//            result += w2[n].getWeight()*compute_dVdW2(t, n, i);
+            result += w2[n].getWeight()*gradient.getCurrent_dVdW2();
         }
         result += v[i];
         return result;
     }
 
+    //i tu?
     public double compute_dE_dW2(int t, int i){
-        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*compute_dYdW2(t, i);
+//        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*compute_dYdW2(t, i);
+        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*gradient.getElementdYdW2AtIndex(t, i);
         return result;
     }
 }

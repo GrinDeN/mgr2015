@@ -29,7 +29,11 @@ public abstract class Layer{
         return this.neurons[index];
     }
 
-    protected double getNeuronZt(int iter, int neuron){
-        return this.neurons[neuron].getInputWeigthSum(iter);
+    protected double getNeuronZt(int neuron){
+        return this.neurons[neuron].getInputWeigthSum();
+    }
+
+    protected double[] getInputToLayer(){
+        return this.inputToLayer;
     }
 }

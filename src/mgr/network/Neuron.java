@@ -10,12 +10,10 @@ import static mgr.config.Config.DEBUG;
 
 public class Neuron{
 
-//    private double inputWeigthSum;
-    private ArrayList<Double> inputWeigthSum;
+    private double inputWeigthSum;
     private double output;
     private String name;
     private double[] currentInput;
-    private ArrayList<double[]> inputs;
 
     private ArrayList<Dendrite> connections;
 
@@ -25,8 +23,6 @@ public class Neuron{
         Neuron.neuronCount++;
         this.setName("Neuron " + neuronCount);
         this.connections = new ArrayList<Dendrite>();
-        this.inputWeigthSum = new ArrayList<Double>();
-        this.inputs = new ArrayList<double[]>();
     }
 
     public String toString(){
@@ -38,7 +34,7 @@ public class Neuron{
     }
 
     private void calculateInputWeigthSum(){
-//        this.inputWeigthSum = 0;
+        this.inputWeigthSum = 0;
         double sumResult = 0;
         Dendrite[] connsArray = new Dendrite[this.connections.size()];
         if (DEBUG) {
@@ -54,7 +50,7 @@ public class Neuron{
         for (int i = 0; i < currentInput.length; i++) {
             sumResult += currentInput[i] * connsArray[i].getWeight();
         }
-        this.inputWeigthSum.add(sumResult);
+        this.inputWeigthSum = sumResult;
     }
 
     private void setOutput(double result){
@@ -65,8 +61,8 @@ public class Neuron{
         return this.output;
     }
 
-    protected double getInputWeigthSum(int index){
-        return this.inputWeigthSum.get(index);
+    protected double getInputWeigthSum(){
+        return this.inputWeigthSum;
     }
 
     public void addConnection(Dendrite conn){
@@ -89,11 +85,11 @@ public class Neuron{
         return this.connections.get(index).getWeight();
     }
 
-    public double getHiddenNeuronResult(int iter, ActivateFunc mathActiveFunc){
+    public double getHiddenNeuronResult(ActivateFunc mathActiveFunc){
         this.calculateInputWeigthSum();
-        double funcResult = MathUtils.getMainResult(this.getInputWeigthSum(iter), mathActiveFunc);
+        double funcResult = MathUtils.getMainResult(this.getInputWeigthSum(), mathActiveFunc);
         if (DEBUG){
-            System.out.println("Suma iloczynu wag i wejscia dla neuronu " + toString() + " : " + this.getInputWeigthSum(iter));
+            System.out.println("Suma iloczynu wag i wejscia dla neuronu " + toString() + " : " + this.getInputWeigthSum());
             System.out.println("Wynik funkcji_aktywacji(suma): " + funcResult);
         }
         this.setOutput(funcResult);
@@ -117,15 +113,6 @@ public class Neuron{
 
     public void setCurrentInput(double[] currentInput){
         this.currentInput = Arrays.copyOf(currentInput, currentInput.length);
-        setCurrentInputToInputsList();
-    }
-
-    private void setCurrentInputToInputsList(){
-        inputs.add(currentInput);
-    }
-
-    public double[] getInputAtIndex(int index){
-        return this.inputs.get(index);
     }
 
 }

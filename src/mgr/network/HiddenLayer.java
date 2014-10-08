@@ -28,11 +28,11 @@ public class HiddenLayer extends Layer{
         }
     }
 
-    public double[] getCalculateOutputArray(int iter){
+    public double[] getCalculateOutputArray(){
         this.outputArray[BIAS_POSITION] = BIAS_VALUE;
         for (int i = 1; i <= this.getNumOfNeurons(); i++){
             this.neurons[i].setCurrentInput(inputToLayer);
-            this.setOutputValue(i, this.neurons[i].getHiddenNeuronResult(iter, ACTIVATE_FUNCTION));
+            this.setOutputValue(i, this.neurons[i].getHiddenNeuronResult(ACTIVATE_FUNCTION));
         }
         return this.outputArray;
     }

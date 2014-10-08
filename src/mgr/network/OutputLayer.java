@@ -52,8 +52,4 @@ public class OutputLayer extends Layer {
         return this.outputOfLayer;
     }
 
-    protected double[] getInputToLayer(int index){
-        return this.neurons[this.numOfNeurons].getInputAtIndex(index);
-    }
-
 }

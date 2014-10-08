@@ -39,9 +39,9 @@ public class Network {
         this.networkInput = Arrays.copyOf(input, input.length);
     }
 
-    public double calculateOutput(int iter){
+    public double calculateOutput(){
         this.hiddLayer.setInput(networkInput);
-        this.outLayer.setInput(this.hiddLayer.getCalculateOutputArray(iter));
+        this.outLayer.setInput(this.hiddLayer.getCalculateOutputArray());
         return this.outLayer.getCalculateOutput();
     }
 
@@ -53,12 +53,15 @@ public class Network {
         return outLayer;
     }
 
-    public double getHiddLayerNeuronZt(int iter, int neuron){
-        return hiddLayer.getNeuronZt(iter, neuron);
+    public double getHiddLayerNeuronZt(int neuron){
+        return hiddLayer.getNeuronZt(neuron);
     }
 
-    public double[] getOutputLayerInputAtIndex(int iter){
-        return this.outLayer.getInputToLayer(iter);
+    public double[] getOutputLayerInput(){
+        return outLayer.getInputToLayer();
     }
 
+    public double[] getHiddLayerInput(){
+        return hiddLayer.getInputToLayer();
+    }
 }
