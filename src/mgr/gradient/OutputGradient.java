@@ -33,28 +33,28 @@ public class OutputGradient {
     }
 
     //tu pytanie czy nie powinienem brac tego dZdW2 juz obliczonego, po chuj to liczyc w nieskonocznosc?
-    public double compute_dVdW2(int t, int n, int i){
+    public double compute_dVdW2(int n, int i){
         double hiddLayerNeuronZt = network.getHiddLayerNeuronZt(n);
 //        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*compute_dZdW2(t, n, i);
-        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW2();
+        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW2(i, n);
         return result;
     }
 
     // to samo tu
-    public double compute_dYdW2(int t, int i){
+    public double compute_dYdW2(int i){
         Dendrite[] w2 = network.getOutLayer().getLayerDendrites();
         double result = 0.0;
         double[] v = network.getOutputLayerInput();
         for (int n = 1; n <= HIDD_NEURONS; n++) {
 //            result += w2[n].getWeight()*compute_dVdW2(t, n, i);
-            result += w2[n].getWeight()*gradient.getCurrent_dVdW2();
+            result += w2[n].getWeight()*gradient.getCurrent_dVdW2(i, n);
         }
         result += v[i];
         return result;
     }
 
     //i tu?
-    public double compute_dE_dW2(int t, int i){
+    public double compute_dEdW2(int t, int i){
 //        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*compute_dYdW2(t, i);
         double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*gradient.getElementdYdW2AtIndex(t, i);
         return result;

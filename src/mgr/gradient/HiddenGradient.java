@@ -7,9 +7,6 @@ import mgr.teacher.NetworkTeacher;
 
 import static mgr.config.Config.*;
 
-/**
- * Created by Lukasz on 2014-10-07.
- */
 public class HiddenGradient {
 
     private Network network;
@@ -30,26 +27,26 @@ public class HiddenGradient {
             result = x[j];
         }
         for (int t0 = 1; t0 <= N2; t0++){
-            result += w1[n][N1+t0].getWeight()*gradient.getElementdYdW1AtIndex(t - t0, i, j);
+            result += w1[n][N1+t0].getWeight()*gradient.getElementdYdW1AtIndex(t-t0, i, j);
         }
         return result;
     }
 
     //tu pytanie czy nie powinienem brac tego dZdW1 juz obliczonego, po chuj to liczyc w nieskonocznosc?
-    public double compute_dVdW1(int t, int n, int i, int j){
+    public double compute_dVdW1(int n, int i, int j){
         double hiddLayerNeuronZt = network.getHiddLayerNeuronZt(n);
 //        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*compute_dZdW1(t, n, i, j);
-        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW1();
+        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW1(i, j, n);
         return result;
     }
 
     // tu tez
-    public double compute_dYdW1(int t, int i, int j){
+    public double compute_dYdW1(int i, int j){
         Dendrite[] w2 = network.getOutLayer().getLayerDendrites();
         double result = 0.0;
         for (int n = 1; n <= HIDD_NEURONS; n++){
 //            result += w2[n].getWeight()*compute_dVdW1(t, n, i, j);
-            result += w2[n].getWeight()*gradient.getCurrent_dVdW1();
+            result += w2[n].getWeight()*gradient.getCurrent_dVdW1(i, j, n);
         }
         return result;
     }

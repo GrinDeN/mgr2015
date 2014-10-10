@@ -11,19 +11,26 @@ public class DataFileExtractor {
     private ArrayList<ArrayList<Double>> dataValues;
     private ArrayList<Double> demandValues;
     private int numOfFileCols;
+    private int sizeOfDataValues;
 
     public DataFileExtractor(List<String> allData){
         allFileData = allData;
         dataValues = new ArrayList<ArrayList<Double>>();
-        demandValues = new ArrayList<Double>();
+        initializeDemandValues();
         numOfFileCols = getNumOfFileColumns();
         allocateInnerDataLists();
+    }
+
+    private void initializeDemandValues(){
+        this.demandValues = new ArrayList<Double>();
+        this.demandValues.add(0, 0.0);
     }
 
     private void allocateInnerDataLists(){
         int correctSize = numOfFileCols-1;   //without last column - demand values
         for (int i = 0; i < correctSize; i++) {
             dataValues.add(new ArrayList<Double>());
+            dataValues.get(i).add(0, 0.0);
         }
     }
 
@@ -45,6 +52,7 @@ public class DataFileExtractor {
             String demandValue = lineValues[positionOfDemandValue];
             addDemandValue(demandValue);
         }
+        setSizeOfDataValues();
     }
 
     private int getPositionOfDemand(int numOfAllElements){
@@ -65,12 +73,20 @@ public class DataFileExtractor {
         demandValues.add(demandVal);
     }
 
+    private void setSizeOfDataValues(){
+        this.sizeOfDataValues = this.dataValues.get(0).size();
+    }
+
     public ArrayList<ArrayList<Double>> getDataValues(){
         return this.dataValues;
     }
 
     public ArrayList<Double> getDemandValues(){
         return this.demandValues;
+    }
+
+    public int getSizeOfDataValues(){
+        return this.sizeOfDataValues;
     }
 
 }

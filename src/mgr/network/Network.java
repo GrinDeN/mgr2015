@@ -15,8 +15,8 @@ public class Network {
     private OutputLayer outLayer;
     private double[] networkInput;
 
-    public Network(final double[] input){
-        this.networkInput = Arrays.copyOf(input, input.length);
+    public Network(){
+        this.networkInput = new double[INPUT_SIZE];
         this.layers = new ArrayList<Layer>(NUM_OF_LAYERS);
         this.hiddLayer = new HiddenLayer(HIDD_NEURONS);
         this.outLayer = new OutputLayer(OUT_NEURONS, this.hiddLayer);
