@@ -1,6 +1,5 @@
 package mgr.file.utils;
 
-import mgr.input.builder.InputBuilder;
 import mgr.input.builder.ParamPair;
 
 import java.io.IOException;
@@ -49,12 +48,12 @@ public class DataFileReader {
         ArrayList<ParamPair> params = new ArrayList<ParamPair>();
         params.add(new ParamPair(1, 2));
         params.add(new ParamPair(1));
-        InputBuilder inputBuild = new InputBuilder(dataValues, params);
-        inputBuild.build(4, networkOutputs);
-        ArrayList<Double> input = inputBuild.getInput();
-        for (int i = 0; i < input.size(); i++) {
-            System.out.println(i+". element wektora wejsciowego: "+input.get(i));
-        }
+//        InputBuilder inputBuild = new InputBuilder(dataValues, params);
+//        inputBuild.build(4, networkOutputs);
+//        ArrayList<Double> input = inputBuild.getInput();
+//        for (int i = 0; i < input.size(); i++) {
+//            System.out.println(i+". element wektora wejsciowego: "+input.get(i));
+//        }
     }
 
 }

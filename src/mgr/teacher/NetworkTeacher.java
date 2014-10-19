@@ -52,6 +52,10 @@ public class NetworkTeacher {
         return this.netOutputs;
     }
 
+    public double getLastOutput(){
+        return this.netOutputs.get(netOutputs.size()-1);
+    }
+
     public void printNetOutputs(){
         for (Double value : netOutputs){
             System.out.println(String.valueOf(value));

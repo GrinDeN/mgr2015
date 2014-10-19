@@ -40,10 +40,10 @@ public class Gradient {
     }
 
     private void initAllArrays(){
-        this.dZdW1 = new double[HIDD_NEURONS+1][INPUT_SIZE][HIDD_NEURONS+1];
+        this.dZdW1 = new double[HIDD_NEURONS+1][HIDD_NEURONS+1][INPUT_SIZE];
         this.dZdW2 = new double[HIDD_NEURONS+1][HIDD_NEURONS+1];
 
-        this.dVdW1 = new double[HIDD_NEURONS+1][INPUT_SIZE][HIDD_NEURONS+1];
+        this.dVdW1 = new double[HIDD_NEURONS+1][HIDD_NEURONS+1][INPUT_SIZE];
         this.dVdW2 = new double[HIDD_NEURONS+1][HIDD_NEURONS+1];
 
         this.dYdW1 = new double[P+1][HIDD_NEURONS+1][INPUT_SIZE];
@@ -55,9 +55,9 @@ public class Gradient {
 
     private void initZeroGradient(int t){
         for (int t0=1; t0<=S-1; t0++){
-            for (int i=0; i<K; i++){
+            for (int i=0; i<=HIDD_NEURONS; i++){
                 this.dYdW2[t-t0][i] = 0;
-                for (int j=0; j<=INPUT_SIZE; j++){
+                for (int j=0; j<INPUT_SIZE; j++){
                     this.dYdW1[t-t0][i][j] = 0;
                 }
             }
@@ -95,7 +95,7 @@ public class Gradient {
     private void computeAlldZdW1(int t){
         for (int n=1; n<=K; n++){
             for (int i=1; i<=K; i++){
-                for (int j=0; j<=INPUT_SIZE; j++){
+                for (int j=0; j<INPUT_SIZE; j++){
                     this.dZdW1[n][i][j] = hiddenGradient.compute_dZdW1(t, n, i, j);
                 }
             }
@@ -105,7 +105,7 @@ public class Gradient {
     private void computeAlldVdW1(){
         for (int n=1; n<=K; n++){
             for (int i=1; i<=K; i++){
-                for (int j=0; j<=INPUT_SIZE; j++){
+                for (int j=0; j<INPUT_SIZE; j++){
                     this.dVdW1[n][i][j] = hiddenGradient.compute_dVdW1(n, i, j);
                 }
             }
@@ -114,7 +114,7 @@ public class Gradient {
 
     private void computeAlldYdW1(int t){
         for (int i=1; i<=K; i++){
-            for (int j=0; j<=INPUT_SIZE; j++){
+            for (int j=0; j<INPUT_SIZE; j++){
                 this.dYdW1[t][i][j] = hiddenGradient.compute_dYdW1(i, j);
             }
         }
@@ -122,7 +122,7 @@ public class Gradient {
 
     private void computeAlldEdW1(int t){
         for (int i=1; i<=K; i++){
-            for (int j=0; j<=INPUT_SIZE; j++){
+            for (int j=0; j<INPUT_SIZE; j++){
                 this.dEdW1[t][i][j] = hiddenGradient.compute_dEdW1(t, i, j);
             }
         }
@@ -145,7 +145,10 @@ public class Gradient {
     }
 
     protected double getCurrent_dZdW1(int i, int j, int n){
-        return this.dZdW1[i][j][n];
+//        System.out.println("i: "+i);
+//        System.out.println("j: "+j);
+//        System.out.println("n: "+n);
+        return this.dZdW1[n][i][j];
     }
 
     protected double getCurrent_dZdW2(int i, int n){
@@ -153,7 +156,7 @@ public class Gradient {
     }
 
     protected double getCurrent_dVdW1(int i, int j, int n){
-        return this.dVdW1[i][j][n];
+        return this.dVdW1[n][i][j];
     }
 
     protected double getCurrent_dVdW2(int i, int n){
@@ -177,7 +180,7 @@ public class Gradient {
         double[][] sum_dEdW1 = new double[K+1][INPUT_SIZE+1];
         double[] sum_dEdW2 = new double[K+1];
         for (int i = 1; i<=K; i++){
-            for (int j = 0; j<=INPUT_SIZE; j++){
+            for (int j = 0; j<INPUT_SIZE; j++){
                 for (int t = S; t<P; t++){
                     sum_dEdW1[i][j] += getElementdEdW1AtIndex(t, i, j);
                 }
@@ -189,7 +192,7 @@ public class Gradient {
             }
         }
         for (int i = 1; i<=K; i++){
-            for (int j = 0; j<=INPUT_SIZE; j++){
+            for (int j = 0; j<INPUT_SIZE; j++){
                 gW.add(sum_dEdW1[i][j]);
             }
         }

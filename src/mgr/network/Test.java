@@ -1,5 +1,6 @@
 package mgr.network;
 
+import mgr.config.Config;
 import mgr.config.ConfigBuilder;
 import mgr.file.utils.DataFileExtractor;
 import mgr.file.utils.DataFileReader;
@@ -9,9 +10,6 @@ import mgr.input.builder.ParamPair;
 import mgr.teacher.NetworkTeacher;
 
 import java.util.ArrayList;
-
-import static mgr.config.Config.P;
-import static mgr.config.Config.S;
 
 public class Test {
 
@@ -37,23 +35,39 @@ public class Test {
         teacher.setDemandValues(demandValues);
         teacher.addDemandAsFirstNetOutputs();
 
-        ArrayList<Double> networkOutputs = new ArrayList<Double>();
-        networkOutputs.addAll(teacher.getNetOutputs());
+        ArrayList<Double> beginningNetworkOutputs = new ArrayList<Double>();
+        beginningNetworkOutputs.addAll(teacher.getNetOutputs());
 
-        InputBuilder inputBuilder = new InputBuilder(dataValues, params);
+        System.out.println("POCZATKOWE WARTOSCI OUTPUTOW");
+        for (Double val : beginningNetworkOutputs){
+            System.out.println(val);
+        }
+
+        InputBuilder inputBuilder = new InputBuilder(dataValues, params, beginningNetworkOutputs);
 
         Gradient grad = new Gradient(net, teacher);
 
-        for (int t = S; t <= P; t++){
-            inputBuilder.build(t, networkOutputs);
-            ArrayList<Double> inputBuilt = inputBuilder.getInput();
-            double[] arr = new double[inputBuilt.size()];
-            inputBuilt.toArray(arr);// zmaiana input z double[] na ArrayList<Double> :<<
+        for (int t = Config.S; t <= Config.P; t++){
+//            networkOutputs.clear();
+//            inputBuilder.build(Config.S, networkOutputs);
+            inputBuilder.build(t, teacher.getLastOutput());
+            double[] arr = inputBuilder.getInput();
+            for (int i = 0; i < arr.length; i++){
+                System.out.print(arr[i]);
+                System.out.print(" ");
+            }
+            System.out.println();
             net.setNetworkInput(arr);
             double currentOutput = net.calculateOutput();
             // tu jeszcze teacher moglby blad sobie liczyc w sensie liczyc y-d i dodawaj do swojej listy bledow
             teacher.addNetOutput(currentOutput);
             grad.computeAllGradients(t);
+        }
+
+        System.out.println("OUTPUTS: ");
+        ArrayList<Double> outputs = teacher.getNetOutputs();
+        for (Double value : outputs){
+            System.out.println(value);
         }
 
 
