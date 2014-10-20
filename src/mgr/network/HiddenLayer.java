@@ -46,8 +46,24 @@ public class HiddenLayer extends Layer{
     }
 
     @Override
-    public void updateWeights(){
-        // TODO Auto-generated method stub
+    public void updateWeights(double[] newWeights){
+        int weightCounter = 0;
+        for (int i = 1; i <= this.getNumOfNeurons(); i++){
+            for (int j = 0; j < INPUT_SIZE; j++){
+                layerDendrites[i][j].updateWeight(newWeights[weightCounter]);
+                weightCounter++;
+            }
+        }
+    }
 
+    @Override
+    public void setWeights(double[] weights){
+        int weightCounter = 0;
+        for (int i = 1; i <= this.getNumOfNeurons(); i++){
+            for (int j = 0; j < INPUT_SIZE; j++){
+                layerDendrites[i][j].setWeight(weights[weightCounter]);
+                weightCounter++;
+            }
+        }
     }
 }

@@ -33,7 +33,7 @@ public class InputBuilder {
         this.currentIndex = 0;
         setCurrentIter(iter);
 //        setNetworkOutputs(networkOutputs);
-        addValueToNetOutputsIfNotFirst(netOutputValue);
+        addValueToNetOutputsIfNotFirstIter(netOutputValue);
         addBIASToInput();
         addValuesToInputFromDataFile();
         addValuesToInputFromNetworkOutputs();
@@ -48,7 +48,7 @@ public class InputBuilder {
 //        this.networkOutputs = outputValues;
 //    }
 
-    private void addValueToNetOutputsIfNotFirst(double value){
+    private void addValueToNetOutputsIfNotFirstIter(double value){
         if (currentIter != Config.S){
             addValueToNetworkOutputs(value);
         }

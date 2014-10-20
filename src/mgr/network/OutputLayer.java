@@ -1,5 +1,7 @@
 package mgr.network;
 
+import mgr.config.Config;
+
 import static mgr.config.Config.BIAS_POSITION;
 
 public class OutputLayer extends Layer {
@@ -39,8 +41,21 @@ public class OutputLayer extends Layer {
     }
 
     @Override
-    public void updateWeights(){
+    public void updateWeights(double[] newWeights){
+        int weightCounter = Config.INPUT_SIZE*Config.HIDD_NEURONS;
+        for (int weight = 0; weight <= hiddLayer.getNumOfNeurons(); weight++){
+            layerDendrites[weight].updateWeight(newWeights[weightCounter]);
+            weightCounter++;
+        }
+    }
 
+    @Override
+    public void setWeights(double[] weights){
+        int weightCounter = Config.INPUT_SIZE*Config.HIDD_NEURONS;
+        for (int weight = 0; weight <= hiddLayer.getNumOfNeurons(); weight++){
+            layerDendrites[weight].setWeight(weights[weightCounter]);
+            weightCounter++;
+        }
     }
 
     public double getCalculateOutput(){

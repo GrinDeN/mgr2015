@@ -31,17 +31,17 @@ public class Test {
         ConfigBuilder.selectSParam(params);
 //        ConfigBuilder.selectPParam(dfe.getSizeOfDataValues());
 
-        NetworkTeacher teacher = new NetworkTeacher(net);
-        teacher.setDemandValues(demandValues);
-        teacher.addDemandAsFirstNetOutputs();
+        NetworkTeacher teacher = new NetworkTeacher(net, demandValues);
+//        teacher.addDemandAsFirstNetOutputs();
+//        teacher.addFirstNetErrors();
 
         ArrayList<Double> beginningNetworkOutputs = new ArrayList<Double>();
         beginningNetworkOutputs.addAll(teacher.getNetOutputs());
 
-        System.out.println("POCZATKOWE WARTOSCI OUTPUTOW");
-        for (Double val : beginningNetworkOutputs){
-            System.out.println(val);
-        }
+//        System.out.println("POCZATKOWE WARTOSCI OUTPUTOW");
+//        for (Double val : beginningNetworkOutputs){
+//            System.out.println(val);
+//        }
 
         InputBuilder inputBuilder = new InputBuilder(dataValues, params, beginningNetworkOutputs);
 
@@ -61,14 +61,19 @@ public class Test {
             double currentOutput = net.calculateOutput();
             // tu jeszcze teacher moglby blad sobie liczyc w sensie liczyc y-d i dodawaj do swojej listy bledow
             teacher.addNetOutput(currentOutput);
+            teacher.addNetError(t);
             grad.computeAllGradients(t);
         }
 
+        teacher.sumarizeNetErrors();
+
         System.out.println("OUTPUTS: ");
-        ArrayList<Double> outputs = teacher.getNetOutputs();
-        for (Double value : outputs){
-            System.out.println(value);
-        }
+        teacher.printNetOutputs();
+
+        System.out.println();
+        teacher.printErrors();
+
+        teacher.printError();
 
 
 //        InputBuilder inputBuild = new InputBuilder(dataValues, params);

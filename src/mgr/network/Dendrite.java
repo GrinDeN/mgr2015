@@ -28,6 +28,10 @@ public class Dendrite{
         this.weight = w;
     }
 
+    public void updateWeight(double newWeight){
+        this.weight += newWeight;
+    }
+
     public double getWeight(){
         return this.weight;
     }

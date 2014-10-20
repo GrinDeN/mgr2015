@@ -144,23 +144,23 @@ public class Gradient {
         return this.dYdW2[t][i];
     }
 
-    protected double getCurrent_dZdW1(int i, int j, int n){
+    protected double getCurrent_dZdW1(int n, int i, int j){
 //        System.out.println("i: "+i);
 //        System.out.println("j: "+j);
 //        System.out.println("n: "+n);
         return this.dZdW1[n][i][j];
     }
 
-    protected double getCurrent_dZdW2(int i, int n){
-        return this.dZdW2[i][n];
+    protected double getCurrent_dZdW2(int n, int i){
+        return this.dZdW2[n][i];
     }
 
-    protected double getCurrent_dVdW1(int i, int j, int n){
+    protected double getCurrent_dVdW1(int n, int i, int j){
         return this.dVdW1[n][i][j];
     }
 
-    protected double getCurrent_dVdW2(int i, int n){
-        return this.dVdW2[i][n];
+    protected double getCurrent_dVdW2(int n, int i){
+        return this.dVdW2[n][i];
     }
 
     public void computeAllGradients(int t){

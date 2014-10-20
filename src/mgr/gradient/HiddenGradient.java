@@ -36,7 +36,7 @@ public class HiddenGradient {
     public double compute_dVdW1(int n, int i, int j){
         double hiddLayerNeuronZt = network.getHiddLayerNeuronZt(n);
 //        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*compute_dZdW1(t, n, i, j);
-        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW1(i, j, n);
+        double result = MathUtils.getDerivResult(hiddLayerNeuronZt, ACTIVATE_FUNCTION)*gradient.getCurrent_dZdW1(n, i, j);
         return result;
     }
 
@@ -46,7 +46,7 @@ public class HiddenGradient {
         double result = 0.0;
         for (int n = 1; n <= HIDD_NEURONS; n++){
 //            result += w2[n].getWeight()*compute_dVdW1(t, n, i, j);
-            result += w2[n].getWeight()*gradient.getCurrent_dVdW1(i, j, n);
+            result += w2[n].getWeight()*gradient.getCurrent_dVdW1(n, i, j);
         }
         return result;
     }

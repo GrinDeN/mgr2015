@@ -11,7 +11,9 @@ public abstract class Layer{
 
     public abstract void initialize();
 
-    public abstract void updateWeights();
+    public abstract void updateWeights(double[] weights);
+
+    public abstract void setWeights(double[] weights);
 
     public int getNumOfNeurons(){
         return this.numOfNeurons;

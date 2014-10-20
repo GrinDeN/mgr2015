@@ -35,6 +35,12 @@ public class Network {
         }
     }
 
+    public void updateWeights(double[] newWeights){
+        for (Layer eachLayer : layers){
+            eachLayer.updateWeights(newWeights);
+        }
+    }
+
     public void setNetworkInput(double[] input){
         this.networkInput = Arrays.copyOf(input, input.length);
     }
