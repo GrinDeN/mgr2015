@@ -50,17 +50,17 @@ public class Test {
         for (int t = Config.S; t <= Config.P; t++){
 //            networkOutputs.clear();
 //            inputBuilder.build(Config.S, networkOutputs);
-            inputBuilder.build(t, teacher.getLastOutput());
-            double[] arr = inputBuilder.getInput();
-            for (int i = 0; i < arr.length; i++){
-                System.out.print(arr[i]);
-                System.out.print(" ");
-            }
-            System.out.println();
-            net.setNetworkInput(arr);
-            double currentOutput = net.calculateOutput();
+            double[] input = inputBuilder.build(t, teacher.getLastOutput());
+//            for (int i = 0; i < arr.length; i++){
+//                System.out.print(arr[i]);
+//                System.out.print(" ");
+//            }
+//            System.out.println();
+            net.setNetworkInput(input);
+//            double currentOutput = net.calculateOutput();
+            net.calculateOutput();
             // tu jeszcze teacher moglby blad sobie liczyc w sensie liczyc y-d i dodawaj do swojej listy bledow
-            teacher.addNetOutput(currentOutput);
+            teacher.addCurrentNetOutput();
             teacher.addNetError(t);
             grad.computeAllGradients(t);
         }

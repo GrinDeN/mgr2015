@@ -67,8 +67,8 @@ public class NetworkTeacher {
         return this.demandValues.get(current);
     }
 
-    public void addNetOutput(double output){
-        this.netOutputs.add(output);
+    public void addCurrentNetOutput(){
+        this.netOutputs.add(network.getCurrentOutput());
     }
 
     public double getNetOutput(int t){

@@ -14,6 +14,7 @@ public class Network {
     private HiddenLayer hiddLayer;
     private OutputLayer outLayer;
     private double[] networkInput;
+    private double currentOutput;
 
     public Network(){
         this.networkInput = new double[INPUT_SIZE];
@@ -41,14 +42,25 @@ public class Network {
         }
     }
 
+    public void setWeights(double[] weights){
+        for (Layer eachLayer : layers){
+            eachLayer.updateWeights(weights);
+        }
+    }
+
     public void setNetworkInput(double[] input){
         this.networkInput = Arrays.copyOf(input, input.length);
     }
 
-    public double calculateOutput(){
+    public void calculateOutput(){
         this.hiddLayer.setInput(networkInput);
         this.outLayer.setInput(this.hiddLayer.getCalculateOutputArray());
-        return this.outLayer.getCalculateOutput();
+        this.currentOutput = this.outLayer.getCalculateOutput();
+//        return this.currentOutput;
+    }
+
+    public double getCurrentOutput(){
+        return this.currentOutput;
     }
 
     public HiddenLayer getHiddLayer(){

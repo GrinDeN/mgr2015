@@ -19,6 +19,7 @@ public class Gradient {
     private double[][] dEdW2;
 
     private ArrayList<Double> gW;
+    private ArrayList<Double> pWk;
 
     private HiddenGradient hiddenGradient;
     private OutputGradient outputGradient;
@@ -34,6 +35,7 @@ public class Gradient {
         this.outputGradient = new OutputGradient(net, teacher, this);
 
         this.gW = new ArrayList<Double>();
+        this.pWk = new ArrayList<Double>();
 
         initAllArrays();
         initZeroGradient(S);
@@ -199,5 +201,9 @@ public class Gradient {
         for (int i = 1; i<=K; i++){
             gW.add(sum_dEdW2[i]);
         }
+    }
+
+    public ArrayList<Double> getpWk(){
+        return this.pWk;
     }
 }

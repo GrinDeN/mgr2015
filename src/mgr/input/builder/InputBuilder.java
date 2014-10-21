@@ -12,6 +12,7 @@ public class InputBuilder {
     private ArrayList<ArrayList<Double>> dataList;
     private ArrayList<ParamPair> inputParamList;
     private ArrayList<Double> networkOutputs;
+    private ArrayList<Double> startingOutputs;
 //    private ArrayList<Double> input;
     private double[] input;
     private int currentIndex;
@@ -19,34 +20,33 @@ public class InputBuilder {
     public InputBuilder(ArrayList<ArrayList<Double>> dataList, ArrayList<ParamPair> params, ArrayList<Double> currentOutputs){
         this.currentIter = 0;
         this.currentIndex = 0;
+
         this.dataList = new ArrayList<ArrayList<Double>>();
         this.dataList.addAll(dataList);
+
         this.inputParamList = new ArrayList<ParamPair>();
         this.inputParamList.addAll(params);
 //        this.input = new ArrayList<Double>();
         this.input = new double[INPUT_SIZE];
+
+        this.startingOutputs = new ArrayList<Double>();
+        this.startingOutputs.addAll(currentOutputs);
+
         this.networkOutputs = new ArrayList<Double>();
-        this.networkOutputs.addAll(currentOutputs);
+        this.networkOutputs.addAll(startingOutputs);
     }
 
-    public void build(int iter, double netOutputValue){
+    public double[] build(int iter, double netOutputValue){
         this.currentIndex = 0;
         setCurrentIter(iter);
-//        setNetworkOutputs(networkOutputs);
         addValueToNetOutputsIfNotFirstIter(netOutputValue);
-        addBIASToInput();
-        addValuesToInputFromDataFile();
-        addValuesToInputFromNetworkOutputs();
+        buildInput();
+        return getInput();
     }
 
     private void setCurrentIter(int iter){
         this.currentIter = iter;
     }
-
-//    private void setNetworkOutputs(ArrayList<Double> outputValues){
-//        this.networkOutputs = null;
-//        this.networkOutputs = outputValues;
-//    }
 
     private void addValueToNetOutputsIfNotFirstIter(double value){
         if (currentIter != Config.S){
@@ -58,9 +58,12 @@ public class InputBuilder {
         this.networkOutputs.add(value);
     }
 
-//    private void addBIASToInput(){
-//        input.add(BIAS_VALUE);
-//    }
+    private void buildInput(){
+        addBIASToInput();
+        addValuesToInputFromDataFile();
+        addValuesToInputFromNetworkOutputs();
+    }
+
     private void addBIASToInput(){
         input[BIAS_POSITION] = BIAS_VALUE;
         currentIndex++;
@@ -98,6 +101,11 @@ public class InputBuilder {
 
     private ParamPair getNetworkOutputs(){
         return inputParamList.get(inputParamList.size()-1);
+    }
+
+    public void resetNetOutputs(){
+        this.networkOutputs.clear();
+        this.networkOutputs.addAll(startingOutputs);
     }
 
 //    public ArrayList<Double> getInput(){
