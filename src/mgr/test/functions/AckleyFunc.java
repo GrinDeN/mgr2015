@@ -3,7 +3,7 @@ package mgr.test.functions;
 /**
  * Created by Lukasz on 2014-10-24.
  */
-public class AckleyFunc {
+public class AckleyFunc{
 
     public static double function(double x, double y){
         return -20*Math.exp(-0.2*Math.sqrt(0.5*(Math.pow(x, 2)+Math.pow(y, 2))))-

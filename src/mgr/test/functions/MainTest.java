@@ -11,7 +11,7 @@ public class MainTest {
         double result;
         for (int i = 0; i < swarm.getNumberOfParticles() ; i++){
             double[] particle_xPositions = swarm.getParticleAtIndex(i).get_xPositions();
-            result = AckleyFunc.function(particle_xPositions[0], particle_xPositions[1]);
+            result = EasomFunc.function(particle_xPositions[0], particle_xPositions[1]);
             swarm.getParticleAtIndex(i).setBestValueError(result);
             if (i==0){
                 swarm.setActualBestValueOfMinFunc(result);
@@ -28,7 +28,7 @@ public class MainTest {
             for (int i = 0; i < swarm.getNumberOfParticles(); i++){
                 swarm.updateParticlesAtIndex(i);
                 double[] particle_xPositions = swarm.getParticleAtIndex(i).get_xPositions();
-                result = AckleyFunc.function(particle_xPositions[0], particle_xPositions[1]);
+                result = EasomFunc.function(particle_xPositions[0], particle_xPositions[1]);
                 swarm.getParticleAtIndex(i).setActualValueError(result);
                 swarm.getParticleAtIndex(i).checkErrorValues();
                 swarm.checkIfVectorIsBetter(result, particle_xPositions);
