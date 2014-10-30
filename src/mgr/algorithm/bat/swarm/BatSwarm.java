@@ -7,7 +7,7 @@ public class BatSwarm {
     private Bat[] batSwarm;
     private int numBats;
     private int dimension;
-    private double[] currentBest;
+    private double[] bestPositions;
     private double minimumValue;
 
     private double pulseRate;
@@ -21,8 +21,9 @@ public class BatSwarm {
         this.pulseRate = 0.5;
         this.loudness = 0.5;
         this.minimumValue = 1000000;
-        this.currentBest = new double[dimension];
+        this.bestPositions = new double[dimension];
         rand = new Random();
+        initBats();
     }
 
     private void initBats(){
@@ -36,19 +37,18 @@ public class BatSwarm {
         return this.batSwarm[index];
     }
 
+//    public void correctPositionsToBoundaries(int index){
+//        this.batSwarm[index].correctPositions();
+//    }
 
     public void getSomeRandomWalk(int index){
-        if (getSomeRandomValueFrom0To1() > pulseRate){
+        if (getSomeRandomDoubleValueFrom0To1() > pulseRate){
             this.batSwarm[index].generateNewPositionsNearBest();
         }
     }
 
-    public void correctPositionsToBoundaries(int index){
-        this.batSwarm[index].correctPositions();
-    }
-
     public void setBestPositions(double[] best){
-        this.currentBest = best;
+        this.bestPositions = best;
     }
 
     public void setBestMinimumValue(double value){
@@ -56,14 +56,45 @@ public class BatSwarm {
     }
 
     public void updateSolutionIfBetter(double value, double[] positions){
-        if (value < this.minimumValue && getSomeRandomValueFrom0To1() < loudness){
+        if (value < this.minimumValue){
             this.minimumValue = value;
-            this.currentBest = positions;
+//            this.bestPositions = positions;
+            System.arraycopy(positions, 0, this.bestPositions, 0, positions.length);
+            updateBestPositionsInAllBats();
         }
     }
 
-    private double getSomeRandomValueFrom0To1(){
+    private void updateBestPositionsInAllBats(){
+        for (int i = 0; i < numBats; i++) {
+            this.batSwarm[i].setGlobalBestPositions(this.bestPositions);
+        }
+    }
+
+    public void updateBatAtIndexIfBetterSol(int index, double result){
+        this.batSwarm[index].updatePositionsAndMinimumIfBetter(result, loudness);
+    }
+
+//    public void updateSolutionIfBetterInEarlyPhase(double value, double[] positions){
+//        if (value < this.minimumValue){
+//            this.minimumValue = value;
+//            this.bestPositions = positions;
+//        }
+//    }
+
+    private double getSomeRandomDoubleValueFrom0To1(){
         return rand.nextDouble();
+    }
+
+    public double getNumOfBats(){
+        return this.numBats;
+    }
+
+    public double getBestPosAtIndex(int index){
+        return this.bestPositions[index];
+    }
+
+    public double getMinimumValue(){
+        return this.minimumValue;
     }
 
 }

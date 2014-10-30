@@ -23,8 +23,8 @@ public class Particle {
         xPositions = new double[xSize];
         velocity = new double[xSize];
         xBest = new double[xSize];
-        lowerBoundary = -10;
-        upperBoundary = 10;
+        lowerBoundary = -100;
+        upperBoundary = 100;
     }
 
     public void initializeParticle(){
