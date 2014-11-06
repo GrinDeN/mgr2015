@@ -11,13 +11,12 @@ public class Food {
     protected double trial;
     protected double prob;
     private Random rand;
-    private static final double lowerBound = -5.5;
-    private static final double upperBound = 5.5;
+    private static final double lowerBound = -5.0;
+    private static final double upperBound = 5.0;
 
     public Food(int dimension){
         this.foodPositions = new double[dimension];
         this.rand = new Random();
-        initRandomlyFoodVector();
     }
 
     public void init(double funcValue){
@@ -34,7 +33,7 @@ public class Food {
         }
     }
 
-    private void initRandomlyFoodVector(){
+    public void initRandomlyFoodVector(){
         for (int i = 0; i < foodPositions.length; i++){
             foodPositions[i] = getRandomFromRange(0, 1)*(upperBound-lowerBound)+lowerBound;
         }
@@ -50,6 +49,10 @@ public class Food {
 
     public void setFunctionValue(double value){
         this.functionValue = value;
+    }
+
+    public double getFunctionValue(){
+        return this.functionValue;
     }
 
     private double getRandomFromRange(double min, double max){
@@ -77,7 +80,15 @@ public class Food {
         this.trial = this.trial+1;
     }
 
+    public double getTrial(){
+        return this.trial;
+    }
+
     public void setProbValue(double prob){
         this.prob = prob;
+    }
+
+    public double getProbValue(){
+        return this.prob;
     }
 }
