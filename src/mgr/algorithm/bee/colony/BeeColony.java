@@ -1,8 +1,8 @@
 package mgr.algorithm.bee.colony;
 
-import mgr.test.functions.AckleyFunc;
 import mgr.test.functions.AlgorithmFactory;
 import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.EasomFunc;
 
 import java.util.Random;
 
@@ -170,7 +170,7 @@ public class BeeColony {
         if (getFoodAtIndex(maxTrialIndex).getTrial() >= this.limit){
             getFoodAtIndex(maxTrialIndex).initRandomlyFoodVector();
             double[] eachFoodPositions = getFoodAtIndex(maxTrialIndex).getFoodPositions();
-            result = AckleyFunc.function(eachFoodPositions[0], eachFoodPositions[1]);
+            result = EasomFunc.function(eachFoodPositions[0], eachFoodPositions[1]);
             getFoodAtIndex(maxTrialIndex).init(result);
         }
     }
