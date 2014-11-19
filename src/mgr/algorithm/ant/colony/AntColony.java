@@ -10,10 +10,11 @@ public class AntColony {
     private static final int DIMENSION = 2;
     private static final int NUM_OF_ANTS = 30;
 
-    private static final double lowerBoundary = -5.5;
-    private static final double upperBoundary = 5.5;
+    private static final double lowerBoundary = -5.0;
+    private static final double upperBoundary = 5.0;
 
     private double fitness;
+    private double previousFitness;
     private double[] globalPositions;
     private double[] minusGlobalPositions;
     private double[] positionsToUpdate;
@@ -39,9 +40,11 @@ public class AntColony {
         this.positionsToUpdate = new double[DIMENSION];
         this.ants = new Ant[NUM_OF_ANTS];
         this.dx = new double[DIMENSION];
-        this.alphaParam = 0.5;
-        this.pheronome = 0.5;
+        this.fitness = Double.POSITIVE_INFINITY;
+        this.previousFitness = Double.POSITIVE_INFINITY;
         this.rand = new Random();
+        this.alphaParam = rand.nextDouble();
+        this.pheronome = 0.5;
         initAnts();
     }
 
@@ -79,6 +82,18 @@ public class AntColony {
         }
     }
 
+    public void memorizeBestFuncValue(){
+        double antFuncValue;
+        for (int i = 0; i < this.ants.length; i++){
+            antFuncValue = this.ants[i].getFuncValue();
+            if (antFuncValue < this.fitness){
+                this.previousFitness = this.fitness;
+                this.fitness = antFuncValue;
+                System.arraycopy(this.ants[i].getPositions(), 0, this.globalPositions, 0, this.globalPositions.length);
+            }
+        }
+    }
+
     private void setNewPositions(){
         generateNewdxVector();
         for (int i = 0; i < this.positionsToUpdate.length; i++){
@@ -105,14 +120,41 @@ public class AntColony {
     }
 
     public void setPheronomeUpdate(){
-        this.pheronome = this.pheronome+(0.01*this.fitness);
+        this.pheronome = this.pheronome+(0.01*this.previousFitness);
     }
 
-    public void setFitness(double newFitness){
-        this.fitness = newFitness;
-    }
+//    public void setFitness(double newFitness){
+//        this.fitness = newFitness;
+//    }
 
     public void updateAlphaParam(){
         this.alphaParam = 0.1*this.alphaParam;
+    }
+
+    public void getMinimum(){
+        calculateAllAntsFuncValue();
+        memorizeBestFuncValue();
+        setDirection();
+        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + this.globalPositions[0] + " y: " + this.globalPositions[1]);
+        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
+        int n = 10;
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < k*sqrtMaxIterations; i++){
+                updateAllAntsPositions();
+                calculateAllAntsFuncValue();
+                memorizeBestFuncValue();
+                setPheronomeAtFirstIterations();
+                setPheronomeUpdate();
+            }
+            updateAlphaParam();
+        }
+    }
+
+    public double getFitness(){
+        return this.fitness;
+    }
+
+    public double getGlobalPositionsAtIndex(int index){
+        return this.globalPositions[index];
     }
 }

@@ -9,8 +9,8 @@ public class Ant {
     private double funcValue;
     private double[] positions;
 
-    private final static double lower = -5.5;
-    private final static double upper = 5.5;
+    private final static double lower = -5.0;
+    private final static double upper = 5.0;
 
     public Ant(int dim){
         this.dimension = dim;
