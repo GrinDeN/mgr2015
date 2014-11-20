@@ -5,7 +5,7 @@ import mgr.test.functions.AlgsEnum;
 public class FireflyTest {
 
     public static void main(String[] args){
-        FireflySwarm ffswarm = new FireflySwarm(AlgsEnum.ACKLEY);
+        FireflySwarm ffswarm = new FireflySwarm(AlgsEnum.GOLDSTEINPRICE);
         ffswarm.getMinimum();
 
         System.out.println("Najlepsze wskazane wspolrzedne w fazie koncowej, x: " + ffswarm.getBestPositionAtIndex(0) + " y: " + ffswarm.getBestPositionAtIndex(1));

@@ -17,22 +17,23 @@ public class FireflySwarm {
     private double[] bestPositions;
 //    private double[] bestPositionsCopy;
 
-    private static final double lowerBoundary = -5.5;
-    private static final double upperBoundary = 5.5;
+    private static final double lowerBoundary = -2.0;
+    private static final double upperBoundary = 2.0;
 
     private double scale;
 
     private AlgsEnum algorithm;
 
-    private final static int NUM_OF_FIREFLIES = 30;
-    private final static int MAX_GENERATIONS = 500;
+    private final static int NUM_OF_FIREFLIES = 20;
+    private final static int MAX_GENERATIONS = 400;
 
     private final static int DIMENSION = 2;
 
-    private double alpha = 0.2;
+    private double alpha = 0.35;
     private final static double BETA_MIN = 0.2;
     private final static double BETA0 = 1.0;
     private final static double GAMMA = 1.0;
+    private final static double DELTA = 0.97;
 
     private Random rand;
 
@@ -69,6 +70,7 @@ public class FireflySwarm {
     private void setNewAlpha(){
         double delta = 1-Math.pow((Math.pow(10, -4) / 0.9), 1 / MAX_GENERATIONS);
         this.alpha = (1-delta)*this.alpha;
+//        alpha = alpha*DELTA;
     }
 
     private void getNewSolutions(){
@@ -87,7 +89,7 @@ public class FireflySwarm {
 //        }
         this.firefliesList = Arrays.asList(fireflies);
         Collections.sort(firefliesList);
-        this.firefliesList.toArray(fireflies);
+        this.fireflies = this.firefliesList.toArray(fireflies);
     }
 
     private void saveCurrentBest(){
@@ -109,9 +111,11 @@ public class FireflySwarm {
             for (int j = 0; j < firefliesCopy.length; j++) {
                 radius = getRadius(i, j);
                 if (fireflies[i].getLightness() > firefliesCopy[j].getLightness()){
-                    beta = (BETA0-BETA_MIN)*Math.exp(-GAMMA*Math.pow(radius, 2))+BETA_MIN;
-                    tmpf = alpha*(getRandomFromRange(1, DIMENSION)-0.5)*scale;
-                    updatePositionAtIndex(i, j , beta, tmpf);
+//                    beta = (BETA0-BETA_MIN)*Math.exp(-GAMMA*Math.pow(radius, 2))+BETA_MIN;
+                    beta = BETA0*Math.exp(-GAMMA*Math.pow(radius, 2));
+//                    tmpf = alpha*(getRandomFromRange(1, DIMENSION)-0.5)*scale;
+//                    updatePositionAtIndex(i, j , beta, tmpf);
+                    updatePositionAtIndex(i, j , beta);
                 }
             }
         }
@@ -132,10 +136,12 @@ public class FireflySwarm {
     }
 
 
-    private void updatePositionAtIndex(int index, int j, double beta, double tmpf){
+    private void updatePositionAtIndex(int index, int j, double beta){
         double newPosition;
         for (int k = 0; k < DIMENSION; k++) {
-            newPosition = fireflies[index].getPositionAtIndex(k)*(1-beta)+firefliesCopy[j].getPositionAtIndex(k)*beta+tmpf;
+//            newPosition = fireflies[index].getPositionAtIndex(k)*(1-beta)+firefliesCopy[j].getPositionAtIndex(k)*beta+tmpf;
+            newPosition = fireflies[index].getPositionAtIndex(k)*(1-beta)+firefliesCopy[j].getPositionAtIndex(k)*beta+
+                    alpha*getRandomFromRange(0, 1)-0.5;
             fireflies[index].setNewPositionAtIndex(k, newPosition);
         }
     }

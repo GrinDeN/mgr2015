@@ -8,8 +8,8 @@ public class Firefly implements Comparable<Firefly> {
     private double lightness;
     private int dimension;
 
-    private static final double lowerBoundary = -5.5;
-    private static final double upperBoundary = 5.5;
+    private static final double lowerBoundary = -2.0;
+    private static final double upperBoundary = 2.0;
 
     private Random rand;
 
