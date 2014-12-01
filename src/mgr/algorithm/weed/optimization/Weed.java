@@ -12,8 +12,8 @@ public class Weed implements Comparable<Weed>{
 
     private Random rand;
 
-    private static final double LOWER_BOUNDARY = -4.5;
-    private static final double UPPER_BOUNDARY = 4.5;
+    private static final double LOWER_BOUNDARY = -50.5;
+    private static final double UPPER_BOUNDARY = 50.5;
 
     public Weed(int dim){
         this.dimension = dim;
@@ -21,6 +21,13 @@ public class Weed implements Comparable<Weed>{
         this.numberOfSeeds = 0;
         this.rand = new Random();
         initRandomPositions();
+    }
+
+    public Weed(int dim, double[] startingPositions){
+        this.dimension = dim;
+        this.positions = new double[dimension];
+        System.arraycopy(startingPositions, 0, positions, 0, startingPositions.length);
+        this.numberOfSeeds = 0;
     }
 
     private void initRandomPositions(){
