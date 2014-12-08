@@ -1,8 +1,8 @@
 package mgr.algorithm.bee.colony;
 
-import mgr.test.functions.AlgorithmFactory;
 import mgr.test.functions.AlgsEnum;
-import mgr.test.functions.EasomFunc;
+import mgr.test.functions.TestFuncFactory;
+import mgr.test.functions.TestFunction;
 
 import java.util.Random;
 
@@ -21,13 +21,17 @@ public class BeeColony {
     private double[] solutionToChange;
     private double globalFitnessValue;
 
-    protected static final double lowerBoundary = -5.0;
-    protected static final double upperBoundary = 5.0;
+    private TestFunction testFunction;
+
+    protected double lowerBoundary;
+    protected double upperBoundary;
     private int limit;
 
-    public BeeColony(int foodNumber, int dimension){
+    public BeeColony(AlgsEnum alg, int foodNumber, int dimension){
+        this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.numOfFood = foodNumber;
         this.dim = dimension;
+        initBoundariesFromTestFunc();
         this.foodFarm = new Food[this.numOfFood];
         this.best_xPositions = new double[dim];
         this.globalMinimum = 1000000;
@@ -37,44 +41,88 @@ public class BeeColony {
         initFood();
     }
 
+    private void initBoundariesFromTestFunc(){
+        this.lowerBoundary = testFunction.getLowerBoundary();
+        this.upperBoundary = testFunction.getUpperBoundary();
+    }
+
     private void initFood(){
         for (int i = 0; i < numOfFood; i++) {
-            this.foodFarm[i] = new Food(dim);
+            this.foodFarm[i] = new Food(dim, testFunction.getLowerBoundary(), testFunction.getUpperBoundary());
         }
     }
 
-    public Food getFoodAtIndex(int index){
+    public void getMinimum(){
+        double result;
+        for (int i = 0; i < getNumOfFood(); i++) {
+            getFoodAtIndex(i).initRandomlyFoodVector();
+            double[] eachFoodPositions = getFoodAtIndex(i).getFoodPositions();
+            result = testFunction.getResult(eachFoodPositions);
+            getFoodAtIndex(i).init(result);
+            if (i==0){
+                setBestxPositions(eachFoodPositions);
+                setGlobalMinimum(result);
+            } else{
+                updateSolutionIfBetter(result, eachFoodPositions);
+            }
+        }
+        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getGlobalMinimum());
+        //koniec fazy wstepnej
+
+        double resultOfChangedSolution;
+        for (int iter = 0; iter < 5000; iter++){
+            if (testFunction.isSolutionEnoughNearMinimum(getGlobalMinimum())) {
+                System.out.println("Algorytm wykonał " + iter + " iteracji.");
+                break;
+            }
+            for (int i = 0; i < getNumOfFood(); i++){
+                sendEmployedBees();
+                double[] changedSolution = getChangedSolution();
+//                resultOfChangedSolution = EasomFunc.function(changedSolution[0], changedSolution[1]);
+                resultOfChangedSolution = testFunction.getResult(changedSolution);
+                calculateFitness(resultOfChangedSolution);
+                checkFitnessAndUpdate(resultOfChangedSolution, i);
+                calculateProbabilities();
+                sendOnLookerBees();
+                memorizeBestPositions();
+                sendScoutBees();
+            }
+        }
+    }
+
+    private Food getFoodAtIndex(int index){
         return this.foodFarm[index];
     }
 
-    public int getNumOfFood(){
+    private int getNumOfFood(){
         return this.numOfFood;
     }
 
-    public void setBestxPositions(double[] eachFoodPositions){
+    private void setBestxPositions(double[] eachFoodPositions){
         System.arraycopy(eachFoodPositions, 0, this.best_xPositions, 0, eachFoodPositions.length);
     }
 
-    public void setGlobalMinimum(double result){
+    private void setGlobalMinimum(double result){
         this.globalMinimum = result;
     }
 
-    public void updateSolutionIfBetter(double value, double[] positions){
+    private void updateSolutionIfBetter(double value, double[] positions){
         if (value < this.globalMinimum){
             setGlobalMinimum(value);
             System.arraycopy(positions, 0, this.best_xPositions, 0, positions.length);
         }
     }
 
-    public double getBestPosAtIndex(int index){
+    private double getBestPosAtIndex(int index){
         return this.best_xPositions[index];
     }
 
-    public double getGlobalMinimum(){
+    private double getGlobalMinimum(){
         return this.globalMinimum;
     }
 
-    public void sendEmployedBees(){
+    private void sendEmployedBees(){
         for (int i = 0; i < getNumOfFood(); i++){
             this.param2change = (int)(rand.nextDouble()*dim);
 //            System.out.println("param2change: "+param2change);
@@ -95,11 +143,11 @@ public class BeeColony {
         }
     }
 
-    public double[] getChangedSolution(){
+    private double[] getChangedSolution(){
         return this.solutionToChange;
     }
 
-    public void calculateFitness(double result){
+    private void calculateFitness(double result){
         if(result >= 0){
             this.globalFitnessValue = 1/(result+1);
         } else{
@@ -107,7 +155,7 @@ public class BeeColony {
         }
     }
 
-    public void checkFitnessAndUpdate(double resultOfChangedSolution, int indexOfFood){
+    private void checkFitnessAndUpdate(double resultOfChangedSolution, int indexOfFood){
         if (this.globalFitnessValue > getFoodAtIndex(indexOfFood).getFitness()){
             getFoodAtIndex(indexOfFood).setTrialToZero();
             getFoodAtIndex(indexOfFood).setFoodPositions(this.solutionToChange);
@@ -118,7 +166,7 @@ public class BeeColony {
         }
     }
 
-    public void calculateProbabilities(){
+    private void calculateProbabilities(){
         double maxFit = getFoodAtIndex(0).getFitness();
         double prob = 0;
         for (int i = 1; i < getNumOfFood(); i++){
@@ -133,7 +181,7 @@ public class BeeColony {
         }
     }
 
-    public void sendOnLookerBees(AlgsEnum enumArg){
+    private void sendOnLookerBees(){
         int t = 0;
         int i = 0;
         while (t < getNumOfFood()){
@@ -148,7 +196,8 @@ public class BeeColony {
                 this.solutionToChange[param2change] = getFoodAtIndex(i).getFoodPositionAtIndex(param2change)-
                         getFoodAtIndex(neighbour).getFoodPositionAtIndex(param2change)*(rand.nextDouble()-0.5)*2;
                 correctSolutionValueAtIndexToBoundaries(param2change);
-                this.objValueSolution = AlgorithmFactory.getResultOfAlgorithm(enumArg, this.solutionToChange[0], this.solutionToChange[1]);
+//                this.objValueSolution = TestFuncFactory.getResultOfAlgorithm(enumArg, this.solutionToChange[0], this.solutionToChange[1]);
+                this.objValueSolution = testFunction.getResult(solutionToChange);
                 calculateFitnessSolution();
                 checkFitnessAndUpdate(this.objValueSolution, i);
             }
@@ -159,7 +208,7 @@ public class BeeColony {
         }
     }
 
-    public void sendScoutBees(){
+    private void sendScoutBees(){
         int maxTrialIndex = 0;
         double result;
         for (int i = 1; i < getNumOfFood(); i++) {
@@ -170,7 +219,8 @@ public class BeeColony {
         if (getFoodAtIndex(maxTrialIndex).getTrial() >= this.limit){
             getFoodAtIndex(maxTrialIndex).initRandomlyFoodVector();
             double[] eachFoodPositions = getFoodAtIndex(maxTrialIndex).getFoodPositions();
-            result = EasomFunc.function(eachFoodPositions[0], eachFoodPositions[1]);
+//            result = EasomFunc.function(eachFoodPositions[0], eachFoodPositions[1]);
+            result = testFunction.getResult(eachFoodPositions);
             getFoodAtIndex(maxTrialIndex).init(result);
         }
     }
@@ -183,7 +233,7 @@ public class BeeColony {
         }
     }
 
-    public void memorizeBestPositions(){
+    private void memorizeBestPositions(){
         double eachFoodResult;
         double[] eachFoodPositions;
         for (int i = 0; i < getNumOfFood(); i++){
@@ -191,5 +241,10 @@ public class BeeColony {
             eachFoodPositions = getFoodAtIndex(i).getFoodPositions();
             updateSolutionIfBetter(eachFoodResult, eachFoodPositions);
         }
+    }
+
+    public void printResult(){
+        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getGlobalMinimum());
     }
 }

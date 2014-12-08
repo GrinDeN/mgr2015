@@ -12,11 +12,13 @@ public class Weed implements Comparable<Weed>{
 
     private Random rand;
 
-    private static final double LOWER_BOUNDARY = -50.5;
-    private static final double UPPER_BOUNDARY = 50.5;
+    private double lowerBoundary;
+    private double upperBoundary;
 
-    public Weed(int dim){
+    public Weed(int dim, double lowerBound, double upperBound){
         this.dimension = dim;
+        this.lowerBoundary = lowerBound;
+        this.upperBoundary = upperBound;
         this.positions = new double[dimension];
         this.numberOfSeeds = 0;
         this.rand = new Random();
@@ -32,7 +34,7 @@ public class Weed implements Comparable<Weed>{
 
     private void initRandomPositions(){
         for (int i = 0; i < positions.length; i++) {
-            this.positions[i] = getRandomFromRange(LOWER_BOUNDARY, UPPER_BOUNDARY);
+            this.positions[i] = getRandomFromRange(lowerBoundary, upperBoundary);
         }
     }
 
@@ -49,8 +51,18 @@ public class Weed implements Comparable<Weed>{
         double[] positionsToUpdate = new double[dimension];
         for (int i = 0; i < dimension; i++) {
             positionsToUpdate[i] = this.positions[i] + newPositions[i];
+//            positionsToUpdate[i] = correctPosition(positionsToUpdate[i]);
         }
         System.arraycopy(positionsToUpdate, 0, this.positions, 0, positionsToUpdate.length);
+    }
+
+    private double correctPosition(double position){
+        if (position > upperBoundary){
+            position = upperBoundary;
+        } else if (position < lowerBoundary){
+            position = lowerBoundary;
+        }
+        return position;
     }
 
     public double getFitness(){

@@ -1,7 +1,8 @@
 package mgr.algorithm.firefly;
 
-import mgr.test.functions.AlgorithmFactory;
 import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncFactory;
+import mgr.test.functions.TestFunction;
 
 import java.util.*;
 
@@ -17,19 +18,19 @@ public class FireflySwarm {
     private double[] bestPositions;
 //    private double[] bestPositionsCopy;
 
-    private static final double lowerBoundary = -2.0;
-    private static final double upperBoundary = 2.0;
+    private double lowerBoundary;
+    private double upperBoundary;
 
     private double scale;
 
-    private AlgsEnum algorithm;
+    private TestFunction testFunction;
 
     private final static int NUM_OF_FIREFLIES = 20;
-    private final static int MAX_GENERATIONS = 400;
+    private final static int MAX_GENERATIONS = 500;
 
     private final static int DIMENSION = 2;
 
-    private double alpha = 0.35;
+    private double alpha = 0.67;
     private final static double BETA_MIN = 0.2;
     private final static double BETA0 = 1.0;
     private final static double GAMMA = 1.0;
@@ -38,11 +39,12 @@ public class FireflySwarm {
     private Random rand;
 
     public FireflySwarm(AlgsEnum alg){
-        this.algorithm = alg;
+        this.testFunction = TestFuncFactory.getTestFunction(alg);
+        initBoundariesFromTestFunc();
         this.fireflies = new Firefly[NUM_OF_FIREFLIES];
         this.firefliesCopy = new Firefly[NUM_OF_FIREFLIES];
-        this.firefliesList = new ArrayList<Firefly>();
-        this.firefliesListCopy = new ArrayList<Firefly>();
+//        this.firefliesList = new ArrayList<Firefly>();
+//        this.firefliesListCopy = new ArrayList<Firefly>();
         this.bestPositions = new double[DIMENSION];
         this.bestLightness = Double.POSITIVE_INFINITY;
         this.scale = Math.abs(upperBoundary-lowerBoundary);
@@ -50,27 +52,36 @@ public class FireflySwarm {
         initFireFlies();
     }
 
+    private void initBoundariesFromTestFunc(){
+        this.lowerBoundary = testFunction.getLowerBoundary();
+        this.upperBoundary = testFunction.getUpperBoundary();
+    }
+
     private void initFireFlies(){
         for (int i = 0; i < fireflies.length; i++) {
-            this.fireflies[i] = new Firefly(DIMENSION);
+            this.fireflies[i] = new Firefly(DIMENSION, testFunction.getLowerBoundary(), testFunction.getUpperBoundary());
         }
     }
 
     public void getMinimum(){
-        for (int k = 0; k < MAX_GENERATIONS; k++){
-            setNewAlpha();
+        for (int iter = 0; iter < MAX_GENERATIONS; iter++){
+            if (testFunction.isSolutionEnoughNearMinimum(getBestLightness())) {
+                System.out.println("Algorytm wykonał " + iter + " iteracji.");
+                break;
+            }
             getNewSolutions();
             sortFirefliesInList();
             saveCurrentBest();
-            setCopyOfList();
+            setCopyOfArray();
             moveFireflies();
+            setNewAlpha();
         }
     }
 
     private void setNewAlpha(){
-        double delta = 1-Math.pow((Math.pow(10, -4) / 0.9), 1 / MAX_GENERATIONS);
-        this.alpha = (1-delta)*this.alpha;
-//        alpha = alpha*DELTA;
+//        double delta = 1-Math.pow((Math.pow(10, -4) / 0.9), 1 / MAX_GENERATIONS);
+//        this.alpha = (1-delta)*this.alpha;
+        alpha = alpha*DELTA;
     }
 
     private void getNewSolutions(){
@@ -78,7 +89,8 @@ public class FireflySwarm {
         double newLightness;
         for (int i = 0; i < fireflies.length; i++) {
             fireflyPositions = this.fireflies[i].getPositions();
-            newLightness = AlgorithmFactory.getResultOfAlgorithm(algorithm, fireflyPositions[0], fireflyPositions[1]);
+//            newLightness = TestFuncFactory.getResultOfAlgorithm(algorithm, fireflyPositions[0], fireflyPositions[1]);
+            newLightness = testFunction.getResult(fireflyPositions);
             this.fireflies[i].setLightness(newLightness);
         }
     }
@@ -87,9 +99,10 @@ public class FireflySwarm {
 //        if (firefliesList.size() != 0){
 //            this.firefliesList.clear();
 //        }
-        this.firefliesList = Arrays.asList(fireflies);
-        Collections.sort(firefliesList);
-        this.fireflies = this.firefliesList.toArray(fireflies);
+//        this.firefliesList = Arrays.asList(fireflies);
+//        Collections.sort(firefliesList);
+//        this.fireflies = this.firefliesList.toArray(fireflies);
+        Arrays.sort(this.fireflies);
     }
 
     private void saveCurrentBest(){
@@ -97,10 +110,11 @@ public class FireflySwarm {
         System.arraycopy(fireflies[0].getPositions(), 0, bestPositions, 0, bestPositions.length);
     }
 
-    private void setCopyOfList(){
-        this.firefliesListCopy.clear();
-        this.firefliesListCopy.addAll(firefliesList);
-        this.firefliesListCopy.toArray(firefliesCopy);
+    private void setCopyOfArray(){
+//        this.firefliesListCopy.clear();
+//        this.firefliesListCopy.addAll(firefliesList);
+//        this.firefliesListCopy.toArray(firefliesCopy);
+        firefliesCopy = Arrays.copyOf(fireflies, NUM_OF_FIREFLIES);
     }
 
     private void moveFireflies(){
@@ -141,7 +155,7 @@ public class FireflySwarm {
         for (int k = 0; k < DIMENSION; k++) {
 //            newPosition = fireflies[index].getPositionAtIndex(k)*(1-beta)+firefliesCopy[j].getPositionAtIndex(k)*beta+tmpf;
             newPosition = fireflies[index].getPositionAtIndex(k)*(1-beta)+firefliesCopy[j].getPositionAtIndex(k)*beta+
-                    alpha*getRandomFromRange(0, 1)-0.5;
+                    alpha*(getRandomFromRange(0, 1)-0.5);
             fireflies[index].setNewPositionAtIndex(k, newPosition);
         }
     }
@@ -164,5 +178,10 @@ public class FireflySwarm {
                 }
             }
         }
+    }
+
+    public void printResult(){
+        System.out.println("Najlepsze wskazane wspolrzedne w fazie koncowej, x: " + getBestPositionAtIndex(0) + " y: " + getBestPositionAtIndex(1));
+        System.out.println("Najlepszy wskazany rezultat w fazie koncowej: " + getBestLightness());
     }
 }

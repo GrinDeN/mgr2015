@@ -1,5 +1,9 @@
 package mgr.algorithm.bat.swarm;
 
+import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncFactory;
+import mgr.test.functions.TestFunction;
+
 import java.util.Random;
 
 public class BatSwarm {
@@ -15,12 +19,15 @@ public class BatSwarm {
 
     private Random rand;
 
-    public BatSwarm(int numOfBats, int dim){
+    private TestFunction testFunction;
+
+    public BatSwarm(AlgsEnum alg, int numOfBats, int dim){
+        this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.numBats = numOfBats;
         this.dimension = dim;
         this.pulseRate = 0.5;
         this.loudness = 0.5;
-        this.minimumValue = 1000000;
+        this.minimumValue = Double.POSITIVE_INFINITY;
         this.bestPositions = new double[dimension];
         rand = new Random();
         initBats();
@@ -29,11 +36,49 @@ public class BatSwarm {
     private void initBats(){
         this.batSwarm = new Bat[numBats];
         for (int i = 0; i < numBats; i++) {
-            batSwarm[i] = new Bat(dimension);
+            batSwarm[i] = new Bat(dimension, testFunction.getLowerBoundary(), testFunction.getUpperBoundary());
         }
     }
 
-    public Bat getBatAtIndex(int index){
+    public void getMinimum(){
+        double result;
+        for (int i = 0; i < getNumOfBats(); i++) {
+            double[] eachBatPositions = getBatAtIndex(i).get_xBestPositions();
+            result = testFunction.getResult(eachBatPositions);
+            getBatAtIndex(i).setCurrentMinimum(result);
+            if (i==0){
+                setBestMinimumValue(result);
+                setBestPositions(eachBatPositions);
+            } else{
+                updateSolutionIfBetter(result, eachBatPositions);
+            }
+        }
+//        updateBestPositionsInAllBats();
+        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getMinimumValue());
+        //koniec fazy wstepnej
+
+        for (int iter = 0; iter < 5000; iter++) {
+            if (testFunction.isSolutionEnoughNearMinimum(getMinimumValue())) {
+                System.out.println("Algorytm wykonał " + iter + " iteracji.");
+                break;
+            }
+            for (int i = 0; i < getNumOfBats(); i++){
+                getBatAtIndex(i).updateMovement();
+//                batSwarm.correctPositionsToBoundaries(i);
+                getSomeRandomWalk(i);
+                double[] eachBatPositions = getBatAtIndex(i).get_xPositions();
+//                result = AckleyFunc.function(eachBatPositions[0], eachBatPositions[1]);
+                result = testFunction.getResult(eachBatPositions);
+//                batSwarm.updateSolutionIfBetter(result, eachBatPositions);
+                updateBatAtIndexIfBetterSol(i, result);
+                updateSolutionIfBetter(result, eachBatPositions);
+//                batSwarm.updateBestPositionsInAllBats();
+            }
+        }
+    }
+
+    private Bat getBatAtIndex(int index){
         return this.batSwarm[index];
     }
 
@@ -41,21 +86,21 @@ public class BatSwarm {
 //        this.batSwarm[index].correctPositions();
 //    }
 
-    public void getSomeRandomWalk(int index){
+    private void getSomeRandomWalk(int index){
         if (getSomeRandomDoubleValueFrom0To1() > pulseRate){
             this.batSwarm[index].generateNewPositionsNearBest();
         }
     }
 
-    public void setBestPositions(double[] best){
+    private void setBestPositions(double[] best){
         this.bestPositions = best;
     }
 
-    public void setBestMinimumValue(double value){
+    private void setBestMinimumValue(double value){
         this.minimumValue = value;
     }
 
-    public void updateSolutionIfBetter(double value, double[] positions){
+    private void updateSolutionIfBetter(double value, double[] positions){
         if (value < this.minimumValue){
             this.minimumValue = value;
 //            this.bestPositions = positions;
@@ -70,7 +115,7 @@ public class BatSwarm {
         }
     }
 
-    public void updateBatAtIndexIfBetterSol(int index, double result){
+    private void updateBatAtIndexIfBetterSol(int index, double result){
         this.batSwarm[index].updatePositionsAndMinimumIfBetter(result, loudness);
     }
 
@@ -85,16 +130,21 @@ public class BatSwarm {
         return rand.nextDouble();
     }
 
-    public double getNumOfBats(){
+    private double getNumOfBats(){
         return this.numBats;
     }
 
-    public double getBestPosAtIndex(int index){
+    private double getBestPosAtIndex(int index){
         return this.bestPositions[index];
     }
 
-    public double getMinimumValue(){
+    private double getMinimumValue(){
         return this.minimumValue;
+    }
+
+    public void printResult(){
+        System.out.println("Najlepsze wskazane wspolrzedne po wszystkich iteracjach, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+        System.out.println("Najlepszy wskazany rezultat po wszystkich iteracjach: " + getMinimumValue());
     }
 
 }

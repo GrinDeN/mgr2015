@@ -1,7 +1,8 @@
 package mgr.algorithm.grey.wolf;
 
-import mgr.test.functions.AlgorithmFactory;
 import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncFactory;
+import mgr.test.functions.TestFunction;
 
 import java.util.Random;
 
@@ -10,28 +11,35 @@ public class WolfsPack {
     private static final int DIMENSION = 2;
     private static final int NUM_OF_AGENTS = 30;
 
-    private static final double lowerBoundary = -5.5;
-    private static final double upperBoundary = 5.5;
+    private double lowerBoundary;
+    private double upperBoundary;
 
     private double[][] globalPositions;
     double fitness;
     private Random rand;
     private int max_iter;
-    private AlgsEnum algorithm;
 
     private Wolf alpha;
     private Wolf beta;
     private Wolf delta;
 
+    private TestFunction testFunction;
+
     public WolfsPack(AlgsEnum alg, int max_iter){
+        this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.alpha = new Wolf(DIMENSION);
         this.beta = new Wolf(DIMENSION);
         this.delta = new Wolf(DIMENSION);
         this.globalPositions = new double[NUM_OF_AGENTS][DIMENSION];
         this.rand = new Random();
         this.max_iter = max_iter;
-        this.algorithm = alg;
+        initBoundariesFromTestFunc();
         initializePositions();
+    }
+
+    private void initBoundariesFromTestFunc(){
+        this.lowerBoundary = testFunction.getLowerBoundary();
+        this.upperBoundary = testFunction.getUpperBoundary();
     }
 
     private void initializePositions(){
@@ -48,11 +56,16 @@ public class WolfsPack {
     }
 
     public void getMinimum(){
-        int l = 0;
-        while (l < max_iter){
+        int iter = 0;
+        while (iter < max_iter){
+            if (testFunction.isSolutionEnoughNearMinimum(getAlphaScore())) {
+                System.out.println("Algorytm wykonał " + iter + " iteracji.");
+                break;
+            }
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 correctPositionsAtIndex(i);
-                fitness = AlgorithmFactory.getResultOfAlgorithm(algorithm, globalPositions[i][0], globalPositions[i][1]);
+//                fitness = TestFuncFactory.getResultOfAlgorithm(algorithm, globalPositions[i][0], globalPositions[i][1]);
+                fitness = testFunction.getResult(globalPositions[i]);
                 if (fitness < alpha.getScore()){
                     alpha.setScore(fitness);
                     alpha.setPositions(getGlobalPositionsAtIndex(i));
@@ -66,7 +79,7 @@ public class WolfsPack {
                     beta.setPositions(getGlobalPositionsAtIndex(i));
                 }
             }
-            double a = 2-l*(2/max_iter);
+            double a = 2-   iter*(2/max_iter);
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 for (int j = 0; j < DIMENSION; j++){
 //                    r1 = rand.nextDouble();
@@ -97,7 +110,7 @@ public class WolfsPack {
                     globalPositions[i][j] = (X1+X2+X3)/3;
                 }
             }
-            l++;
+            iter++;
         }
     }
 
@@ -129,12 +142,17 @@ public class WolfsPack {
         return xParameter;
     }
 
-    public double getAlphaScore(){
+    private double getAlphaScore(){
         return this.alpha.getScore();
     }
 
-    public double getAlphaPositionAtIndex(int index){
+    private double getAlphaPositionAtIndex(int index){
         return this.alpha.getPositionAtIndex(index);
+    }
+
+    public void printResults(){
+        System.out.println("Najlepsze wskazane wspolrzedne, x: " + getAlphaPositionAtIndex(0) + " y: " + getAlphaPositionAtIndex(1));
+        System.out.println("Najlepszy wskazany rezultat: " + getAlphaScore());
     }
 
 }

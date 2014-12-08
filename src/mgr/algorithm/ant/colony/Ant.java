@@ -9,11 +9,13 @@ public class Ant {
     private double funcValue;
     private double[] positions;
 
-    private final static double lower = -5.0;
-    private final static double upper = 5.0;
+    private double lower;
+    private double upper;
 
-    public Ant(int dim){
+    public Ant(int dim, double lowerBound, double upperBound){
         this.dimension = dim;
+        this.lower = lowerBound;
+        this.upper = upperBound;
         this.positions = new double[dimension];
         this.funcValue = Double.POSITIVE_INFINITY;
         this.rand = new Random();

@@ -16,15 +16,15 @@ public class Particle {
     private final double FI_1 = 1.49;
     private final double FI_2 = 1.49;
 
-    public Particle(int sizeOfX){
-        bestErrorValue = 10000;
-        actualErrorValue = 100000;
+    public Particle(int sizeOfX, double lowerBoundary, double upperBoundary){
+        bestErrorValue = Double.POSITIVE_INFINITY;
+        actualErrorValue = Double.POSITIVE_INFINITY;
         xSize = sizeOfX;
         xPositions = new double[xSize];
         velocity = new double[xSize];
         xBest = new double[xSize];
-        lowerBoundary = -100;
-        upperBoundary = 100;
+        this.lowerBoundary = lowerBoundary;
+        this.upperBoundary = upperBoundary;
     }
 
     public void initializeParticle(){

@@ -1,7 +1,8 @@
 package mgr.algorithm.weed.optimization;
 
-import mgr.test.functions.AlgorithmFactory;
+import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFunction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,19 +13,18 @@ public class WeedColony {
     public static final int DIMENSION = 2;
     public static final int INITIAL_AGENTS = 10*DIMENSION;
     public static final int MAX_NUMBER_OF_PLANT_POPULATION = 20*DIMENSION;
-    public static final int MAX_ITERATIONS = 500;
+    public static final int MAX_ITERATIONS = 1000;
     public static final int MAX_NUMBER_OF_SEEDS = 5;
     public static final int MIN_NUMBER_OF_SEEDS = 0;
     public static final int NONLINEAR_MODULATION = 3;
-    public static final double INIT_VALUE_OF_STANDARD_DEV = 70.0;
-    public static final double FINAL_VALUE_OF_STANDARD_DEV = 0.0001;
 
-    private static final double LOWER_BOUNDARY = -4.5;
-    private static final double UPPER_BOUNDARY = 4.5;
+//    private static final double LOWER_BOUNDARY = -4.5;
+//    private static final double UPPER_BOUNDARY = 4.5;
 
     private int currentIteration = 1;
 
-    private AlgsEnum algorithm;
+//    private AlgsEnum algorithm;
+    private TestFunction testFunction;
 
     private ArrayList<Weed> bestWeeds;
     private ArrayList<Weed> seedCandidates;
@@ -36,16 +36,26 @@ public class WeedColony {
 
     private Random rand;
 
-//    private double bestGlobalFitness;
-//    private double[] bestGlobalPositions;
+    private double initValueOfStandardDev;
+    private double finalValueOfStandardDev;
 
-    public WeedColony(AlgsEnum alg){
-        this.algorithm = alg;
+    private double lowerBoundary;
+    private double upperBoundary;
+
+
+    public WeedColony(AlgsEnum alg, double initValueOfStandardDev, double finalValueOfStandardDev){
+        this.testFunction = TestFuncFactory.getTestFunction(alg);
+        initBoundariesFromTestFunc();
+        this.initValueOfStandardDev = initValueOfStandardDev;
+        this.finalValueOfStandardDev = finalValueOfStandardDev;
         this.bestWeeds = new ArrayList<Weed>();
         this.seedCandidates = new ArrayList<Weed>();
-//        this.bestGlobalPositions = new double[DIMENSION];
         this.rand = new Random();
-//        initAgentsAtBeginning();
+    }
+
+    private void initBoundariesFromTestFunc(){
+        this.lowerBoundary = testFunction.getLowerBoundary();
+        this.upperBoundary = testFunction.getUpperBoundary();
     }
 
     /*private void setGlobalBestWeedPositionsAndFitness(){
@@ -65,13 +75,17 @@ public class WeedColony {
             calculateWeedsFitnessAtList(seedCandidates);
             addBothListAndSortIt();
             trimBestWeedsList();
+            if (testFunction.isSolutionEnoughNearMinimum(getBestFitness())) {
+                System.out.println("Algorytm wykonał " + currentIteration + " iteracji.");
+                break;
+            }
             currentIteration++;
         }
     }
 
     private void initAgentsAtBeginning(){
         for (int i = 0; i < INITIAL_AGENTS; i++) {
-            this.bestWeeds.add(new Weed(DIMENSION));
+            this.bestWeeds.add(new Weed(DIMENSION, lowerBoundary, upperBoundary));
         }
         calculateWeedsFitnessAtList(bestWeeds);
         sortAndSaveMinMaxFitness();
@@ -83,7 +97,8 @@ public class WeedColony {
         double eachWeedFitness;
         for (Weed weed : listOfWeeds){
             eachWeedPositions = weed.getPositions();
-            eachWeedFitness = AlgorithmFactory.getResultOfAlgorithm(algorithm, eachWeedPositions[0], eachWeedPositions[1]);
+//            eachWeedFitness = TestFuncFactory.getResultOfAlgorithm(algorithm, eachWeedPositions[0], eachWeedPositions[1]);
+            eachWeedFitness = testFunction.getResult(eachWeedPositions);
             weed.setFitness(eachWeedFitness);
         }
     }
@@ -100,6 +115,10 @@ public class WeedColony {
         return bestWeeds.get(0);
     }
 
+    private double getBestFitness(){
+        return getBestWeed().getFitness();
+    }
+
     private void setCurrentMinFitness(double newMinFitness){
         this.currentMinFitness = newMinFitness;
     }
@@ -114,8 +133,8 @@ public class WeedColony {
 
     private void setCurrentStandardDeviation(){
         this.currentStandardDeviation = (Math.pow(MAX_ITERATIONS - currentIteration, NONLINEAR_MODULATION)
-                /Math.pow(MAX_ITERATIONS, NONLINEAR_MODULATION))*(INIT_VALUE_OF_STANDARD_DEV-FINAL_VALUE_OF_STANDARD_DEV)
-                +FINAL_VALUE_OF_STANDARD_DEV;
+                /Math.pow(MAX_ITERATIONS, NONLINEAR_MODULATION))*(initValueOfStandardDev-finalValueOfStandardDev)
+                +finalValueOfStandardDev;
     }
 
     private void clearSeedCandidatesList(){
@@ -133,6 +152,10 @@ public class WeedColony {
         int seedsNumber = (int) ((MAX_NUMBER_OF_SEEDS*(currentMaxFitness-currentWeedFitness))/(currentMaxFitness-currentMinFitness));
         seedsNumber = trimMaxNumberOfSeeds(seedsNumber);
         this.bestWeeds.get(weedIndex).setNumberOfSeeds(seedsNumber);
+    }
+
+    private int trimMaxNumberOfSeeds(int seeds){
+        return seeds <= MAX_NUMBER_OF_SEEDS ? seeds : MAX_NUMBER_OF_SEEDS;
     }
 
     private void produceNewSeeds(){
@@ -169,10 +192,6 @@ public class WeedColony {
     private void addBothListAndSortIt(){
         bestWeeds.addAll(seedCandidates);
         Collections.sort(bestWeeds);
-    }
-
-    private int trimMaxNumberOfSeeds(int seeds){
-        return seeds <= MAX_NUMBER_OF_SEEDS ? seeds : MAX_NUMBER_OF_SEEDS;
     }
 
     private void trimBestWeedsList(){

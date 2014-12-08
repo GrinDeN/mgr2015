@@ -8,16 +8,18 @@ public class Firefly implements Comparable<Firefly> {
     private double lightness;
     private int dimension;
 
-    private static final double lowerBoundary = -2.0;
-    private static final double upperBoundary = 2.0;
+    private double lowerBoundary;
+    private double upperBoundary;
 
     private Random rand;
 
-    public Firefly(int dim){
+    public Firefly(int dim, double lowerBoundary, double upperBoundary){
         this.dimension = dim;
+        this.lowerBoundary = lowerBoundary;
+        this.upperBoundary = upperBoundary;
         this.positions = new double[dimension];
         this.rand = new Random();
-        this.lightness = Double.POSITIVE_INFINITY;
+        this.lightness = 0;
         initFirefly();
     }
 

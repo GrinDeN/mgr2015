@@ -15,19 +15,21 @@ public class Bat {
 
     private double currentMinimum;
 
-    private double lowerBoundary = -4.5;
-    private double upperBoundary = 4.5;
+    private double lowerBoundary;
+    private double upperBoundary;
 
     private static final double f_min = 0;
     private static final double f_max = 2;
 
-    public Bat(int dimension){
+    public Bat(int dimension, double lowerBound, double upperBound){
         this.xSize = dimension;
         this.current_xPositions = new double[xSize];
         this.best_xPositions = new double[xSize];
         this.xBestOfAllSwarm = new double[xSize];
         this.velocity = new double[xSize];
         this.currentMinimum = 0;
+        this.lowerBoundary = lowerBound;
+        this.upperBoundary = upperBound;
         this.rand = new Random();
         initFrequency();
         initializeBat();
@@ -44,6 +46,7 @@ public class Bat {
             this.velocity[i] = 0.0;
         }
     }
+
 
     private double getRandomFromRange(double min, double max){
         double result = min + (rand.nextDouble()*(max-min));

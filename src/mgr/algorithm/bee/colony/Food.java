@@ -11,11 +11,13 @@ public class Food {
     protected double trial;
     protected double prob;
     private Random rand;
-    private static final double lowerBound = -5.0;
-    private static final double upperBound = 5.0;
+    private double lowerBound;
+    private double upperBound;
 
-    public Food(int dimension){
+    public Food(int dimension, double lowerBound, double upperBound){
         this.foodPositions = new double[dimension];
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
         this.rand = new Random();
     }
 
