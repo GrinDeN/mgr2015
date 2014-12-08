@@ -1,6 +1,6 @@
 package mgr.algorithm.grey.wolf;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
@@ -25,7 +25,7 @@ public class WolfsPack {
 
     private TestFunction testFunction;
 
-    public WolfsPack(AlgsEnum alg, int max_iter){
+    public WolfsPack(TestFuncEnum alg, int max_iter){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.alpha = new Wolf(DIMENSION);
         this.beta = new Wolf(DIMENSION);

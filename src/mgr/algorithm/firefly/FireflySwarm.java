@@ -1,12 +1,13 @@
 package mgr.algorithm.firefly;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.algorithm.SwarmAlgorithm;
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
 import java.util.*;
 
-public class FireflySwarm {
+public class FireflySwarm implements SwarmAlgorithm{
 
     private Firefly[] fireflies;
     private Firefly[] firefliesCopy;
@@ -38,7 +39,7 @@ public class FireflySwarm {
 
     private Random rand;
 
-    public FireflySwarm(AlgsEnum alg){
+    public FireflySwarm(TestFuncEnum alg){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         initBoundariesFromTestFunc();
         this.fireflies = new Firefly[NUM_OF_FIREFLIES];
@@ -63,11 +64,11 @@ public class FireflySwarm {
         }
     }
 
-    public void getMinimum(){
+    public int getMinimum(){
         for (int iter = 0; iter < MAX_GENERATIONS; iter++){
             if (testFunction.isSolutionEnoughNearMinimum(getBestLightness())) {
                 System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                break;
+                return iter;
             }
             getNewSolutions();
             sortFirefliesInList();
@@ -76,6 +77,7 @@ public class FireflySwarm {
             moveFireflies();
             setNewAlpha();
         }
+        return 0;
     }
 
     private void setNewAlpha(){

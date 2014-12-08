@@ -1,10 +1,10 @@
 package mgr.algorithm.particle.swarm;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncEnum;
 
 public class SwarmTest {
     public static void main(String[] args){
-        AlgsEnum alg = AlgsEnum.EASOM;
+        TestFuncEnum alg = TestFuncEnum.EASOM;
         Swarm swarm = new Swarm(alg, 20, 2);
         swarm.getMinimum();
     }

@@ -1,5 +1,5 @@
 package mgr.test.functions;
 
-public enum AlgsEnum {
+public enum TestFuncEnum {
     ACKLEY, BEALES, EASOM, GOLDSTEINPRICE, MATYAS;
 }

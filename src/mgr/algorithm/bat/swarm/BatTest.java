@@ -1,10 +1,10 @@
 package mgr.algorithm.bat.swarm;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncEnum;
 
 public class BatTest {
     public static void main(String[] args){
-        AlgsEnum alg = AlgsEnum.EASOM;
+        TestFuncEnum alg = TestFuncEnum.EASOM;
         BatSwarm batSwarm = new BatSwarm(alg, 20, 2);
         batSwarm.getMinimum();
         batSwarm.printResult();

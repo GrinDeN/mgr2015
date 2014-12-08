@@ -91,7 +91,7 @@ public class Weed implements Comparable<Weed>{
 
     @Override
     public int compareTo(Weed otherWeed){
-        if (this.fitness <= otherWeed.fitness){
+        if (this.fitness < otherWeed.fitness){
             return -1;
         } else if(this.fitness > otherWeed.fitness){
             return 1;

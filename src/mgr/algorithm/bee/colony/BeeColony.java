@@ -1,6 +1,6 @@
 package mgr.algorithm.bee.colony;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
@@ -27,7 +27,7 @@ public class BeeColony {
     protected double upperBoundary;
     private int limit;
 
-    public BeeColony(AlgsEnum alg, int foodNumber, int dimension){
+    public BeeColony(TestFuncEnum alg, int foodNumber, int dimension){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.numOfFood = foodNumber;
         this.dim = dimension;

@@ -1,7 +1,7 @@
 package mgr.algorithm.ant.colony;
 
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.AlgsEnum;
 import mgr.test.functions.TestFunction;
 
 import java.util.Random;
@@ -33,7 +33,7 @@ public class AntColony {
 
     private Direction direction;
 
-    public AntColony(AlgsEnum alg, int maxIter){
+    public AntColony(TestFuncEnum alg, int maxIter){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.maxIterations = maxIter;
         this.sqrtMaxIterations = (int) Math.sqrt(maxIterations);

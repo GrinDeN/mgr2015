@@ -1,6 +1,6 @@
 package mgr.algorithm.bat.swarm;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
@@ -21,7 +21,7 @@ public class BatSwarm {
 
     private TestFunction testFunction;
 
-    public BatSwarm(AlgsEnum alg, int numOfBats, int dim){
+    public BatSwarm(TestFuncEnum alg, int numOfBats, int dim){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         this.numBats = numOfBats;
         this.dimension = dim;

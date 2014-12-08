@@ -1,7 +1,7 @@
 package mgr.algorithm.weed.optimization;
 
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.AlgsEnum;
 import mgr.test.functions.TestFunction;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class WeedColony {
     private double upperBoundary;
 
 
-    public WeedColony(AlgsEnum alg, double initValueOfStandardDev, double finalValueOfStandardDev){
+    public WeedColony(TestFuncEnum alg, double initValueOfStandardDev, double finalValueOfStandardDev){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         initBoundariesFromTestFunc();
         this.initValueOfStandardDev = initValueOfStandardDev;
@@ -64,7 +64,7 @@ public class WeedColony {
         System.arraycopy(bestWeed.getPositions(), 0, this.bestGlobalPositions, 0, bestWeed.getPositions().length);
     }*/
 
-    public void getMinimum(){
+    public int getMinimum(){
         initAgentsAtBeginning();
         while(currentIteration <= MAX_ITERATIONS){
             setCurrentStandardDeviation();
@@ -77,10 +77,11 @@ public class WeedColony {
             trimBestWeedsList();
             if (testFunction.isSolutionEnoughNearMinimum(getBestFitness())) {
                 System.out.println("Algorytm wykonał " + currentIteration + " iteracji.");
-                break;
+                return currentIteration;
             }
             currentIteration++;
         }
+        return 0;
     }
 
     private void initAgentsAtBeginning(){

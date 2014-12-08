@@ -1,6 +1,6 @@
 package mgr.algorithm.particle.swarm;
 
-import mgr.test.functions.AlgsEnum;
+import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
@@ -14,7 +14,7 @@ public class Swarm {
 
     private TestFunction testFunction;
 
-    public Swarm(AlgsEnum alg, int numOfParticles, int xSize){
+    public Swarm(TestFuncEnum alg, int numOfParticles, int xSize){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
         numberOfParticles = numOfParticles;
         particles = new Particle[numberOfParticles];
