@@ -1,12 +1,13 @@
 package mgr.algorithm.bat.swarm;
 
+import mgr.algorithm.SwarmAlgorithm;
 import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
 import java.util.Random;
 
-public class BatSwarm {
+public class BatSwarm implements SwarmAlgorithm{
 
     private Bat[] batSwarm;
     private int numBats;
@@ -19,10 +20,13 @@ public class BatSwarm {
 
     private Random rand;
 
+    private int iterations;
+
     private TestFunction testFunction;
 
-    public BatSwarm(TestFuncEnum alg, int numOfBats, int dim){
+    public BatSwarm(TestFuncEnum alg, int iters, int numOfBats, int dim){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
+        this.iterations = iters;
         this.numBats = numOfBats;
         this.dimension = dim;
         this.pulseRate = 0.5;
@@ -40,7 +44,7 @@ public class BatSwarm {
         }
     }
 
-    public void getMinimum(){
+    public int getMinimum(){
         double result;
         for (int i = 0; i < getNumOfBats(); i++) {
             double[] eachBatPositions = getBatAtIndex(i).get_xBestPositions();
@@ -54,14 +58,14 @@ public class BatSwarm {
             }
         }
 //        updateBestPositionsInAllBats();
-        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getMinimumValue());
+//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getMinimumValue());
         //koniec fazy wstepnej
 
-        for (int iter = 0; iter < 5000; iter++) {
+        for (int iter = 0; iter < iterations; iter++) {
             if (testFunction.isSolutionEnoughNearMinimum(getMinimumValue())) {
                 System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                break;
+                return iter;
             }
             for (int i = 0; i < getNumOfBats(); i++){
                 getBatAtIndex(i).updateMovement();
@@ -76,6 +80,7 @@ public class BatSwarm {
 //                batSwarm.updateBestPositionsInAllBats();
             }
         }
+        return 0;
     }
 
     private Bat getBatAtIndex(int index){

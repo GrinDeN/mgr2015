@@ -1,12 +1,13 @@
 package mgr.algorithm.ant.colony;
 
+import mgr.algorithm.SwarmAlgorithm;
 import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
 import java.util.Random;
 
-public class AntColony {
+public class AntColony implements SwarmAlgorithm{
 
     private static final int DIMENSION = 2;
     private static final int NUM_OF_ANTS = 30;
@@ -139,20 +140,20 @@ public class AntColony {
         this.alphaParam = 0.1*this.alphaParam;
     }
 
-    public void getMinimum(){
+    public int getMinimum(){
         calculateAllAntsFuncValue();
         memorizeBestFuncValue();
         setDirection();
-        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + this.globalPositions[0] + " y: " + this.globalPositions[1]);
-        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
+//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + this.globalPositions[0] + " y: " + this.globalPositions[1]);
+//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
         int n = 10;
         int i = 0;
-        for (int k = 0; k < n; k++) {
+        for (int iter = 0; iter < n; iter++) {
             if (testFunction.isSolutionEnoughNearMinimum(getFitness())){
-                System.out.println("Algorytm wykonał " + k+i + " iteracji.");
-                break;
+                System.out.println("Algorytm wykonał " + iter+i + " iteracji.");
+                return iter;
             }
-            for (i = 0; i < k*sqrtMaxIterations; i++){
+            for (i = 0; i < iter*sqrtMaxIterations; i++){
                 updateAllAntsPositions();
                 calculateAllAntsFuncValue();
                 memorizeBestFuncValue();
@@ -161,6 +162,7 @@ public class AntColony {
             }
             updateAlphaParam();
         }
+        return 0;
     }
 
     public double getFitness(){

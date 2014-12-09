@@ -1,12 +1,13 @@
 package mgr.algorithm.grey.wolf;
 
+import mgr.algorithm.SwarmAlgorithm;
 import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
 import java.util.Random;
 
-public class WolfsPack {
+public class WolfsPack implements SwarmAlgorithm{
 
     private static final int DIMENSION = 2;
     private static final int NUM_OF_AGENTS = 30;
@@ -55,12 +56,12 @@ public class WolfsPack {
         return result;
     }
 
-    public void getMinimum(){
+    public int getMinimum(){
         int iter = 0;
         while (iter < max_iter){
             if (testFunction.isSolutionEnoughNearMinimum(getAlphaScore())) {
                 System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                break;
+                return iter;
             }
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 correctPositionsAtIndex(i);
@@ -112,6 +113,7 @@ public class WolfsPack {
             }
             iter++;
         }
+        return 0;
     }
 
     private double[] getGlobalPositionsAtIndex(int index){

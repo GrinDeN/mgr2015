@@ -1,6 +1,5 @@
 package mgr.algorithm;
 
-import mgr.algorithm.weed.optimization.SwarmEnum;
 import mgr.test.functions.TestFuncEnum;
 
 public class AlgTester {

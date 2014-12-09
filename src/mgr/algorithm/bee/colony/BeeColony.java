@@ -1,12 +1,13 @@
 package mgr.algorithm.bee.colony;
 
+import mgr.algorithm.SwarmAlgorithm;
 import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
 import java.util.Random;
 
-public class BeeColony {
+public class BeeColony implements SwarmAlgorithm{
 
     private Food[] foodFarm;
     private double[] best_xPositions;
@@ -27,8 +28,11 @@ public class BeeColony {
     protected double upperBoundary;
     private int limit;
 
-    public BeeColony(TestFuncEnum alg, int foodNumber, int dimension){
+    private int iterations;
+
+    public BeeColony(TestFuncEnum alg, int iters, int foodNumber, int dimension){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
+        this.iterations = iters;
         this.numOfFood = foodNumber;
         this.dim = dimension;
         initBoundariesFromTestFunc();
@@ -52,7 +56,7 @@ public class BeeColony {
         }
     }
 
-    public void getMinimum(){
+    public int getMinimum(){
         double result;
         for (int i = 0; i < getNumOfFood(); i++) {
             getFoodAtIndex(i).initRandomlyFoodVector();
@@ -66,15 +70,15 @@ public class BeeColony {
                 updateSolutionIfBetter(result, eachFoodPositions);
             }
         }
-        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getGlobalMinimum());
+//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getGlobalMinimum());
         //koniec fazy wstepnej
 
         double resultOfChangedSolution;
-        for (int iter = 0; iter < 5000; iter++){
+        for (int iter = 0; iter < iterations; iter++){
             if (testFunction.isSolutionEnoughNearMinimum(getGlobalMinimum())) {
                 System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                break;
+                return iter;
             }
             for (int i = 0; i < getNumOfFood(); i++){
                 sendEmployedBees();
@@ -89,6 +93,7 @@ public class BeeColony {
                 sendScoutBees();
             }
         }
+        return 0;
     }
 
     private Food getFoodAtIndex(int index){

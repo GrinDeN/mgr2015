@@ -1,28 +1,31 @@
 package mgr.algorithm.particle.swarm;
 
+import mgr.algorithm.SwarmAlgorithm;
 import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
 
-public class Swarm {
+public class Swarm implements SwarmAlgorithm{
 
     private int numberOfParticles;
     private int xSize;
     private Particle[] particles;
     private double[] bestPositionOfSwarm;
     private double actualBestValueOfMinFunc;
+    private int iterations;
 
     private TestFunction testFunction;
 
-    public Swarm(TestFuncEnum alg, int numOfParticles, int xSize){
+    public Swarm(TestFuncEnum alg, int numOfIters, int numOfParticles, int xSize){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
+        this.iterations = numOfIters;
         numberOfParticles = numOfParticles;
         particles = new Particle[numberOfParticles];
         this.xSize = xSize;
         bestPositionOfSwarm = new double[xSize];
     }
 
-    public void getMinimum(){
+    public int getMinimum(){
         initializeSwarm();
         double result;
         for (int i = 0; i < getNumberOfParticles() ; i++){
@@ -36,14 +39,16 @@ public class Swarm {
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
-        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getActualBestValueOfMinFunc());
+//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getActualBestValueOfMinFunc());
         //koniec fazy wstepnej
 
-        for (int k = 0; k < 100; k++){
+        for (int iter = 0; iter < iterations; iter++){
             if (testFunction.isSolutionEnoughNearMinimum(getActualBestValueOfMinFunc())){
-                System.out.println("Algorytm wykonał " + k + "iteracji.");
-                break;
+                System.out.println("Algorytm wykonał " + iter + "iteracji.");
+//                System.out.println("Najlepsze wskazane wspolrzedne po wszystkich iteracjach, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
+//                System.out.println("Najlepszy wskazany rezultat po wszystkich iteracjach: " + getActualBestValueOfMinFunc());
+                return iter;
             }
             for (int i = 0; i < getNumberOfParticles(); i++){
                 updateParticlesAtIndex(i);
@@ -54,8 +59,7 @@ public class Swarm {
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
-        System.out.println("Najlepsze wskazane wspolrzedne po wszystkich iteracjach, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-        System.out.println("Najlepszy wskazany rezultat po wszystkich iteracjach: " + getActualBestValueOfMinFunc());
+        return 0;
     }
 
     private void initializeSwarm(){

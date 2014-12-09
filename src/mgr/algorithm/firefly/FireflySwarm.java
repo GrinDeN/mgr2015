@@ -27,7 +27,7 @@ public class FireflySwarm implements SwarmAlgorithm{
     private TestFunction testFunction;
 
     private final static int NUM_OF_FIREFLIES = 20;
-    private final static int MAX_GENERATIONS = 500;
+//    private final static int MAX_GENERATIONS = 500;
 
     private final static int DIMENSION = 2;
 
@@ -39,8 +39,11 @@ public class FireflySwarm implements SwarmAlgorithm{
 
     private Random rand;
 
-    public FireflySwarm(TestFuncEnum alg){
+    private int iterations;
+
+    public FireflySwarm(TestFuncEnum alg, int iters){
         this.testFunction = TestFuncFactory.getTestFunction(alg);
+        this.iterations = iters;
         initBoundariesFromTestFunc();
         this.fireflies = new Firefly[NUM_OF_FIREFLIES];
         this.firefliesCopy = new Firefly[NUM_OF_FIREFLIES];
@@ -65,7 +68,7 @@ public class FireflySwarm implements SwarmAlgorithm{
     }
 
     public int getMinimum(){
-        for (int iter = 0; iter < MAX_GENERATIONS; iter++){
+        for (int iter = 0; iter < iterations; iter++){
             if (testFunction.isSolutionEnoughNearMinimum(getBestLightness())) {
                 System.out.println("Algorytm wykonał " + iter + " iteracji.");
                 return iter;

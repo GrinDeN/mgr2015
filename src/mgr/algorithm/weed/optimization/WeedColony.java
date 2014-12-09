@@ -1,5 +1,6 @@
 package mgr.algorithm.weed.optimization;
 
+import mgr.algorithm.SwarmAlgorithm;
 import mgr.test.functions.TestFuncEnum;
 import mgr.test.functions.TestFuncFactory;
 import mgr.test.functions.TestFunction;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class WeedColony {
+public class WeedColony implements SwarmAlgorithm{
 
     public static final int DIMENSION = 2;
     public static final int INITIAL_AGENTS = 10*DIMENSION;

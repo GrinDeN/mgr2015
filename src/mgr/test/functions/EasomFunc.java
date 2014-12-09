@@ -6,6 +6,7 @@ public class EasomFunc extends TestFunction{
     private final static double UPPER_BOUNDARY = 100.0;
     private final static double MINIMUM = -1.0;
     private final static double STOP_CRITERIA = 0.001;
+//    private final static double STOP_CRITERIA = 0.5;
 
     @Override
     public double getResult(double[] positions){
