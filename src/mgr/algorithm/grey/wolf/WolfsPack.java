@@ -80,7 +80,7 @@ public class WolfsPack implements SwarmAlgorithm{
                     beta.setPositions(getGlobalPositionsAtIndex(i));
                 }
             }
-            double a = 2-   iter*(2/max_iter);
+            double a = 2-iter*(2/max_iter);
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 for (int j = 0; j < DIMENSION; j++){
 //                    r1 = rand.nextDouble();

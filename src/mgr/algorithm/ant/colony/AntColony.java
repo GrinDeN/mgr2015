@@ -148,9 +148,10 @@ public class AntColony implements SwarmAlgorithm{
 //        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
         int n = 10;
         int i = 0;
-        for (int iter = 0; iter < n; iter++) {
+        for (int iter = 1; iter <= n; iter++) {
             if (testFunction.isSolutionEnoughNearMinimum(getFitness())){
-                System.out.println("Algorytm wykonał " + iter+i + " iteracji.");
+                System.out.println("Algorytm wykonał " + iter + " iteracji zewn.");
+                System.out.println("Algorytm wykonał " + i + " iteracji wewn.");
                 return iter;
             }
             for (i = 0; i < iter*sqrtMaxIterations; i++){

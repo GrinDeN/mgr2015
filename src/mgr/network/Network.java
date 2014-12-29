@@ -37,13 +37,13 @@ public class Network {
     }
 
     public void updateWeights(double[] newWeights){
-        for (Layer eachLayer : layers){
+        for (Layer eachLayer : layers){// kolejnosc ma znaczenie?
             eachLayer.updateWeights(newWeights);
         }
     }
 
     public void setWeights(double[] weights){
-        for (Layer eachLayer : layers){
+        for (Layer eachLayer : layers){// kolejnosc ma znaczenie?
             eachLayer.updateWeights(weights);
         }
     }

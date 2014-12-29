@@ -2,9 +2,6 @@ package mgr.config;
 
 import mgr.math.utils.ActivateFunc;
 
-/**
- * Created by Lukasz on 2014-08-07.
- */
 public class Config {
 
     public static final int NUM_OF_LAYERS = 2;

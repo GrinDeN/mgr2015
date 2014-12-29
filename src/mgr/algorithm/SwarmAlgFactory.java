@@ -17,7 +17,7 @@ public class SwarmAlgFactory {
             case BAT:
                 return new BatSwarm(testFun, 1000, 20, 2);
             case BEE:
-                return new BeeColony(testFun, 1000, 30, 2);
+                return new BeeColony(testFun, 700, 30, 2);
             case FIREFLY:
                 return new FireflySwarm(testFun, 500);
             case WOLF:
@@ -27,11 +27,11 @@ public class SwarmAlgFactory {
             case WEED:
                 switch (testFun){
                     case ACKLEY:
-                        return new WeedColony(testFun, 4.0, 0.001);
+                        return new WeedColony(testFun, 1.5, 0.001);
                     case BEALES:
-                        return new WeedColony(testFun, 4.0, 0.001);
+                        return new WeedColony(testFun, 2.0, 0.001);
                     case GOLDSTEINPRICE:
-                        return new WeedColony(testFun, 1.0, 0.001);
+                        return new WeedColony(testFun, 0.5, 0.001);
                     case MATYAS:
                         return new WeedColony(testFun, 8.0, 0.0001);
                     case EASOM:
