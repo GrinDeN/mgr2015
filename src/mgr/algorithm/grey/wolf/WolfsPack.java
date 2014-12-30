@@ -1,15 +1,13 @@
 package mgr.algorithm.grey.wolf;
 
 import mgr.algorithm.SwarmAlgorithm;
-import mgr.test.functions.TestFuncEnum;
-import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.TestFunction;
+import mgr.config.Config;
+import mgr.teacher.NetworkTeacher;
 
 import java.util.Random;
 
 public class WolfsPack implements SwarmAlgorithm{
 
-    private static final int DIMENSION = 2;
     private static final int NUM_OF_AGENTS = 30;
 
     private double lowerBoundary;
@@ -24,14 +22,14 @@ public class WolfsPack implements SwarmAlgorithm{
     private Wolf beta;
     private Wolf delta;
 
-    private TestFunction testFunction;
+    private NetworkTeacher networkTeacher;
 
-    public WolfsPack(TestFuncEnum alg, int max_iter){
-        this.testFunction = TestFuncFactory.getTestFunction(alg);
-        this.alpha = new Wolf(DIMENSION);
-        this.beta = new Wolf(DIMENSION);
-        this.delta = new Wolf(DIMENSION);
-        this.globalPositions = new double[NUM_OF_AGENTS][DIMENSION];
+    public WolfsPack(NetworkTeacher netTeacher, int max_iter){
+        this.networkTeacher = netTeacher;
+        this.alpha = new Wolf(Config.NUM_OF_WEIGHTS);
+        this.beta = new Wolf(Config.NUM_OF_WEIGHTS);
+        this.delta = new Wolf(Config.NUM_OF_WEIGHTS);
+        this.globalPositions = new double[NUM_OF_AGENTS][Config.NUM_OF_WEIGHTS];
         this.rand = new Random();
         this.max_iter = max_iter;
         initBoundariesFromTestFunc();
@@ -39,13 +37,13 @@ public class WolfsPack implements SwarmAlgorithm{
     }
 
     private void initBoundariesFromTestFunc(){
-        this.lowerBoundary = testFunction.getLowerBoundary();
-        this.upperBoundary = testFunction.getUpperBoundary();
+        this.lowerBoundary = -3.0;
+        this.upperBoundary = 3.0;
     }
 
     private void initializePositions(){
         for (int i = 0; i < NUM_OF_AGENTS; i++) {
-            for (int j = 0; j < DIMENSION; j++) {
+            for (int j = 0; j < Config.NUM_OF_WEIGHTS; j++) {
                 this.globalPositions[i][j] = getRandomFrom(0, 1)*(upperBoundary-lowerBoundary)*lowerBoundary;
             }
         }
@@ -56,17 +54,14 @@ public class WolfsPack implements SwarmAlgorithm{
         return result;
     }
 
-    public int getMinimum(){
+    public int getMinimum() throws Exception{
         int iter = 0;
         while (iter < max_iter){
-            if (testFunction.isSolutionEnoughNearMinimum(getAlphaScore())) {
-                System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                return iter;
-            }
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 correctPositionsAtIndex(i);
 //                fitness = TestFuncFactory.getResultOfAlgorithm(algorithm, globalPositions[i][0], globalPositions[i][1]);
-                fitness = testFunction.getResult(globalPositions[i]);
+//                fitness = testFunction.getResult(globalPositions[i]);
+                fitness = networkTeacher.getErrorOfNetwork(globalPositions[i]);
                 if (fitness < alpha.getScore()){
                     alpha.setScore(fitness);
                     alpha.setPositions(getGlobalPositionsAtIndex(i));
@@ -82,7 +77,7 @@ public class WolfsPack implements SwarmAlgorithm{
             }
             double a = 2-iter*(2/max_iter);
             for (int i = 0; i < NUM_OF_AGENTS; i++){
-                for (int j = 0; j < DIMENSION; j++){
+                for (int j = 0; j < Config.NUM_OF_WEIGHTS; j++){
 //                    r1 = rand.nextDouble();
 //                    r2 = rand.nextDouble();
 //                    double A1 = 2*a*r1-a;
@@ -113,6 +108,7 @@ public class WolfsPack implements SwarmAlgorithm{
             }
             iter++;
         }
+        System.out.println("Najlepszy wynik bledu po koncowej fazie: " + getAlphaScore());
         return 0;
     }
 
@@ -121,7 +117,7 @@ public class WolfsPack implements SwarmAlgorithm{
     }
 
     private void correctPositionsAtIndex(int index){
-        double[] newPositions = new double[DIMENSION];
+        double[] newPositions = new double[Config.NUM_OF_WEIGHTS];
         System.arraycopy(globalPositions[index], 0, newPositions, 0, globalPositions[index].length);
         for (int i = 0; i < globalPositions[index].length; i++) {
             if (newPositions[i] > upperBoundary){
