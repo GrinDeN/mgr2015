@@ -5,9 +5,6 @@ import java.util.Arrays;
 
 import static mgr.config.Config.*;
 
-/**
- * Created by Lukasz on 2014-08-07.
- */
 public class Network {
 
     private ArrayList<Layer> layers;
@@ -43,8 +40,8 @@ public class Network {
     }
 
     public void setWeights(double[] weights){
-        for (Layer eachLayer : layers){// kolejnosc ma znaczenie?
-            eachLayer.updateWeights(weights);
+        for (Layer eachLayer : layers){
+            eachLayer.setWeights(weights);
         }
     }
 

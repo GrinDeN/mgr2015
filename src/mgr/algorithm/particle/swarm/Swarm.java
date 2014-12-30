@@ -1,7 +1,7 @@
 package mgr.algorithm.particle.swarm;
 
 import mgr.algorithm.SwarmAlgorithm;
-import mgr.network.Network;
+import mgr.teacher.NetworkTeacher;
 
 public class Swarm implements SwarmAlgorithm{
 
@@ -12,10 +12,10 @@ public class Swarm implements SwarmAlgorithm{
     private double actualBestValueOfMinFunc;
     private int iterations;
 
-    private Network network;
+    private NetworkTeacher networkTeacher;
 
-    public Swarm(Network net, int numOfIters, int numOfParticles, int xSize){
-        this.network = net;
+    public Swarm(NetworkTeacher netTeacher, int numOfIters, int numOfParticles, int xSize){
+        this.networkTeacher = netTeacher;
         this.iterations = numOfIters;
         numberOfParticles = numOfParticles;
         particles = new Particle[numberOfParticles];
@@ -23,12 +23,13 @@ public class Swarm implements SwarmAlgorithm{
         bestPositionOfSwarm = new double[xSize];
     }
 
-    public int getMinimum(){
+    public int getMinimum() throws Exception{
         initializeSwarm();
         double result = 0;
         for (int i = 0; i < getNumberOfParticles() ; i++){
             double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
 //            result = testFunction.getResult(particle_xPositions);
+            result = networkTeacher.getErrorOfNetwork(particle_xPositions);
             getParticleAtIndex(i).setBestValueError(result);
             if (i==0){
                 setActualBestValueOfMinFunc(result);
@@ -37,17 +38,19 @@ public class Swarm implements SwarmAlgorithm{
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
-
+        System.out.println("Najlepszy wynik bledu po wstepnej fazie: " + actualBestValueOfMinFunc);
         for (int iter = 0; iter < iterations; iter++){
             for (int i = 0; i < getNumberOfParticles(); i++){
                 updateParticlesAtIndex(i);
                 double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
 //                result = testFunction.getResult(particle_xPositions);
+                result = networkTeacher.getErrorOfNetwork(particle_xPositions);
                 getParticleAtIndex(i).setActualValueError(result);
                 getParticleAtIndex(i).checkErrorValues();
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
+        System.out.println("Najlepszy wynik bledu po koncowej fazie: " + actualBestValueOfMinFunc);
         return 0;
     }
 

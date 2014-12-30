@@ -1,122 +1,110 @@
 package mgr.teacher;
 
+import mgr.config.Config;
+import mgr.config.ConfigBuilder;
+import mgr.file.utils.DataFileExtractor;
+import mgr.file.utils.DataFileReader;
+import mgr.input.builder.InputBuilder;
+import mgr.input.builder.ParamPair;
 import mgr.network.Network;
 
 import java.util.ArrayList;
 
-import static mgr.config.Config.S;
-
 public class NetworkTeacher {
 
     private Network network;
+    private String filenameOfData;
+    private DataFileReader reader;
+    private DataFileExtractor extractor;
+    private InputBuilder builder;
+
     private ArrayList<Double> demandValues;
-    private ArrayList<Double> netOutputs;
-    private ArrayList<Double> netErrors;
-    private double error;
+    private ArrayList<ArrayList<Double>> dataValues;
 
-    public NetworkTeacher(Network net, ArrayList<Double> demandValues){
+    private ArrayList<ParamPair> params;
+
+    private NetworkErrorCounter errorCounter;
+
+    public NetworkTeacher(Network net, String filename, ArrayList<ParamPair> params){
         this.network = net;
-        initializeDemandValues(demandValues);
-        initializeNetOutputs();
-        initializeNetErrors();
+        this.filenameOfData = filename;
+        this.params = params;
+        readData();
+        extractData();
+        getDemandValues();
+        getDataValues();
+        ConfigBuilder.selectSParam(params); // do wyjebania na zewnatrz w przyszlosci, narazie aby nie zapomniec
+        initInputBuilder();
+        initErrorCounter();
     }
 
-    private void initializeDemandValues(ArrayList<Double> demandValues){
-        this.demandValues = new ArrayList<Double>();
-        setDemandValues(demandValues);
+    private void readData(){
+        this.reader = new DataFileReader(filenameOfData);
+        this.reader.readData();
     }
 
-    private void setDemandValues(ArrayList<Double> demValues){
-        this.demandValues.addAll(demValues);
+    private void extractData(){
+        this.extractor = new DataFileExtractor(reader.getValueList());
+        this.extractor.extractData();
     }
 
-    private void initializeNetOutputs(){
-        this.netOutputs = new ArrayList<Double>();
-        addDemandAsFirstNetOutputs();
+    private void getDemandValues(){
+        this.demandValues = extractor.getDemandValues();
     }
 
-    private void addDemandAsFirstNetOutputs(){
-        for (int i = 0; i <=S-1; i++) {
-            this.netOutputs.add(i, this.demandValues.get(i));
+    private void getDataValues(){
+        this.dataValues = extractor.getDataValues();
+    }
+
+    private void initInputBuilder(){
+        this.builder = new InputBuilder(dataValues, params, getFirstNetOutputsAsDemandValues());
+    }
+
+    private ArrayList<Double> getFirstNetOutputsAsDemandValues(){
+        ArrayList<Double> firstNetOutputs = new ArrayList<Double>();
+        for (int i = 0; i <= Config.S-1; i++) {
+            firstNetOutputs.add(i, this.demandValues.get(i));
         }
+        return firstNetOutputs;
     }
 
-    private void initializeNetErrors(){
-        this.netErrors = new ArrayList<Double>();
-        addFirstNetErrors();
+    private void initErrorCounter(){
+        this.errorCounter = new NetworkErrorCounter(demandValues);
+        this.errorCounter.addFirstPartOfNetworkOutputs(getFirstNetOutputsAsDemandValues());
     }
 
-    private void addFirstNetErrors(){
-        for (int i = 0; i <=S-1; i++) {
-            addNetError(i);
+    private void resetErrorCounterNetOutputsList(){
+        this.errorCounter.resetNetOutputList();
+        this.errorCounter.addFirstPartOfNetworkOutputs(getFirstNetOutputsAsDemandValues());
+    }
+
+    public double getErrorOfNetwork(double[] weights) throws Exception{
+        network.setWeights(weights);
+        resetErrorCounterNetOutputsList();
+        double[] input;
+        for (int t = Config.S; t <= Config.P; t++){
+            if (t == Config.S){
+                input = builder.build(t, demandValues.get(t));
+            } else {
+                input = builder.build(t, network.getCurrentOutput());
+            }
+//            for (int i = 0; i < arr.length; i++){
+//                System.out.print(arr[i]);
+//                System.out.print(" ");
+//            }
+//            System.out.println();
+            network.setNetworkInput(input);
+//            double currentOutput = net.calculateOutput();
+            network.calculateOutput();
+            // tu jeszcze teacher moglby blad sobie liczyc w sensie liczyc y-d i dodawaj do swojej listy bledow
+//            teacher.addCurrentNetOutput();
+//            teacher.addNetError(t);
+//            grad.computeAllGradients(t);
+//            System.out.println("Current net output: " + network.getCurrentOutput());
+//            System.out.println("iteracja: " +t);
+            errorCounter.addNetworkOutput(network.getCurrentOutput());
         }
-    }
-
-    public void addNetError(int index){
-        double netOutput = getCurrentNetOutput(index);
-        double demandValue = getCurrentDemandValue(index);
-        double result = Math.pow(netOutput-demandValue, 2);
-        this.netErrors.add(result);
-    }
-
-    private double getCurrentNetOutput(int current){
-        return this.netOutputs.get(current);
-    }
-
-    private double getCurrentDemandValue(int current){
-        return this.demandValues.get(current);
-    }
-
-    public void addCurrentNetOutput(){
-        this.netOutputs.add(network.getCurrentOutput());
-    }
-
-    public double getNetOutput(int t){
-        return this.netOutputs.get(t);
-    }
-
-    public double getDemandOutput(int t){
-        return this.demandValues.get(t);
-    }
-
-    public ArrayList<Double> getNetOutputs(){
-        return this.netOutputs;
-    }
-
-    public double getLastOutput(){
-        return this.netOutputs.get(netOutputs.size()-1);
-    }
-
-    public void sumarizeNetErrors(){
-        setZeroNetError();
-        for (Double value : netErrors){
-            this.error += value;
-        }
-    }
-
-    private void setZeroNetError(){
-        this.error = 0;
-    }
-
-    public void printNetOutputs(){
-        for (Double value : netOutputs){
-            System.out.println(String.valueOf(value));
-        }
-    }
-
-    public void printDemandValues(){
-        for (Double value : demandValues){
-            System.out.println(String.valueOf(value));
-        }
-    }
-
-    public void printErrors(){
-        for (Double value : netErrors){
-            System.out.println(String.valueOf(value));
-        }
-    }
-
-    public void printError(){
-        System.out.println("Sumaryczny błąd: " + error);
+        double error = errorCounter.sumarizeErrors();
+        return error;
     }
 }

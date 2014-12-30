@@ -12,7 +12,7 @@ public class Config {
     public static int NUM_OF_WEIGHTS = (INPUT_SIZE*HIDD_NEURONS)+HIDD_NEURONS+1;
 
     public static int S = 0;
-    public static int P = 10;
+    public static int P = 500;
     public static int K = HIDD_NEURONS;
 
     public static int N1 = 0;

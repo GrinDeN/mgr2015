@@ -54,7 +54,8 @@ public class HiddenGradient {
     // i tu
     public double compute_dEdW1(int t, int i, int j){
 //        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*compute_dYdW1(t, i, j);
-        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*gradient.getElementdYdW1AtIndex(t, i, j);
-        return result;
+//        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*gradient.getElementdYdW1AtIndex(t, i, j);
+//        return result;
+        return 0;
     }
 }

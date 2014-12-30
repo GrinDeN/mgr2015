@@ -20,12 +20,16 @@ public class NetworkErrorCounter {
 
     public void initNetworkOutputsList(){
         this.networkOutputs = new ArrayList<Double>();
-        this.networkOutputs.add(0, 0.0);
+//        this.networkOutputs.add(0, 0.0);
     }
 
     public void initDemandValuesList(ArrayList<Double> demands){
         this.demandValues = new ArrayList<Double>();
         this.demandValues.addAll(demands);
+    }
+
+    public void resetNetOutputList(){
+        this.networkOutputs.clear();
     }
 
     public void addFirstPartOfNetworkOutputs(ArrayList<Double> firstNetOutputs){
@@ -38,6 +42,8 @@ public class NetworkErrorCounter {
 
     public double sumarizeErrors() throws Exception{
         if (networkOutputs.size() != demandValues.size()){
+            System.out.println("Rozmiar networkOutputs: " + networkOutputs.size());
+            System.out.println("Rozmiar demandValues: " + demandValues.size());
             throw new Exception("Różny rozmiar list: demandValues oraz networkOutputs");
         }
         resetErrorValue();
@@ -62,5 +68,4 @@ public class NetworkErrorCounter {
         double error = errorCounter.sumarizeErrors();
         System.out.println("Blad: " + error);
     }
-
 }
