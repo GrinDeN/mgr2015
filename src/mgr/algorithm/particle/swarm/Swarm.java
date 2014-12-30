@@ -1,9 +1,7 @@
 package mgr.algorithm.particle.swarm;
 
 import mgr.algorithm.SwarmAlgorithm;
-import mgr.test.functions.TestFuncEnum;
-import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.TestFunction;
+import mgr.network.Network;
 
 public class Swarm implements SwarmAlgorithm{
 
@@ -14,10 +12,10 @@ public class Swarm implements SwarmAlgorithm{
     private double actualBestValueOfMinFunc;
     private int iterations;
 
-    private TestFunction testFunction;
+    private Network network;
 
-    public Swarm(TestFuncEnum alg, int numOfIters, int numOfParticles, int xSize){
-        this.testFunction = TestFuncFactory.getTestFunction(alg);
+    public Swarm(Network net, int numOfIters, int numOfParticles, int xSize){
+        this.network = net;
         this.iterations = numOfIters;
         numberOfParticles = numOfParticles;
         particles = new Particle[numberOfParticles];
@@ -27,10 +25,10 @@ public class Swarm implements SwarmAlgorithm{
 
     public int getMinimum(){
         initializeSwarm();
-        double result;
+        double result = 0;
         for (int i = 0; i < getNumberOfParticles() ; i++){
             double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
-            result = testFunction.getResult(particle_xPositions);
+//            result = testFunction.getResult(particle_xPositions);
             getParticleAtIndex(i).setBestValueError(result);
             if (i==0){
                 setActualBestValueOfMinFunc(result);
@@ -39,21 +37,12 @@ public class Swarm implements SwarmAlgorithm{
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
-//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getActualBestValueOfMinFunc());
-        //koniec fazy wstepnej
 
         for (int iter = 0; iter < iterations; iter++){
-            if (testFunction.isSolutionEnoughNearMinimum(getActualBestValueOfMinFunc())){
-                System.out.println("Algorytm wykonał " + iter + "iteracji.");
-//                System.out.println("Najlepsze wskazane wspolrzedne po wszystkich iteracjach, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-//                System.out.println("Najlepszy wskazany rezultat po wszystkich iteracjach: " + getActualBestValueOfMinFunc());
-                return iter;
-            }
             for (int i = 0; i < getNumberOfParticles(); i++){
                 updateParticlesAtIndex(i);
                 double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
-                result = testFunction.getResult(particle_xPositions);
+//                result = testFunction.getResult(particle_xPositions);
                 getParticleAtIndex(i).setActualValueError(result);
                 getParticleAtIndex(i).checkErrorValues();
                 checkIfVectorIsBetter(result, particle_xPositions);
@@ -65,7 +54,7 @@ public class Swarm implements SwarmAlgorithm{
     private void initializeSwarm(){
         actualBestValueOfMinFunc = Double.POSITIVE_INFINITY;
         for (int i=0; i<numberOfParticles; i++){
-            particles[i] = new Particle(xSize, testFunction.getLowerBoundary(), testFunction.getUpperBoundary());
+            particles[i] = new Particle(xSize, -2.0, 2.0);
             particles[i].initializeParticle();
         }
     }

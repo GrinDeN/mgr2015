@@ -5,7 +5,6 @@ import mgr.algorithm.bat.swarm.BatSwarm;
 import mgr.algorithm.bee.colony.BeeColony;
 import mgr.algorithm.firefly.FireflySwarm;
 import mgr.algorithm.grey.wolf.WolfsPack;
-import mgr.algorithm.particle.swarm.Swarm;
 import mgr.algorithm.weed.optimization.WeedColony;
 import mgr.test.functions.TestFuncEnum;
 
@@ -23,7 +22,7 @@ public class SwarmAlgFactory {
             case WOLF:
                 return new WolfsPack(testFun, 500);
             case PSO:
-                return new Swarm(testFun, 200, 20, 2);
+//                return new Swarm(testFun, 200, 20, 2);
             case WEED:
                 switch (testFun){
                     case ACKLEY:
