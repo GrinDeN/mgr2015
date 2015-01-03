@@ -166,6 +166,11 @@ public class AntColony implements SwarmAlgorithm{
         return 0;
     }
 
+    @Override
+    public String getName(){
+        return "Ant Colony";
+    }
+
     public double getFitness(){
         return this.fitness;
     }

@@ -83,6 +83,11 @@ public class BatSwarm implements SwarmAlgorithm{
         return 0;
     }
 
+    @Override
+    public String getName(){
+        return "Bat Algorithm";
+    }
+
     private Bat getBatAtIndex(int index){
         return this.batSwarm[index];
     }

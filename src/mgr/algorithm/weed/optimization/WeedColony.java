@@ -85,6 +85,11 @@ public class WeedColony implements SwarmAlgorithm{
         return 0;
     }
 
+    @Override
+    public String getName(){
+        return "WeedColony";
+    }
+
     private void initAgentsAtBeginning(){
         for (int i = 0; i < INITIAL_AGENTS; i++) {
             this.bestWeeds.add(new Weed(DIMENSION, lowerBoundary, upperBoundary));

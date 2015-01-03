@@ -54,6 +54,7 @@ public class WolfsPack implements SwarmAlgorithm{
         return result;
     }
 
+    @Override
     public int getMinimum() throws Exception{
         int iter = 0;
         while (iter < max_iter){
@@ -110,6 +111,11 @@ public class WolfsPack implements SwarmAlgorithm{
         }
         System.out.println("Najlepszy wynik bledu po koncowej fazie: " + getAlphaScore());
         return 0;
+    }
+
+    @Override
+    public String getName(){
+        return "Grey Wolf Optimizer (GWO)";
     }
 
     private double[] getGlobalPositionsAtIndex(int index){

@@ -83,6 +83,11 @@ public class FireflySwarm implements SwarmAlgorithm{
         return 0;
     }
 
+    @Override
+    public String getName(){
+        return "FireFly Algorithm";
+    }
+
     private void setNewAlpha(){
 //        double delta = 1-Math.pow((Math.pow(10, -4) / 0.9), 1 / MAX_GENERATIONS);
 //        this.alpha = (1-delta)*this.alpha;

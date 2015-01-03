@@ -7,7 +7,6 @@ import mgr.teacher.NetworkTeacher;
 import java.util.ArrayList;
 
 public class WolfTest {
-
     public static void main(String[] args) throws Exception{
         Network net = new Network();
         String filename = "dane_spr_grad.txt";

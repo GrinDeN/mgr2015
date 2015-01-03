@@ -23,6 +23,7 @@ public class Swarm implements SwarmAlgorithm{
         bestPositionOfSwarm = new double[xSize];
     }
 
+    @Override
     public int getMinimum() throws Exception{
         initializeSwarm();
         double result = 0;
@@ -52,6 +53,11 @@ public class Swarm implements SwarmAlgorithm{
         }
         System.out.println("Najlepszy wynik bledu po koncowej fazie: " + actualBestValueOfMinFunc);
         return 0;
+    }
+
+    @Override
+    public String getName(){
+        return "PSO";
     }
 
     private void initializeSwarm(){

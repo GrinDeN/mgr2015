@@ -1,40 +1,29 @@
 package mgr.algorithm;
 
-import mgr.test.functions.TestFuncEnum;
+import mgr.input.builder.ParamPair;
+import mgr.network.Network;
+import mgr.teacher.NetworkTeacher;
+
+import java.util.ArrayList;
 
 public class AlgTester {
 
-    private int iterations;
     private SwarmEnum swarmAlgEnum;
-    private TestFuncEnum testFunEnum;
 
-    public AlgTester(SwarmEnum swarmAlg, TestFuncEnum testFun, int iters){
+    public AlgTester(SwarmEnum swarmAlg){
         this.swarmAlgEnum = swarmAlg;
-        this.testFunEnum = testFun;
-        this.iterations = iters;
     }
 
-    public void test(){
-//        int i = 1;
-//        int breakCounter = 0;
-//        int sumOfIterations = 0;
-//        double sredniaIteracji = 0.0;
-//        long start = System.nanoTime();
-//        while (i<=iterations){
-//            SwarmAlgorithm swarmAlg = SwarmAlgFactory.getSwarmAlgorithm(swarmAlgEnum, testFunEnum);
-//            int min = swarmAlg.getMinimum();
-//            if (min != 0){
-//                breakCounter++;
-//                sumOfIterations += min;
-//            }
-//            i++;
-//        }
-//        long end = System.nanoTime();
-//        double difference = (end - start)/1e6;
-//        if (breakCounter!=0)
-//            sredniaIteracji = sumOfIterations/breakCounter;
-//        System.out.println("Algorytm znalazł " + breakCounter + " rozwiazan wczesniej(breaki).");
-//        System.out.println("Srednia ilosc iteracji w breakach: " + sredniaIteracji);
-//        System.out.println("Czas wykonania " + iterations + " iteracji wynosi: " + difference + " ms.");
+    public void test(String filename, ArrayList<ParamPair> dataParams) throws Exception{
+        Network net = new Network();
+        ArrayList<ParamPair> params = new ArrayList<ParamPair>();
+        params.addAll(dataParams);
+        NetworkTeacher netTeacher = new NetworkTeacher(net, filename, params);
+        SwarmAlgorithm swarmAlg = SwarmAlgFactory.getSwarmAlgorithm(swarmAlgEnum, netTeacher);
+        long start = System.nanoTime();
+        swarmAlg.getMinimum();
+        long end = System.nanoTime();
+        double difference = (end - start)/1e6;
+        System.out.println("Czas wykonania " + swarmAlg.getName() + " wynosi: " + difference + " ms.");
     }
 }

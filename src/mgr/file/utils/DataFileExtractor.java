@@ -26,18 +26,18 @@ public class DataFileExtractor {
         this.demandValues.add(0, 0.0);
     }
 
+    private int getNumOfFileColumns(){
+        String[] firstLine = allFileData.get(0).split(" ");
+        int numOfFileCols = firstLine.length;
+        return numOfFileCols;
+    }
+
     private void allocateInnerDataLists(){
         int correctSize = numOfFileCols-1;   //without last column - demand values
         for (int i = 0; i < correctSize; i++) {
             dataValues.add(new ArrayList<Double>());
             dataValues.get(i).add(0, 0.0);
         }
-    }
-
-    private int getNumOfFileColumns(){
-        String[] firstLine = allFileData.get(0).split(" ");
-        int numOfFileCols = firstLine.length;
-        return numOfFileCols;
     }
 
     public void extractData(){

@@ -1,41 +1,27 @@
 package mgr.algorithm;
 
-import mgr.algorithm.ant.colony.AntColony;
-import mgr.algorithm.bat.swarm.BatSwarm;
-import mgr.algorithm.bee.colony.BeeColony;
-import mgr.algorithm.firefly.FireflySwarm;
-import mgr.algorithm.weed.optimization.WeedColony;
-import mgr.test.functions.TestFuncEnum;
+import mgr.algorithm.grey.wolf.WolfsPack;
+import mgr.algorithm.particle.swarm.Swarm;
+import mgr.config.Config;
+import mgr.teacher.NetworkTeacher;
 
 public class SwarmAlgFactory {
-    public static SwarmAlgorithm getSwarmAlgorithm(SwarmEnum alg, TestFuncEnum testFun){
+    public static SwarmAlgorithm getSwarmAlgorithm(SwarmEnum alg, NetworkTeacher netTeacher){
         switch (alg){
             case ANT:
-                return new AntColony(testFun, 1000);
+//                return new AntColony(testFun, 1000);
             case BAT:
-                return new BatSwarm(testFun, 1000, 20, 2);
+//                return new BatSwarm(testFun, 1000, 20, 2);
             case BEE:
-                return new BeeColony(testFun, 700, 30, 2);
+//                return new BeeColony(testFun, 700, 30, 2);
             case FIREFLY:
-                return new FireflySwarm(testFun, 500);
+//                return new FireflySwarm(testFun, 500);
             case WOLF:
-//                return new WolfsPack(testFun, 500);
+                return new WolfsPack(netTeacher, 200);
             case PSO:
-//                return new Swarm(testFun, 200, 20, 2);
+                return new Swarm(netTeacher, 100, 30, Config.NUM_OF_WEIGHTS);
             case WEED:
-                switch (testFun){
-                    case ACKLEY:
-                        return new WeedColony(testFun, 1.5, 0.001);
-                    case BEALES:
-                        return new WeedColony(testFun, 2.0, 0.001);
-                    case GOLDSTEINPRICE:
-                        return new WeedColony(testFun, 0.5, 0.001);
-                    case MATYAS:
-                        return new WeedColony(testFun, 8.0, 0.0001);
-                    case EASOM:
-                        return new WeedColony(testFun, 40.0, 0.0001);
-                }
-                return null;
+//                return new WeedColony(testFun, 1.5, 0.001);
         }
         return null;
     }

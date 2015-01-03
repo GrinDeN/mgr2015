@@ -96,6 +96,11 @@ public class BeeColony implements SwarmAlgorithm{
         return 0;
     }
 
+    @Override
+    public String getName(){
+        return "Bee Colony";
+    }
+
     private Food getFoodAtIndex(int index){
         return this.foodFarm[index];
     }
