@@ -5,8 +5,13 @@ import mgr.input.builder.ParamPair;
 import java.util.ArrayList;
 
 public class MainTest {
+    // TODO
+    // weryfikator
+    // dokonczenie podpiecia pozostalych algorytmow pod netTeacher ++++++
+    // zrobienie statycznej sieci (modyfikacja inputBuildera zeby bral probki w tym samym momencie wszystkie)
+    //
     public static void main(String[] args) throws Exception{
-        SwarmEnum swarmAlg = SwarmEnum.WOLF;
+        SwarmEnum swarmAlg = SwarmEnum.WEED;
         AlgTester algTester = new AlgTester(swarmAlg);
         String filename = "daneucz2000.txt";
         ArrayList<ParamPair> params = new ArrayList<ParamPair>();

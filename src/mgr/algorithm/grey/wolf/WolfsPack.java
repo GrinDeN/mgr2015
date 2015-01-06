@@ -37,8 +37,8 @@ public class WolfsPack implements SwarmAlgorithm{
     }
 
     private void initBoundariesFromTestFunc(){
-        this.lowerBoundary = -3.0;
-        this.upperBoundary = 3.0;
+        this.lowerBoundary = Config.LOWER_BOUNDARY;
+        this.upperBoundary = Config.UPPER_BOUNDARY;
     }
 
     private void initializePositions(){

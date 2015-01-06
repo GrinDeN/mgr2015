@@ -1,15 +1,14 @@
 package mgr.algorithm.ant.colony;
 
 import mgr.algorithm.SwarmAlgorithm;
-import mgr.test.functions.TestFuncEnum;
-import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.TestFunction;
+import mgr.config.Config;
+import mgr.teacher.NetworkTeacher;
 
 import java.util.Random;
 
 public class AntColony implements SwarmAlgorithm{
 
-    private static final int DIMENSION = 2;
+    private static final int DIMENSION = Config.NUM_OF_WEIGHTS;
     private static final int NUM_OF_ANTS = 30;
 
     private double lowerBoundary;
@@ -30,12 +29,12 @@ public class AntColony implements SwarmAlgorithm{
     private int sqrtMaxIterations;
     private Random rand;
 
-    private TestFunction testFunction;
+    private NetworkTeacher netTeacher;
 
     private Direction direction;
 
-    public AntColony(TestFuncEnum alg, int maxIter){
-        this.testFunction = TestFuncFactory.getTestFunction(alg);
+    public AntColony(NetworkTeacher teacher, int maxIter){
+        this.netTeacher = teacher;
         this.maxIterations = maxIter;
         this.sqrtMaxIterations = (int) Math.sqrt(maxIterations);
         this.globalPositions = new double[DIMENSION];
@@ -53,8 +52,8 @@ public class AntColony implements SwarmAlgorithm{
     }
 
     private void initBoundariesFromTestFunc(){
-        this.lowerBoundary = testFunction.getLowerBoundary();
-        this.upperBoundary = testFunction.getUpperBoundary();
+        this.lowerBoundary = Config.LOWER_BOUNDARY;
+        this.upperBoundary = Config.UPPER_BOUNDARY;
     }
 
     private void initAnts(){
@@ -63,10 +62,10 @@ public class AntColony implements SwarmAlgorithm{
         }
     }
 
-    public void setDirection(){
+    public void setDirection() throws Exception{
         setMinusGlobalPositions();
-        double fitnessByMinus = testFunction.getResult(this.minusGlobalPositions);
-        double fitnessByBest = testFunction.getResult(this.globalPositions);
+        double fitnessByMinus = netTeacher.getErrorOfNetwork(this.minusGlobalPositions);
+        double fitnessByBest = netTeacher.getErrorOfNetwork(this.globalPositions);
         this.direction = (fitnessByMinus <= fitnessByBest) ? Direction.PLUS : Direction.MINUS;
     }
 
@@ -83,10 +82,10 @@ public class AntColony implements SwarmAlgorithm{
         }
     }
 
-    public void calculateAllAntsFuncValue(){
+    public void calculateAllAntsFuncValue() throws Exception{
         for (int i = 0; i < this.ants.length; i++){
             double[] antPositions = this.ants[i].getPositions();
-            double antFuncValue = testFunction.getResult(antPositions);
+            double antFuncValue = netTeacher.getErrorOfNetwork(antPositions);
             this.ants[i].setFuncValue(antFuncValue); // ????
         }
     }
@@ -140,20 +139,15 @@ public class AntColony implements SwarmAlgorithm{
         this.alphaParam = 0.1*this.alphaParam;
     }
 
-    public int getMinimum(){
+    public int getMinimum() throws Exception{
         calculateAllAntsFuncValue();
         memorizeBestFuncValue();
         setDirection();
 //        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + this.globalPositions[0] + " y: " + this.globalPositions[1]);
-//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
+        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
         int n = 10;
         int i = 0;
         for (int iter = 1; iter <= n; iter++) {
-            if (testFunction.isSolutionEnoughNearMinimum(getFitness())){
-                System.out.println("Algorytm wykonał " + iter + " iteracji zewn.");
-                System.out.println("Algorytm wykonał " + i + " iteracji wewn.");
-                return iter;
-            }
             for (i = 0; i < iter*sqrtMaxIterations; i++){
                 updateAllAntsPositions();
                 calculateAllAntsFuncValue();
@@ -163,6 +157,7 @@ public class AntColony implements SwarmAlgorithm{
             }
             updateAlphaParam();
         }
+        printResult();
         return 0;
     }
 
@@ -180,7 +175,7 @@ public class AntColony implements SwarmAlgorithm{
     }
 
     public void printResult(){
-        System.out.println("Najlepsze wskazane wspolrzedne w fazie koncowej, x: " + getGlobalPositionsAtIndex(0) + " y: " + getGlobalPositionsAtIndex(1));
+//        System.out.println("Najlepsze wskazane wspolrzedne w fazie koncowej, x: " + getGlobalPositionsAtIndex(0) + " y: " + getGlobalPositionsAtIndex(1));
         System.out.println("Najlepszy wskazany rezultat w fazie koncowej: " + getFitness());
     }
 }

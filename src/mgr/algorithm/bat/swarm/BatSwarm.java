@@ -1,9 +1,8 @@
 package mgr.algorithm.bat.swarm;
 
 import mgr.algorithm.SwarmAlgorithm;
-import mgr.test.functions.TestFuncEnum;
-import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.TestFunction;
+import mgr.config.Config;
+import mgr.teacher.NetworkTeacher;
 
 import java.util.Random;
 
@@ -22,13 +21,13 @@ public class BatSwarm implements SwarmAlgorithm{
 
     private int iterations;
 
-    private TestFunction testFunction;
+    private NetworkTeacher netTeacher;
 
-    public BatSwarm(TestFuncEnum alg, int iters, int numOfBats, int dim){
-        this.testFunction = TestFuncFactory.getTestFunction(alg);
+    public BatSwarm(NetworkTeacher teacher, int iters, int numOfBats){
+        this.netTeacher = teacher;
         this.iterations = iters;
         this.numBats = numOfBats;
-        this.dimension = dim;
+        this.dimension = Config.NUM_OF_WEIGHTS;
         this.pulseRate = 0.5;
         this.loudness = 0.5;
         this.minimumValue = Double.POSITIVE_INFINITY;
@@ -40,15 +39,16 @@ public class BatSwarm implements SwarmAlgorithm{
     private void initBats(){
         this.batSwarm = new Bat[numBats];
         for (int i = 0; i < numBats; i++) {
-            batSwarm[i] = new Bat(dimension, testFunction.getLowerBoundary(), testFunction.getUpperBoundary());
+            batSwarm[i] = new Bat(dimension, Config.LOWER_BOUNDARY, Config.UPPER_BOUNDARY);
         }
     }
 
-    public int getMinimum(){
+    public int getMinimum() throws Exception{
         double result;
         for (int i = 0; i < getNumOfBats(); i++) {
             double[] eachBatPositions = getBatAtIndex(i).get_xBestPositions();
-            result = testFunction.getResult(eachBatPositions);
+//            result = testFunction.getResult(eachBatPositions);
+            result = netTeacher.getErrorOfNetwork(eachBatPositions);
             getBatAtIndex(i).setCurrentMinimum(result);
             if (i==0){
                 setBestMinimumValue(result);
@@ -59,27 +59,25 @@ public class BatSwarm implements SwarmAlgorithm{
         }
 //        updateBestPositionsInAllBats();
 //        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
-//        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getMinimumValue());
+        System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getMinimumValue());
         //koniec fazy wstepnej
 
         for (int iter = 0; iter < iterations; iter++) {
-            if (testFunction.isSolutionEnoughNearMinimum(getMinimumValue())) {
-                System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                return iter;
-            }
             for (int i = 0; i < getNumOfBats(); i++){
                 getBatAtIndex(i).updateMovement();
 //                batSwarm.correctPositionsToBoundaries(i);
                 getSomeRandomWalk(i);
                 double[] eachBatPositions = getBatAtIndex(i).get_xPositions();
 //                result = AckleyFunc.function(eachBatPositions[0], eachBatPositions[1]);
-                result = testFunction.getResult(eachBatPositions);
+//                result = testFunction.getResult(eachBatPositions);
+                result = netTeacher.getErrorOfNetwork(eachBatPositions);
 //                batSwarm.updateSolutionIfBetter(result, eachBatPositions);
                 updateBatAtIndexIfBetterSol(i, result);
                 updateSolutionIfBetter(result, eachBatPositions);
 //                batSwarm.updateBestPositionsInAllBats();
             }
         }
+        System.out.println("Najlepszy wskazany rezultat w fazie koncowej: " + getMinimumValue());
         return 0;
     }
 

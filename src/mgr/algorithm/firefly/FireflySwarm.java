@@ -1,11 +1,12 @@
 package mgr.algorithm.firefly;
 
 import mgr.algorithm.SwarmAlgorithm;
-import mgr.test.functions.TestFuncEnum;
-import mgr.test.functions.TestFuncFactory;
-import mgr.test.functions.TestFunction;
+import mgr.config.Config;
+import mgr.teacher.NetworkTeacher;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class FireflySwarm implements SwarmAlgorithm{
 
@@ -24,12 +25,12 @@ public class FireflySwarm implements SwarmAlgorithm{
 
     private double scale;
 
-    private TestFunction testFunction;
+    private NetworkTeacher netTeacher;
 
     private final static int NUM_OF_FIREFLIES = 20;
 //    private final static int MAX_GENERATIONS = 500;
 
-    private final static int DIMENSION = 2;
+    private final static int DIMENSION = Config.NUM_OF_WEIGHTS;
 
     private double alpha = 0.67;
     private final static double BETA_MIN = 0.2;
@@ -41,8 +42,8 @@ public class FireflySwarm implements SwarmAlgorithm{
 
     private int iterations;
 
-    public FireflySwarm(TestFuncEnum alg, int iters){
-        this.testFunction = TestFuncFactory.getTestFunction(alg);
+    public FireflySwarm(NetworkTeacher teacher, int iters){
+        this.netTeacher = teacher;
         this.iterations = iters;
         initBoundariesFromTestFunc();
         this.fireflies = new Firefly[NUM_OF_FIREFLIES];
@@ -57,22 +58,18 @@ public class FireflySwarm implements SwarmAlgorithm{
     }
 
     private void initBoundariesFromTestFunc(){
-        this.lowerBoundary = testFunction.getLowerBoundary();
-        this.upperBoundary = testFunction.getUpperBoundary();
+        this.lowerBoundary = Config.LOWER_BOUNDARY;
+        this.upperBoundary = Config.UPPER_BOUNDARY;
     }
 
     private void initFireFlies(){
         for (int i = 0; i < fireflies.length; i++) {
-            this.fireflies[i] = new Firefly(DIMENSION, testFunction.getLowerBoundary(), testFunction.getUpperBoundary());
+            this.fireflies[i] = new Firefly(DIMENSION, this.lowerBoundary, this.upperBoundary);
         }
     }
 
-    public int getMinimum(){
+    public int getMinimum() throws Exception{
         for (int iter = 0; iter < iterations; iter++){
-            if (testFunction.isSolutionEnoughNearMinimum(getBestLightness())) {
-                System.out.println("Algorytm wykonał " + iter + " iteracji.");
-                return iter;
-            }
             getNewSolutions();
             sortFirefliesInList();
             saveCurrentBest();
@@ -80,6 +77,7 @@ public class FireflySwarm implements SwarmAlgorithm{
             moveFireflies();
             setNewAlpha();
         }
+        printResult();
         return 0;
     }
 
@@ -94,13 +92,14 @@ public class FireflySwarm implements SwarmAlgorithm{
         alpha = alpha*DELTA;
     }
 
-    private void getNewSolutions(){
+    private void getNewSolutions() throws Exception{
         double[] fireflyPositions;
         double newLightness;
         for (int i = 0; i < fireflies.length; i++) {
             fireflyPositions = this.fireflies[i].getPositions();
 //            newLightness = TestFuncFactory.getResultOfAlgorithm(algorithm, fireflyPositions[0], fireflyPositions[1]);
-            newLightness = testFunction.getResult(fireflyPositions);
+//            newLightness = testFunction.getResult(fireflyPositions);
+            newLightness = netTeacher.getErrorOfNetwork(fireflyPositions);
             this.fireflies[i].setLightness(newLightness);
         }
     }
@@ -191,7 +190,7 @@ public class FireflySwarm implements SwarmAlgorithm{
     }
 
     public void printResult(){
-        System.out.println("Najlepsze wskazane wspolrzedne w fazie koncowej, x: " + getBestPositionAtIndex(0) + " y: " + getBestPositionAtIndex(1));
+//        System.out.println("Najlepsze wskazane wspolrzedne w fazie koncowej, x: " + getBestPositionAtIndex(0) + " y: " + getBestPositionAtIndex(1));
         System.out.println("Najlepszy wskazany rezultat w fazie koncowej: " + getBestLightness());
     }
 }

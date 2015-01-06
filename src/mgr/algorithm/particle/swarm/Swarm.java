@@ -1,6 +1,7 @@
 package mgr.algorithm.particle.swarm;
 
 import mgr.algorithm.SwarmAlgorithm;
+import mgr.config.Config;
 import mgr.teacher.NetworkTeacher;
 
 public class Swarm implements SwarmAlgorithm{
@@ -63,7 +64,7 @@ public class Swarm implements SwarmAlgorithm{
     private void initializeSwarm(){
         actualBestValueOfMinFunc = Double.POSITIVE_INFINITY;
         for (int i=0; i<numberOfParticles; i++){
-            particles[i] = new Particle(xSize, -2.0, 2.0);
+            particles[i] = new Particle(xSize, Config.LOWER_BOUNDARY, Config.UPPER_BOUNDARY);
             particles[i].initializeParticle();
         }
     }

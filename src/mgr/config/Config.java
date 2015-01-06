@@ -5,7 +5,7 @@ import mgr.math.utils.ActivateFunc;
 public class Config {
 
     public static final int NUM_OF_LAYERS = 2;
-    public static int HIDD_NEURONS = 5;
+    public static int HIDD_NEURONS = 2;
     public final static int OUT_NEURONS = 1;
     public static int INPUT_SIZE = 5;
 
@@ -24,6 +24,9 @@ public class Config {
     public static final int BIAS_POSITION = 0;
 
     public static final boolean DEBUG = false;
+
+    public static final double LOWER_BOUNDARY = -3.0;
+    public static final double UPPER_BOUNDARY = 3.0;
 
     public static void setINPUT_SIZE(){
         INPUT_SIZE = N1 + N2;

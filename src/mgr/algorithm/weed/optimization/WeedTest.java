@@ -1,13 +1,11 @@
 package mgr.algorithm.weed.optimization;
 
-import mgr.test.functions.TestFuncEnum;
-
 public class WeedTest {
 
     public static final int ITERS = 100;
 
     public static void main(String[] args){
-        TestFuncEnum alg = TestFuncEnum.EASOM;
+        /*TestFuncEnum alg = TestFuncEnum.EASOM;
         int i = 1;
         int breakCounter = 0;
         int sumOfIterations = 0;
@@ -29,5 +27,6 @@ public class WeedTest {
         System.out.println("Algorytm znalazł " + breakCounter + " rozwiazan wczesniej(breaki).");
         System.out.println("Srednia ilosc iteracji w breakach: " + sredniaIteracji);
         System.out.println("Czas wykonania " + ITERS + " iteracji wynosi: " + difference + " ms.");
+        */
     }
 }
