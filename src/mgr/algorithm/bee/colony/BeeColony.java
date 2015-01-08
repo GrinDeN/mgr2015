@@ -90,6 +90,7 @@ public class BeeColony implements SwarmAlgorithm{
                 sendScoutBees();
             }
         }
+        netTeacher.setWeightsToNetwork(getBestPositions());
         printResult();
         return 0;
     }
@@ -97,6 +98,11 @@ public class BeeColony implements SwarmAlgorithm{
     @Override
     public String getName(){
         return "Bee Colony";
+    }
+
+    @Override
+    public double[] getBestPositions(){
+        return this.best_xPositions;
     }
 
     private Food getFoodAtIndex(int index){

@@ -1,5 +1,7 @@
 package mgr.network;
 
+import mgr.config.Config;
+
 import static mgr.config.Config.*;
 
 public class HiddenLayer extends Layer{
@@ -66,4 +68,18 @@ public class HiddenLayer extends Layer{
             }
         }
     }
+
+    @Override
+    public double[] getWeights(){
+        int weightCounter = 0;
+        double[] layerWeights = new double[Config.INPUT_SIZE*Config.HIDD_NEURONS];
+        for (int i = 1; i <= this.getNumOfNeurons(); i++){
+            for (int j = 0; j < INPUT_SIZE; j++){
+                layerWeights[weightCounter] = layerDendrites[i][j].getWeight();
+                weightCounter++;
+            }
+        }
+        return layerWeights;
+    }
+
 }

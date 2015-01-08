@@ -58,6 +58,17 @@ public class OutputLayer extends Layer {
         }
     }
 
+    @Override
+    public double[] getWeights(){
+        int weightCounter = Config.INPUT_SIZE*Config.HIDD_NEURONS;
+        double[] layerWeights = new double[Config.HIDD_NEURONS+1];
+        for (int weight = 0; weight <= hiddLayer.getNumOfNeurons(); weight++){
+            layerWeights[weight] = layerDendrites[weight].getWeight();
+            weightCounter++;
+        }
+        return layerWeights;
+    }
+
     public double getCalculateOutput(){
         this.outputOfLayer = 0;
         for (int neur = 1; neur < this.getNumOfNeurons()+1; neur++) {

@@ -109,8 +109,17 @@ public class WolfsPack implements SwarmAlgorithm{
             }
             iter++;
         }
+        networkTeacher.setWeightsToNetwork(getBestPositions());
         System.out.println("Najlepszy wynik bledu po koncowej fazie: " + getAlphaScore());
+        printAlphaPositions();
         return 0;
+    }
+
+    private void printAlphaPositions(){
+        double[] alphaPositions = getBestPositions();
+        for (int i = 0; i < alphaPositions.length; i++) {
+            System.out.println(alphaPositions[i]);
+        }
     }
 
     @Override
@@ -152,6 +161,10 @@ public class WolfsPack implements SwarmAlgorithm{
 
     private double getAlphaPositionAtIndex(int index){
         return this.alpha.getPositionAtIndex(index);
+    }
+
+    public double[] getBestPositions(){
+        return this.alpha.getPositions();
     }
 
     public void printResults(){

@@ -15,6 +15,8 @@ public abstract class Layer{
 
     public abstract void setWeights(double[] weights);
 
+    public abstract double[] getWeights();
+
     public int getNumOfNeurons(){
         return this.numOfNeurons;
     }

@@ -52,13 +52,26 @@ public class Swarm implements SwarmAlgorithm{
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
+        networkTeacher.setWeightsToNetwork(getBestPositions());
         System.out.println("Najlepszy wynik bledu po koncowej fazie: " + actualBestValueOfMinFunc);
+        printBestPositions();
         return 0;
     }
 
     @Override
     public String getName(){
         return "PSO";
+    }
+
+    @Override
+    public double[] getBestPositions(){
+        return this.bestPositionOfSwarm;
+    }
+
+    private void printBestPositions(){
+        for (int i = 0; i < bestPositionOfSwarm.length; i++) {
+            System.out.println(bestPositionOfSwarm[i]);
+        }
     }
 
     private void initializeSwarm(){

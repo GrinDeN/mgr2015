@@ -79,7 +79,9 @@ public class NetworkTeacher {
     }
 
     public double getErrorOfNetwork(double[] weights) throws Exception{
-        network.setWeights(weights);
+        if (weights != null){
+            network.setWeights(weights);
+        }
         resetErrorCounterNetOutputsList();
         double[] input;
         for (int t = Config.S; t <= Config.P; t++){
@@ -106,5 +108,18 @@ public class NetworkTeacher {
         }
         double error = errorCounter.sumarizeErrors();
         return error;
+    }
+
+    public void setWeightsToNetwork(double[] weights){
+        double[] weightsToNetwork = new double[weights.length];
+        System.arraycopy(weights, 0, weightsToNetwork, 0, weightsToNetwork.length);
+        network.setWeights(weightsToNetwork);
+    }
+
+    public void printNetworkWeights(){
+        double[] networkWeights = network.getWeights();
+        for (int i = 0; i < networkWeights.length; i++) {
+            System.out.println(networkWeights[i]);
+        }
     }
 }

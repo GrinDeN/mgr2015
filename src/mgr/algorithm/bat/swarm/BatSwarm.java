@@ -68,7 +68,6 @@ public class BatSwarm implements SwarmAlgorithm{
 //                batSwarm.correctPositionsToBoundaries(i);
                 getSomeRandomWalk(i);
                 double[] eachBatPositions = getBatAtIndex(i).get_xPositions();
-//                result = AckleyFunc.function(eachBatPositions[0], eachBatPositions[1]);
 //                result = testFunction.getResult(eachBatPositions);
                 result = netTeacher.getErrorOfNetwork(eachBatPositions);
 //                batSwarm.updateSolutionIfBetter(result, eachBatPositions);
@@ -77,6 +76,7 @@ public class BatSwarm implements SwarmAlgorithm{
 //                batSwarm.updateBestPositionsInAllBats();
             }
         }
+        netTeacher.setWeightsToNetwork(getBestPositions());
         System.out.println("Najlepszy wskazany rezultat w fazie koncowej: " + getMinimumValue());
         return 0;
     }
@@ -84,6 +84,11 @@ public class BatSwarm implements SwarmAlgorithm{
     @Override
     public String getName(){
         return "Bat Algorithm";
+    }
+
+    @Override
+    public double[] getBestPositions(){
+        return this.bestPositions;
     }
 
     private Bat getBatAtIndex(int index){

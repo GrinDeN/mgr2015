@@ -77,6 +77,7 @@ public class FireflySwarm implements SwarmAlgorithm{
             moveFireflies();
             setNewAlpha();
         }
+        netTeacher.setWeightsToNetwork(getBestPositions());
         printResult();
         return 0;
     }
@@ -84,6 +85,11 @@ public class FireflySwarm implements SwarmAlgorithm{
     @Override
     public String getName(){
         return "FireFly Algorithm";
+    }
+
+    @Override
+    public double[] getBestPositions(){
+        return this.bestPositions;
     }
 
     private void setNewAlpha(){
