@@ -17,7 +17,7 @@ public class MainTest {
     public static void main(String[] args) throws Exception{
         Network net = new Network();
         String dataFilename;
-        SwarmEnum swarmAlg = SwarmEnum.PSO;
+        SwarmEnum swarmAlg = SwarmEnum.BAT;
         AlgTester algTester = new AlgTester();
         if (STATIC_NET == false){
             dataFilename = "daneucz2000.txt";

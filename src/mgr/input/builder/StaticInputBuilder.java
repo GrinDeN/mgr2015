@@ -2,9 +2,7 @@ package mgr.input.builder;
 
 import java.util.ArrayList;
 
-import static mgr.config.Config.BIAS_POSITION;
-import static mgr.config.Config.BIAS_VALUE;
-import static mgr.config.Config.INPUT_SIZE;
+import static mgr.config.Config.*;
 
 public class StaticInputBuilder{
 
@@ -43,10 +41,18 @@ public class StaticInputBuilder{
 
     private void addValuesToInputFromDataFile(){
         int numOfColsWithData = getNumberOfColsWithData();
-        for (int i = 0; i < numOfColsWithData; i++){
-            input[currentIndex] = dataList.get(numOfColsWithData).get(currentIter);
+        for (int i = 0; i <= numOfColsWithData; i++){
+            input[currentIndex] = dataList.get(i).get(currentIter);
             currentIndex++;
         }
+    }
+
+    private void printInput(){
+        System.out.println("Input dla iteracji: " + currentIter);
+        for (int i = 0; i < input.length; i++) {
+            System.out.print(input[i] + " ");
+        }
+        System.out.println();
     }
 
     private int getNumberOfColsWithData(){

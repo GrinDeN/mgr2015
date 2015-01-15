@@ -73,6 +73,17 @@ public class DataFileExtractor {
         demandValues.add(demandVal);
     }
 
+    public void printDataValues(){
+        System.out.println("Data Values: ");
+        for (int i = 0; i < dataValues.size(); i++) {
+            System.out.println("Kolumna nr: " + i);
+            for (int j = 0; j < dataValues.get(i).size() ; j++) {
+                System.out.println(dataValues.get(i).get(j));
+            }
+            System.out.println("-------------------------------------");
+        }
+    }
+
     private void setSizeOfDataValues(){
         this.sizeOfDataValues = this.dataValues.get(0).size();
     }

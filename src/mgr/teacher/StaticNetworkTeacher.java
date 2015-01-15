@@ -48,6 +48,7 @@ public class StaticNetworkTeacher implements NetworkTeacher{
 
     private void getDataValues(){
         this.dataValues = extractor.getDataValues();
+//        extractor.printDataValues();
     }
 
     private void initInputBuilder(){
