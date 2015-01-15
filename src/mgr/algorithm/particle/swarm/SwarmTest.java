@@ -3,7 +3,7 @@ package mgr.algorithm.particle.swarm;
 import mgr.config.Config;
 import mgr.input.builder.ParamPair;
 import mgr.network.Network;
-import mgr.teacher.NetworkTeacher;
+import mgr.teacher.RecursiveNetworkTeacher;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ public class SwarmTest {
         ArrayList<ParamPair> params = new ArrayList<ParamPair>();
         params.add(new ParamPair(1, 2));
         params.add(new ParamPair(1));
-        NetworkTeacher netTeacher = new NetworkTeacher(net, filename, params);
+        RecursiveNetworkTeacher netTeacher = new RecursiveNetworkTeacher(net, filename, params);
         Swarm swarm = new Swarm(netTeacher, 100, 30, Config.NUM_OF_WEIGHTS);
         long start = System.nanoTime();
         swarm.getMinimum();

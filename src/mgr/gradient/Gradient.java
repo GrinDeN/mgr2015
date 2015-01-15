@@ -1,7 +1,7 @@
 package mgr.gradient;
 
 import mgr.network.Network;
-import mgr.teacher.NetworkTeacher;
+import mgr.teacher.RecursiveNetworkTeacher;
 
 import java.util.ArrayList;
 
@@ -25,9 +25,9 @@ public class Gradient {
     private OutputGradient outputGradient;
 
     private Network network;
-    private NetworkTeacher netTeacher;
+    private RecursiveNetworkTeacher netTeacher;
 
-    public Gradient(Network net, NetworkTeacher teacher){
+    public Gradient(Network net, RecursiveNetworkTeacher teacher){
         this.network = net;
         this.netTeacher = teacher;
 

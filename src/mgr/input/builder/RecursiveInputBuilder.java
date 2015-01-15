@@ -6,18 +6,18 @@ import java.util.ArrayList;
 
 import static mgr.config.Config.*;
 
-public class InputBuilder {
+public class RecursiveInputBuilder{
 
     private int currentIter;
     private ArrayList<ArrayList<Double>> dataList;
     private ArrayList<ParamPair> inputParamList;
     private ArrayList<Double> networkOutputs;
     private ArrayList<Double> startingOutputs;
-//    private ArrayList<Double> input;
     private double[] input;
     private int currentIndex;
+    private double currentNetOutput;
 
-    public InputBuilder(ArrayList<ArrayList<Double>> dataList, ArrayList<ParamPair> params, ArrayList<Double> currentOutputs){
+    public RecursiveInputBuilder(ArrayList<ArrayList<Double>> dataList, ArrayList<ParamPair> params, ArrayList<Double> currentOutputs){
         this.currentIter = 0;
         this.currentIndex = 0;
 
@@ -26,7 +26,6 @@ public class InputBuilder {
 
         this.inputParamList = new ArrayList<ParamPair>();
         this.inputParamList.addAll(params);
-//        this.input = new ArrayList<Double>();
         this.input = new double[INPUT_SIZE];
 
         this.startingOutputs = new ArrayList<Double>();
@@ -35,6 +34,7 @@ public class InputBuilder {
         this.networkOutputs = new ArrayList<Double>();
         this.networkOutputs.addAll(startingOutputs);
     }
+
 
     public double[] build(int iter, double netOutputValue){
         this.currentIndex = 0;
@@ -77,7 +77,6 @@ public class InputBuilder {
             int secParam = pair.getSecondValue();
             ArrayList<Double> currentColumn = dataList.get(pairCounter);
             for (int delay = firstParam; delay <= secParam; delay++){
-//                input.add(currentColumn.get(currentIter-delay));
                 input[currentIndex] = currentColumn.get(currentIter-delay);
                 currentIndex++;
             }
@@ -93,7 +92,6 @@ public class InputBuilder {
         int firstParam = networkOutputsPairOfParams.getFirstValue();
         int secParam = networkOutputsPairOfParams.getSecondValue();
         for (int delay = firstParam; delay <= secParam; delay++){
-//            input.add(networkOutputs.get(currentIter-delay));
             input[currentIndex] = networkOutputs.get(currentIter-delay);
             currentIndex++;
         }
@@ -111,7 +109,8 @@ public class InputBuilder {
 //    public ArrayList<Double> getInput(){
 //        return this.input;
 //    }
-    public double[] getInput(){
+    private double[] getInput(){
         return this.input;
     }
+
 }

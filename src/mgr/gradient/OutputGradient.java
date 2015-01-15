@@ -3,17 +3,17 @@ package mgr.gradient;
 import mgr.math.utils.MathUtils;
 import mgr.network.Dendrite;
 import mgr.network.Network;
-import mgr.teacher.NetworkTeacher;
+import mgr.teacher.RecursiveNetworkTeacher;
 
 import static mgr.config.Config.*;
 
 public class OutputGradient {
 
     private Network network;
-    private NetworkTeacher netTeacher;
+    private RecursiveNetworkTeacher netTeacher;
     private Gradient gradient;
 
-    public OutputGradient(Network net, NetworkTeacher networkTeacher, Gradient grad){
+    public OutputGradient(Network net, RecursiveNetworkTeacher networkTeacher, Gradient grad){
         this.network = net;
         this.netTeacher = networkTeacher;
         this.gradient = grad;

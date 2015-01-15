@@ -1,12 +1,12 @@
 package mgr.algorithm.grey.wolf;
 
-public class Wolf {
+public class wolf {
 
     private double[] positions;
     private int dim;
     private double score;
 
-    public Wolf(int dimension){
+    public wolf(int dimension){
         this.dim = dimension;
         this.positions = new double[dim];
         this.score = Double.POSITIVE_INFINITY;
@@ -33,6 +33,10 @@ public class Wolf {
 
     public double getPositionAtIndex(int index){
         return this.positions[index];
+    }
+
+    public double[] getPositions(){
+        return this.positions;
     }
 
 }

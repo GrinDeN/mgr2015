@@ -5,14 +5,14 @@ import mgr.math.utils.ActivateFunc;
 public class Config {
 
     public static final int NUM_OF_LAYERS = 2;
-    public static int HIDD_NEURONS = 2;
+    public static int HIDD_NEURONS = 10;
     public final static int OUT_NEURONS = 1;
-    public static int INPUT_SIZE = 5;
+    public static int INPUT_SIZE = 4;
 
     public static int NUM_OF_WEIGHTS = (INPUT_SIZE*HIDD_NEURONS)+HIDD_NEURONS+1;
 
     public static int S = 0;
-    public static int P = 2000;
+    public static int P = 8000;
     public static int K = HIDD_NEURONS;
 
     public static int N1 = 0;
@@ -43,6 +43,8 @@ public class Config {
     public static void setN2(int value){
         N2 = value;
     }
+
+    public static final boolean STATIC_NET = true;
 
 //    public static void setS(int value){
 //        S = value;

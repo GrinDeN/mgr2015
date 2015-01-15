@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Verifier {
 
-    private NetworkTeacher netTeacher;
+    private RecursiveNetworkTeacher netTeacher;
 
     public Verifier(Network network, String filename, ArrayList<ParamPair> params){
-        this.netTeacher = new NetworkTeacher(network, filename, params);
+        this.netTeacher = new RecursiveNetworkTeacher(network, filename, params);
     }
 
     public void verify() throws Exception{

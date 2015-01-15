@@ -1,7 +1,7 @@
 package mgr.min.kierunkowa;
 
 import mgr.config.Config;
-import mgr.input.builder.InputBuilder;
+import mgr.input.builder.RecursiveInputBuilder;
 import mgr.network.Network;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class MinKierunkowa {
     private static final double EPS = 1E-5;
 
     private Network network;
-    private InputBuilder inputBuilder;
+    private RecursiveInputBuilder inputBuilder;
     private double firstParam;
     private double secParam;
 
@@ -20,7 +20,7 @@ public class MinKierunkowa {
 
     private ArrayList<Double> currentPWk;
 
-    public MinKierunkowa(InputBuilder inputBuilder){
+    public MinKierunkowa(RecursiveInputBuilder inputBuilder){
         this.network = new Network();
         this.inputBuilder = inputBuilder;
         this.firstParam = 0.0;

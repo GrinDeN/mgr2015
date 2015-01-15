@@ -18,17 +18,17 @@ public class WolfsPack implements SwarmAlgorithm{
     private Random rand;
     private int max_iter;
 
-    private Wolf alpha;
-    private Wolf beta;
-    private Wolf delta;
+    private wolf alpha;
+    private wolf beta;
+    private wolf delta;
 
     private NetworkTeacher networkTeacher;
 
     public WolfsPack(NetworkTeacher netTeacher, int max_iter){
         this.networkTeacher = netTeacher;
-        this.alpha = new Wolf(Config.NUM_OF_WEIGHTS);
-        this.beta = new Wolf(Config.NUM_OF_WEIGHTS);
-        this.delta = new Wolf(Config.NUM_OF_WEIGHTS);
+        this.alpha = new wolf(Config.NUM_OF_WEIGHTS);
+        this.beta = new wolf(Config.NUM_OF_WEIGHTS);
+        this.delta = new wolf(Config.NUM_OF_WEIGHTS);
         this.globalPositions = new double[NUM_OF_AGENTS][Config.NUM_OF_WEIGHTS];
         this.rand = new Random();
         this.max_iter = max_iter;
@@ -144,7 +144,7 @@ public class WolfsPack implements SwarmAlgorithm{
         System.arraycopy(newPositions, 0, globalPositions[index], 0, globalPositions[index].length);
     }
 
-    private double calculateXParameter(Wolf currentWolf, double a, int i, int j){
+    private double calculateXParameter(wolf currentWolf, double a, int i, int j){
         double xParameter;
         double r1 = rand.nextDouble();
         double r2 = rand.nextDouble();

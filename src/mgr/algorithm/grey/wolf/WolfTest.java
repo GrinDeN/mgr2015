@@ -2,7 +2,7 @@ package mgr.algorithm.grey.wolf;
 
 import mgr.input.builder.ParamPair;
 import mgr.network.Network;
-import mgr.teacher.NetworkTeacher;
+import mgr.teacher.RecursiveNetworkTeacher;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class WolfTest {
         ArrayList<ParamPair> params = new ArrayList<ParamPair>();
         params.add(new ParamPair(1, 2));
         params.add(new ParamPair(1));
-        NetworkTeacher netTeacher = new NetworkTeacher(net, filename, params);
+        RecursiveNetworkTeacher netTeacher = new RecursiveNetworkTeacher(net, filename, params);
         WolfsPack wolfsPack = new WolfsPack(netTeacher, 100);
         long start = System.nanoTime();
         wolfsPack.getMinimum();
