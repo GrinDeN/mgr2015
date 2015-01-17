@@ -48,29 +48,20 @@ public class StaticNetworkTeacher implements NetworkTeacher{
 
     private void getDataValues(){
         this.dataValues = extractor.getDataValues();
-//        extractor.printDataValues();
     }
 
     private void initInputBuilder(){
         this.builder = new StaticInputBuilder(dataValues);
     }
 
-//    private ArrayList<Double> getFirstNetOutputsAsDemandValues(){
-//        ArrayList<Double> firstNetOutputs = new ArrayList<Double>();
-//        for (int i = 0; i <= Config.S-1; i++) {
-//            firstNetOutputs.add(i, this.demandValues.get(i));
-//        }
-//        return firstNetOutputs;
-//    }
-
     private void initErrorCounter(){
-        this.errorCounter = new NetworkErrorCounter(demandValues);
-//        this.errorCounter.addFirstPartOfNetworkOutputs(getFirstNetOutputsAsDemandValues());
+        errorCounter = new NetworkErrorCounter(demandValues);
+        errorCounter.addZeroAsFirstElement();
     }
 
     private void resetErrorCounterNetOutputsList(){
-        this.errorCounter.resetNetOutputList();
-//        this.errorCounter.addFirstPartOfNetworkOutputs(getFirstNetOutputsAsDemandValues());
+        errorCounter.resetNetOutputList();
+        errorCounter.addZeroAsFirstElement();
     }
 
     @Override
@@ -80,7 +71,7 @@ public class StaticNetworkTeacher implements NetworkTeacher{
         }
         resetErrorCounterNetOutputsList();
         double[] input;
-        for (int t = 0; t <= Config.P; t++){
+        for (int t = 1; t <= Config.P; t++){
             input = builder.build(t);
             network.setNetworkInput(input);
             network.calculateOutput();

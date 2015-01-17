@@ -36,6 +36,10 @@ public class NetworkErrorCounter {
         this.networkOutputs.addAll(firstNetOutputs);
     }
 
+    public void addZeroAsFirstElement(){
+        this.networkOutputs.add(0, 0.0);
+    }
+
     public void addNetworkOutput(double netOutputValue){
         this.networkOutputs.add(netOutputValue);
     }
@@ -47,8 +51,8 @@ public class NetworkErrorCounter {
             throw new Exception("Różny rozmiar list: demandValues oraz networkOutputs");
         }
         resetErrorValue();
-        for (int elem = 0; elem < networkOutputs.size(); elem++){
-            this.error += Math.pow(demandValues.get(elem)-networkOutputs.get(elem) ,2);
+        for (int elem = 1; elem < networkOutputs.size(); elem++){
+            this.error += Math.pow(demandValues.get(elem)-networkOutputs.get(elem), 2);
         }
         return getErrorValue();
     }
@@ -57,15 +61,4 @@ public class NetworkErrorCounter {
         return this.error;
     }
 
-    public static void main(String[] args) throws Exception{
-        ArrayList<Double> demands = new ArrayList<Double>();
-        demands.add(0.0);
-        demands.add(5.3);
-        demands.add(3.2);
-        NetworkErrorCounter errorCounter = new NetworkErrorCounter(demands);
-        errorCounter.addNetworkOutput(3.3);
-        errorCounter.addNetworkOutput(4.0);
-        double error = errorCounter.sumarizeErrors();
-        System.out.println("Blad: " + error);
-    }
 }

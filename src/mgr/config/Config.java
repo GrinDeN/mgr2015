@@ -25,8 +25,8 @@ public class Config {
 
     public static final boolean DEBUG = false;
 
-    public static final double LOWER_BOUNDARY = -3.0;
-    public static final double UPPER_BOUNDARY = 3.0;
+    public static final double LOWER_BOUNDARY = -4.0;
+    public static final double UPPER_BOUNDARY = 4.0;
 
     public static void setINPUT_SIZE(){
         INPUT_SIZE = N1 + N2;
