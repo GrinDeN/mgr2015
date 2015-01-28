@@ -1,33 +1,34 @@
 package mgr.min.kierunkowa;
 
 import mgr.config.Config;
-import mgr.input.builder.RecursiveInputBuilder;
-import mgr.network.Network;
+import mgr.teacher.RecursiveNetworkTeacher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MinKierunkowa {
 
+    private static final double START_ZERO = 0.0;
     private static final double EPS = 1E-5;
 
-    private Network network;
-    private RecursiveInputBuilder inputBuilder;
     private double firstParam;
     private double secParam;
 
+    private RecursiveNetworkTeacher recursiveTeacher;
+
     private double[] startingWeights;
+    private double[] candidateWeights;
+    private double[] sumOfStartingAndCandidates;
 
     private ArrayList<Double> currentPWk;
 
-    public MinKierunkowa(RecursiveInputBuilder inputBuilder){
-        this.network = new Network();
-        this.inputBuilder = inputBuilder;
-        this.firstParam = 0.0;
+    public MinKierunkowa(RecursiveNetworkTeacher teacher){
+        this.recursiveTeacher = teacher;
+        this.firstParam = START_ZERO;
         this.secParam = EPS;
-
         this.startingWeights = new double[Config.NUM_OF_WEIGHTS];
-
+        this.candidateWeights = new double[Config.NUM_OF_WEIGHTS];
+        this.sumOfStartingAndCandidates = new double[Config.NUM_OF_WEIGHTS];
         this.currentPWk = new ArrayList<Double>();
     }
 
@@ -36,47 +37,71 @@ public class MinKierunkowa {
         this.currentPWk.addAll(pwk);
     }
 
-    public double goForwardMinKierunkowa(double step){
-        double currentError = 0.0;
-        setStartingWeightsAsCurrent();
-        double[] candidateWeights = makeCandidateWeights(step);
-        updateWeightsInInnerNetwork(candidateWeights);
-        for (int t = Config.S; t <= Config.P; t++){
-            double[] input = inputBuilder.build(t, network.getCurrentOutput());
-            network.setNetworkInput(input);
-            network.calculateOutput();
+    public double getParamOfMinKierunkowa(double[] currentStartingWeights) throws Exception{
+        setStartingWeights(currentStartingWeights);
+        resetParamsToBeginningValues();
+        double ff1 = goForwardMinKierunkowa(this.firstParam);
+        double ff2 = goForwardMinKierunkowa(this.secParam);
+        // gdy od razu wspolczynnik bledu rosnie to przerwij
+        // Reset kierunku czyli: p(k)=-gW(k) (kierunek = -gradient)
+        // i znowu wchodzimy w te funkcje liczac juz dla tego nowego kierunku
+//        if (ff2 > ff1){
+//            this.resetKierunek = true;
+//            return (firstParam+secParam)/2;
+//        }
+        // jesli blad maleje to poszerzaj
+        while (ff1 > ff2) {
+            firstParam = secParam;
+            secParam = 2 * secParam;
+            ff1 = goForwardMinKierunkowa(this.firstParam);
+            ff2 = goForwardMinKierunkowa(this.secParam);
         }
-
-        return currentError;
-    }
-
-    private double[] makeCandidateWeights(double step){
-        double[] weightsValues = new double[Config.NUM_OF_WEIGHTS];
-        for (int index = 0; index < weightsValues.length; index++){
-            weightsValues[index] = step*currentPWk.get(index);
-        }
-        return weightsValues;
-    }
-
-    public double getParamOfMinKierunkowa(){
-        return 0.0;
-    }
-
-    private void setStartingWeightsAsCurrent(){
-//        setWeightsToInnerNetwork(this.startingWeights);
-        this.network.setWeights(this.startingWeights);
-    }
-
-//    private void setWeightsToInnerNetwork(double[] weights){
-//        this.network.setWeights(weights);
-//    }
-
-    public void updateWeightsInInnerNetwork(double[] weights){
-        this.network.updateWeights(weights);
+        double newStep = ZlotyPodzial.getMinimum(this, firstParam, secParam);
+        return newStep;
     }
 
     private void setStartingWeights(double[] weights){
         this.startingWeights = Arrays.copyOf(weights, weights.length);
     }
+
+    private void resetParamsToBeginningValues(){
+        this.firstParam = START_ZERO;
+        this.secParam = EPS;
+    }
+
+    //TODO obliczenia bledu
+    public double goForwardMinKierunkowa(double step) throws Exception{
+        double currentError;
+        makeCandidateWeights(step);
+        makeSumOfStartingAndCandidatesWeights();
+        currentError = recursiveTeacher.getErrorOfNetwork(sumOfStartingAndCandidates);
+//        double[] input;
+//        for (int t = Config.S; t <= Config.P; t++){
+//            if (t == Config.S){
+////                input = builder.build(t, demandValues.get(t));
+//            } else {
+//                input = builder.build(t, network.getCurrentOutput());
+//            }
+////            network.setNetworkInput(input);
+//            network.calculateOutput();
+//        }
+        return currentError;
+    }
+
+    private void makeCandidateWeights(double step){
+        for (int index = 0; index < candidateWeights.length; index++){
+            candidateWeights[index] = step*currentPWk.get(index);
+        }
+    }
+
+    private void makeSumOfStartingAndCandidatesWeights(){
+        for (int index = 0; index < candidateWeights.length; index++){
+            sumOfStartingAndCandidates[index] = startingWeights[index]+candidateWeights[index];
+        }
+    }
+
+//    public void updateWeightsInInnerNetwork(double[] weights){
+//        this.network.updateWeightsWithoutPrevious(weights);
+//    }
 
 }

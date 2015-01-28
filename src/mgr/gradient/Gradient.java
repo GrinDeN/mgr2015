@@ -1,5 +1,6 @@
 package mgr.gradient;
 
+import mgr.math.utils.MatrixUtils;
 import mgr.network.Network;
 import mgr.teacher.RecursiveNetworkTeacher;
 
@@ -19,6 +20,7 @@ public class Gradient {
     private double[][] dEdW2;
 
     private ArrayList<Double> gW;
+    private ArrayList<Double> previousgW;
     private ArrayList<Double> pWk;
 
     private HiddenGradient hiddenGradient;
@@ -27,14 +29,15 @@ public class Gradient {
     private Network network;
     private RecursiveNetworkTeacher netTeacher;
 
-    public Gradient(Network net, RecursiveNetworkTeacher teacher){
-        this.network = net;
+    public Gradient(RecursiveNetworkTeacher teacher){
         this.netTeacher = teacher;
+        this.network = teacher.getNetwork();
 
-        this.hiddenGradient = new HiddenGradient(net, teacher, this);
-        this.outputGradient = new OutputGradient(net, teacher, this);
+        this.hiddenGradient = new HiddenGradient(network, teacher, this);
+        this.outputGradient = new OutputGradient(network, teacher, this);
 
         this.gW = new ArrayList<Double>();
+        this.previousgW = new ArrayList<Double>();
         this.pWk = new ArrayList<Double>();
 
         initAllArrays();
@@ -178,6 +181,7 @@ public class Gradient {
     }
 
     public void setCurrent_gW(){
+        makeCopyOfgWAsPrevgW();
         this.gW.clear();
         double[][] sum_dEdW1 = new double[K+1][INPUT_SIZE+1];
         double[] sum_dEdW2 = new double[K+1];
@@ -203,7 +207,31 @@ public class Gradient {
         }
     }
 
+    private void makeCopyOfgWAsPrevgW(){
+        this.previousgW.addAll(this.gW);
+    }
+
+    public ArrayList<Double> getgW(){
+        return this.gW;
+    }
+
+    public ArrayList<Double> getPreviousgW(){
+        return this.previousgW;
+    }
+
     public ArrayList<Double> getpWk(){
         return this.pWk;
+    }
+
+    public void setNewPwk_BFGS(double[][] vk){
+        Double[] gwArray = this.gW.toArray(new Double[gW.size()]);
+        double[] HWgW = MatrixUtils.multiplyMatrixByPionowyVec(vk, gwArray);
+        for (int i=0; i<pWk.size(); i++){
+            this.pWk.add(i,-1*HWgW[i]);
+        }
+    }
+
+    public Network getNetwork(){
+        return network;
     }
 }

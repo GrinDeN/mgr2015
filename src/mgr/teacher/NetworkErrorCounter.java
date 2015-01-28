@@ -44,6 +44,14 @@ public class NetworkErrorCounter {
         this.networkOutputs.add(netOutputValue);
     }
 
+    public double getNetworkOutputAtIndex(int index){
+        return this.networkOutputs.get(index);
+    }
+
+    public double getDemandValueAtIndex(int index){
+        return this.demandValues.get(index);
+    }
+
     public double sumarizeErrors() throws Exception{
         if (networkOutputs.size() != demandValues.size()){
             System.out.println("Rozmiar networkOutputs: " + networkOutputs.size());

@@ -78,6 +78,14 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
         this.errorCounter.addFirstPartOfNetworkOutputs(getFirstNetOutputsAsDemandValues());
     }
 
+    public double getDemandValueFromErrorCounter(int t){
+        return errorCounter.getDemandValueAtIndex(t);
+    }
+
+    public double getNetworkOutputFromErrorCounter(int t){
+        return errorCounter.getNetworkOutputAtIndex(t);
+    }
+
     @Override
     public double getErrorOfNetwork(double[] weights) throws Exception{
         if (weights != null){
@@ -100,6 +108,12 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
         return error;
     }
 
+    public void updateWeightsInNetwork(double[] differenceToUpdate){
+        double[] weightsToNetwork = new double[differenceToUpdate.length];
+        System.arraycopy(differenceToUpdate, 0, weightsToNetwork, 0, weightsToNetwork.length);
+        network.updateWeights(weightsToNetwork);
+    }
+
     @Override
     public void setWeightsToNetwork(double[] weights){
         double[] weightsToNetwork = new double[weights.length];
@@ -113,5 +127,25 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
         for (int i = 0; i < networkWeights.length; i++) {
             System.out.println(networkWeights[i]);
         }
+    }
+
+    public double[] getNetworkWeights(){
+        return this.network.getWeights();
+    }
+
+    public void printActualErrorNetwork(){
+        System.out.println("Aktualna wartosc bledu: " + errorCounter.getErrorValue());
+    }
+
+    public String getFilenameOfData(){
+        return this.filenameOfData;
+    }
+
+    public ArrayList<ParamPair> getParams(){
+        return this.params;
+    }
+
+    public Network getNetwork(){
+        return network;
     }
 }

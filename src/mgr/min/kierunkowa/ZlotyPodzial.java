@@ -11,8 +11,8 @@ public class ZlotyPodzial {
         double al2 = GOLDEN_PARAM*(secParam-firstParam)+firstParam;
         double newFirst = 0.0;
         double newSecond = 0.0;
-        double ff1 = 0.0;
-        double ff2 = 0.0;
+        double ff1;
+        double ff2;
         for (int i = 0; i < 15; i++){
             ff1 = minKierunkowa.goForwardMinKierunkowa(al2);
             ff2 = minKierunkowa.goForwardMinKierunkowa(al1);

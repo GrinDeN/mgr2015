@@ -15,8 +15,10 @@ public class Config {
     public static int P = 8000;
     public static int K = HIDD_NEURONS;
 
-    public static int N1 = 0;
-    public static int N2 = 0;
+    public static int N1 = 2;
+    public static int N2 = 2;
+
+    public static int BFGS_ITERATIONS = 200;
 
     public static final ActivateFunc ACTIVATE_FUNCTION = ActivateFunc.SIGMOID_BI;
 

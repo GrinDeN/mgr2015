@@ -56,8 +56,7 @@ public class OutputGradient {
     //i tu?
     public double compute_dEdW2(int t, int i){
 //        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*compute_dYdW2(t, i);
-//        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*gradient.getElementdYdW2AtIndex(t, i);
-//        return result;
-        return 0;
+        double result = (netTeacher.getNetworkOutputFromErrorCounter(t) - netTeacher.getDemandValueFromErrorCounter(t))*gradient.getElementdYdW2AtIndex(t, i);
+        return result;
     }
 }

@@ -13,6 +13,7 @@ public class Network {
     private double[] networkInput;
     private double currentOutput;
     private double[] weights;
+    private double[] previousWeights;
 
     public Network(){
         this.networkInput = new double[INPUT_SIZE];
@@ -20,6 +21,7 @@ public class Network {
         this.hiddLayer = new HiddenLayer(HIDD_NEURONS);
         this.outLayer = new OutputLayer(OUT_NEURONS, this.hiddLayer);
         this.weights = new double[NUM_OF_WEIGHTS];
+        this.previousWeights = new double[NUM_OF_WEIGHTS];
         this.addLayersToList();
         this.initialize();
     }
@@ -36,15 +38,29 @@ public class Network {
     }
 
     public void updateWeights(double[] newWeights){
+        getWeights();
+        setPreviousWeights();
+        for (Layer eachLayer : layers){// kolejnosc ma znaczenie?
+            eachLayer.updateWeights(newWeights);
+        }
+    }
+
+    public void updateWeightsWithoutPrevious(double[] newWeights){
         for (Layer eachLayer : layers){// kolejnosc ma znaczenie?
             eachLayer.updateWeights(newWeights);
         }
     }
 
     public void setWeights(double[] weights){
+        getWeights();
+        setPreviousWeights();
         for (Layer eachLayer : layers){
             eachLayer.setWeights(weights);
         }
+    }
+
+    public void setPreviousWeights(){
+        System.arraycopy(this.weights, 0, this.previousWeights, 0, this.weights.length);
     }
 
     public double[] getWeights(){
@@ -57,6 +73,10 @@ public class Network {
             }
         }
         return this.weights;
+    }
+
+    public double[] getPreviousWeights(){
+        return this.previousWeights;
     }
 
     public void setNetworkInput(double[] input){
