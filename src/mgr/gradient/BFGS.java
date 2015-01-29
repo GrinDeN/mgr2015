@@ -128,6 +128,7 @@ public class BFGS {
     }
 
     //dla iteracji k
+    //gdzies tu blad - zwraca NaN xDD
     public double[][] getVkMatrix(int k){
         if (k==0){
             initializeVkForEyeMatrix();

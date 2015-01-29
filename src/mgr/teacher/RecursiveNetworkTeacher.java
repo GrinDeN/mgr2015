@@ -133,8 +133,8 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
         return this.network.getWeights();
     }
 
-    public void printActualErrorNetwork(){
-        System.out.println("Aktualna wartosc bledu: " + errorCounter.getErrorValue());
+    public void printActualErrorNetwork(int iter){
+        System.out.println("Aktualna wartosc bledu w iteracji " +iter + ": " + errorCounter.getErrorValue());
     }
 
     public String getFilenameOfData(){

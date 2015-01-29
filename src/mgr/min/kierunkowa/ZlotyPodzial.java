@@ -6,7 +6,7 @@ public class ZlotyPodzial {
 //    private static double firstParam;
 //    private static double secondParam;
 
-    public static double getMinimum(MinKierunkowa minKierunkowa, double firstParam, double secParam){
+    public static double getMinimum(MinKierunkowa minKierunkowa, double firstParam, double secParam) throws Exception{
         double al1 = secParam-GOLDEN_PARAM*(secParam-firstParam);
         double al2 = GOLDEN_PARAM*(secParam-firstParam)+firstParam;
         double newFirst = 0.0;

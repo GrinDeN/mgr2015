@@ -34,12 +34,13 @@ public class BFGSAlgorithm {
             gradient.setCurrent_gW();
             double[][] Vk = bfgs.getVkMatrix(t);
             gradient.setNewPwk_BFGS(Vk);
-            minKierunkowa.setCurrentPWk(gradient.getpWk());
-            step = minKierunkowa.getParamOfMinKierunkowa(mainOuterTeacher.getNetworkWeights());
-            updates = setNewValuesForWeightsUpdate(step, gradient.getpWk());
-            mainOuterTeacher.updateWeightsInNetwork(updates);
-            mainOuterTeacher.getErrorOfNetwork(null);
-            mainOuterTeacher.printActualErrorNetwork();
+//            System.out.println(gradient.getpWk());
+//            minKierunkowa.setCurrentPWk(gradient.getpWk());
+//            step = minKierunkowa.getParamOfMinKierunkowa(mainOuterTeacher.getNetworkWeights());
+//            updates = setNewValuesForWeightsUpdate(step, gradient.getpWk());
+//            mainOuterTeacher.updateWeightsInNetwork(updates);
+//            mainOuterTeacher.getErrorOfNetwork(null);
+//            mainOuterTeacher.printActualErrorNetwork(t);
         }
     }
 

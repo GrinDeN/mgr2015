@@ -183,7 +183,7 @@ public class Gradient {
     public void setCurrent_gW(){
         makeCopyOfgWAsPrevgW();
         this.gW.clear();
-        double[][] sum_dEdW1 = new double[K+1][INPUT_SIZE+1];
+        double[][] sum_dEdW1 = new double[K+1][INPUT_SIZE];
         double[] sum_dEdW2 = new double[K+1];
         for (int i = 1; i<=K; i++){
             for (int j = 0; j<INPUT_SIZE; j++){
@@ -202,7 +202,7 @@ public class Gradient {
                 gW.add(sum_dEdW1[i][j]);
             }
         }
-        for (int i = 1; i<=K; i++){
+        for (int i = 0; i<=K; i++){
             gW.add(sum_dEdW2[i]);
         }
     }
@@ -224,7 +224,8 @@ public class Gradient {
     }
 
     public void setNewPwk_BFGS(double[][] vk){
-        Double[] gwArray = this.gW.toArray(new Double[gW.size()]);
+        Double[] gwArray = new Double[gW.size()];
+        gwArray = gW.toArray(gwArray);
         double[] HWgW = MatrixUtils.multiplyMatrixByPionowyVec(vk, gwArray);
         for (int i=0; i<pWk.size(); i++){
             this.pWk.add(i,-1*HWgW[i]);

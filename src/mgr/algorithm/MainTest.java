@@ -17,7 +17,7 @@ public class MainTest {
     public static void main(String[] args) throws Exception{
         Network net = new Network();
         String dataFilename;
-        SwarmEnum swarmAlg = SwarmEnum.PSO;
+        SwarmEnum swarmAlg = SwarmEnum.WOLF;
         AlgTester algTester = new AlgTester();
         if (STATIC_NET == false){
             dataFilename = "daneucz2000.txt";
@@ -25,15 +25,18 @@ public class MainTest {
             params.add(new ParamPair(1, 2));
             params.add(new ParamPair(2));
 
-            algTester.test(net, swarmAlg, dataFilename, params);
+            algTester.testSwarm(net, swarmAlg, dataFilename, params);
 
             String verifyFilename = "danewer2000.txt";
             Verifier verifier = new Verifier(net, verifyFilename, params);
             verifier.verify();
-            verifier.printActualNetworkWeights();
+//            verifier.printActualNetworkWeights();
+
+            algTester.testBFGS();
+
         } else if(STATIC_NET == true){
             dataFilename = "daneucz8000_bezprzedostatniej.txt";
-            algTester.test(net, swarmAlg, dataFilename, null);
+            algTester.testSwarm(net, swarmAlg, dataFilename, null);
         }
     }
 }

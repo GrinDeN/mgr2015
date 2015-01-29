@@ -1,5 +1,6 @@
 package mgr.algorithm;
 
+import mgr.gradient.BFGSAlgorithm;
 import mgr.input.builder.ParamPair;
 import mgr.network.Network;
 import mgr.teacher.NetworkTeacher;
@@ -15,11 +16,12 @@ public class AlgTester {
     private SwarmEnum swarmAlgEnum;
     private Network neuralNet;
     private SwarmAlgorithm swarmAlg;
+    private NetworkTeacher netTeacher;
 
     public AlgTester(){
     }
 
-    public void test(Network net, SwarmEnum swarmAlgorithmEnum, String filename, ArrayList<ParamPair> dataParams) throws Exception{
+    public void testSwarm(Network net, SwarmEnum swarmAlgorithmEnum, String filename, ArrayList<ParamPair> dataParams) throws Exception{
         this.neuralNet = net;
         this.swarmAlgEnum = swarmAlgorithmEnum;
         ArrayList<ParamPair> params = null;
@@ -27,7 +29,6 @@ public class AlgTester {
             params = new ArrayList<ParamPair>();
             params.addAll(dataParams);
         }
-        NetworkTeacher netTeacher;
         if (STATIC_NET == false){
             netTeacher = new RecursiveNetworkTeacher(neuralNet, filename, params);
         } else if (STATIC_NET == true){
@@ -39,5 +40,10 @@ public class AlgTester {
         long end = System.nanoTime();
         double difference = (end - start)/1e6;
         System.out.println("Czas wykonania " + swarmAlg.getName() + " wynosi: " + difference + " ms.");
+    }
+
+    public void testBFGS() throws Exception{
+        BFGSAlgorithm bfgs = new BFGSAlgorithm((RecursiveNetworkTeacher) netTeacher);
+        bfgs.getMinimumError();
     }
 }

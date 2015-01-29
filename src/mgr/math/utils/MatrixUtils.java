@@ -106,9 +106,12 @@ public class MatrixUtils {
 
     public static double[] multiplyMatrixByPionowyVec(double[][] matrix, Double[] vec){
         double[] result = new double[matrix.length];
+        System.out.println(MatrixUtils.matrixToString(matrix));
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-                result[i] += matrix[i][j] * vec[j];
+//                System.out.println(vec[i].toString());
+//                System.out.println("matrix["+i+"]["+j+"]: " + matrix[i][j]);
+                result[i] += matrix[i][j] * vec[j].doubleValue();
             }
         }
         return result;

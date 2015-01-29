@@ -27,7 +27,11 @@ public class HiddenGradient {
             result = x[j];
         }
         for (int t0 = 1; t0 <= N2; t0++){
-            result += w1[n][N1+t0].getWeight()*gradient.getElementdYdW1AtIndex(t-t0, i, j);
+            if (t-t0 <= S) {
+                result += w1[n][N1 + t0].getWeight() * 0;
+            } else {
+                result += w1[n][N1+t0].getWeight()*gradient.getElementdYdW1AtIndex(t-t0, i, j);
+            }
         }
         return result;
     }

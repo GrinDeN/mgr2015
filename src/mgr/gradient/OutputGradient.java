@@ -23,11 +23,11 @@ public class OutputGradient {
         Dendrite[][] w1 = network.getHiddLayer().getLayerDendrites();
         double result = 0.0;
         for (int t0 = 1; t0 <= N2; t0++){
-//            if (t-t0 <= S){
-//                result += w1[n][N1+t0].getWeight()*0;
-//            } else {
+            if (t-t0 <= S){
+                result += w1[n][N1+t0].getWeight()*0;
+            } else {
                 result += w1[n][N1+t0].getWeight()*gradient.getElementdYdW2AtIndex(t-t0, i);
-//            }
+            }
         }
         return result;
     }
