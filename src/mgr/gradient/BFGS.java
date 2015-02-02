@@ -64,7 +64,7 @@ public class BFGS {
 
     public void initializeVkForEyeMatrix(){
         for (int i=0; i<this.Vk.length; i++){
-            for (int j=0; j<this.Vk.length; j++){
+            for (int j=0; j<this.Vk[i].length; j++){
                 this.Vk[i][j] = (i == j) ? 1.0 : 0.0;
             }
         }
@@ -110,6 +110,7 @@ public class BFGS {
         double[][] tmp;// = new double[this.Vk.length][this.Vk.length];
         double[][] result;// = new double[this.Vk.length][this.Vk.length];
         tmp = MatrixUtils.MultiplyMatrixByScalar(getElementAfterBrackets(), getElementInBrackets());
+//        System.out.println(MatrixUtils.matrixToString(tmp));
         result = MatrixUtils.addTwoMatricies(this.Vk1, tmp);
         result = MatrixUtils.substractTwoMatricies(result, getLastElement());
         for (int i=0; i<this.Vk.length; i++){
@@ -129,7 +130,7 @@ public class BFGS {
 
     //dla iteracji k
     //gdzies tu blad - zwraca NaN xDD
-    public double[][] getVkMatrix(int k){
+    public void getVkMatrix(int k){
         if (k==0){
             initializeVkForEyeMatrix();
 //			this.rk = this.grad.getgW();
@@ -156,10 +157,10 @@ public class BFGS {
             makeVMatrix();
             setVkAsVk1();
         }
-		return getVk();
+//		return getVk();
     }
 
-    private double[][] getVk(){
+    public double[][] getVk(){
         return this.Vk;
     }
 }

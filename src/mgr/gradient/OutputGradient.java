@@ -13,9 +13,9 @@ public class OutputGradient {
     private RecursiveNetworkTeacher netTeacher;
     private Gradient gradient;
 
-    public OutputGradient(Network net, RecursiveNetworkTeacher networkTeacher, Gradient grad){
-        this.network = net;
+    public OutputGradient(RecursiveNetworkTeacher networkTeacher, Gradient grad){
         this.netTeacher = networkTeacher;
+        this.network = netTeacher.getNetwork();
         this.gradient = grad;
     }
 
@@ -56,6 +56,9 @@ public class OutputGradient {
     //i tu?
     public double compute_dEdW2(int t, int i){
 //        double result = (netTeacher.getNetOutput(t) - netTeacher.getDemandOutput(t))*compute_dYdW2(t, i);
+//        System.out.println("OutputFromErrorCounter: " + netTeacher.getNetworkOutputFromErrorCounter(t));
+//        System.out.println("DemandValueFromErrorCounter: " + netTeacher.getDemandValueFromErrorCounter(t));
+//        System.out.println("Gradient dydw2: " + gradient.getElementdYdW2AtIndex(t, i));
         double result = (netTeacher.getNetworkOutputFromErrorCounter(t) - netTeacher.getDemandValueFromErrorCounter(t))*gradient.getElementdYdW2AtIndex(t, i);
         return result;
     }

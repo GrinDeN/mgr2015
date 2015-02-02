@@ -7,9 +7,11 @@ public class NetworkErrorCounter {
     private double error;
     private ArrayList<Double> networkOutputs;
     private ArrayList<Double> demandValues;
+//    private ArrayList<Double> errors;
 
     public NetworkErrorCounter(ArrayList<Double> demands){
         resetErrorValue();
+//        this.errors = new ArrayList<Double>();
         initNetworkOutputsList();
         initDemandValuesList(demands);
     }
@@ -68,5 +70,9 @@ public class NetworkErrorCounter {
     public double getErrorValue(){
         return this.error;
     }
+
+//    public double getErrorAtIndex(int index){
+//        return this.errors.get(index);
+//    }
 
 }

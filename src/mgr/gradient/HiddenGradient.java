@@ -13,9 +13,9 @@ public class HiddenGradient {
     private RecursiveNetworkTeacher netTeacher;
     private Gradient gradient;
 
-    public HiddenGradient(Network net, RecursiveNetworkTeacher networkTeacher, Gradient grad){
-        this.network = net;
+    public HiddenGradient(RecursiveNetworkTeacher networkTeacher, Gradient grad){
         this.netTeacher = networkTeacher;
+        this.network = netTeacher.getNetwork();
         this.gradient = grad;
     }
 

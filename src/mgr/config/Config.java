@@ -34,7 +34,7 @@ public class Config {
     public static final double UPPER_BOUNDARY = 4.0;
 
     public static void setINPUT_SIZE(){
-        INPUT_SIZE = N1 + N2;
+        INPUT_SIZE = 1 + N1 + N2;
     }
 
     public static void setNUM_OF_WEIGHTS(int weights){

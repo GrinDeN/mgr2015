@@ -45,10 +45,11 @@ public class MinKierunkowa {
         // gdy od razu wspolczynnik bledu rosnie to przerwij
         // Reset kierunku czyli: p(k)=-gW(k) (kierunek = -gradient)
         // i znowu wchodzimy w te funkcje liczac juz dla tego nowego kierunku
-//        if (ff2 > ff1){
+        if (ff2 > ff1){
 //            this.resetKierunek = true;
-//            return (firstParam+secParam)/2;
-//        }
+            System.out.println("Resetuje kierunek");
+            return -2000;
+        }
         // jesli blad maleje to poszerzaj
         while (ff1 > ff2) {
             firstParam = secParam;

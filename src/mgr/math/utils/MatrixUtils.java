@@ -54,9 +54,14 @@ public class MatrixUtils {
 
     public static double[][] divideMatrixByScalar(double[][] matrix, double scalar){
         double[][] result = new double[matrix.length][matrix.length];
+//        System.out.println("MAM CIE KURWO?");
+//        System.out.println("PRZEKAZYWANY SKALAR: " + scalar);
+//        System.out.println(MatrixUtils.matrixToString(matrix));
+
         for (int i = 0; i < result.length; i++) {
             for (int j = 0; j < result.length; j++) {
                 result[i][j] = matrix[i][j] / scalar;
+//                System.out.println(result[i][j]);
             }
         }
         return result;
@@ -106,7 +111,7 @@ public class MatrixUtils {
 
     public static double[] multiplyMatrixByPionowyVec(double[][] matrix, Double[] vec){
         double[] result = new double[matrix.length];
-        System.out.println(MatrixUtils.matrixToString(matrix));
+//        System.out.println(MatrixUtils.matrixToString(matrix));
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
 //                System.out.println(vec[i].toString());

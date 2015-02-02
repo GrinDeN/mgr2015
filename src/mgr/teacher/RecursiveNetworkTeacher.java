@@ -4,6 +4,7 @@ import mgr.config.Config;
 import mgr.config.ConfigBuilder;
 import mgr.file.utils.DataFileExtractor;
 import mgr.file.utils.DataFileReader;
+import mgr.gradient.Gradient;
 import mgr.input.builder.ParamPair;
 import mgr.input.builder.RecursiveInputBuilder;
 import mgr.network.Network;
@@ -22,6 +23,8 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
     private ArrayList<ArrayList<Double>> dataValues;
 
     private ArrayList<ParamPair> params;
+
+    private Gradient gradient;
 
     private NetworkErrorCounter errorCounter;
 
@@ -103,6 +106,9 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
             network.calculateOutput();
 //            grad.computeAllGradients(t);
             errorCounter.addNetworkOutput(network.getCurrentOutput());
+            if(gradient != null){
+                gradient.computeAllGradients(t);
+            }
         }
         double error = errorCounter.sumarizeErrors();
         return error;
@@ -147,5 +153,9 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
 
     public Network getNetwork(){
         return network;
+    }
+
+    public void setGradient(Gradient grad){
+        this.gradient = grad;
     }
 }
