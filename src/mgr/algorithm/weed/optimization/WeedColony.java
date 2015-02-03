@@ -80,6 +80,7 @@ public class WeedColony implements SwarmAlgorithm{
             currentIteration++;
         }
         netTeacher.setWeightsToNetwork(getBestPositions());
+        printBestPositions();
         printBestWeed();
         return 0;
     }
@@ -92,6 +93,13 @@ public class WeedColony implements SwarmAlgorithm{
     @Override
     public double[] getBestPositions(){
         return getBestWeed().getPositions();
+    }
+
+    private void printBestPositions(){
+        double[] bestPos = getBestPositions();
+        for (int i = 0; i < bestPos.length; i++) {
+            System.out.println(bestPos[i]);
+        }
     }
 
     private void initAgentsAtBeginning() throws Exception{

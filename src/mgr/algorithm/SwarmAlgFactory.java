@@ -22,9 +22,9 @@ public class SwarmAlgFactory {
             case FIREFLY:
                 return new FireflySwarm(netTeacher, 200);
             case WOLF:
-                return new WolfsPack(netTeacher, 100);
+                return new WolfsPack(netTeacher, 150);
             case PSO:
-                return new Swarm(netTeacher, 100, 30, Config.NUM_OF_WEIGHTS);
+                return new Swarm(netTeacher, 150, 30, Config.NUM_OF_WEIGHTS);
             case WEED:
                 return new WeedColony(netTeacher, 5.0, 0.001);
         }

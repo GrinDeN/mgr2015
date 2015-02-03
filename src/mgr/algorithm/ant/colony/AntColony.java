@@ -158,6 +158,7 @@ public class AntColony implements SwarmAlgorithm{
             updateAlphaParam();
         }
         netTeacher.setWeightsToNetwork(getBestPositions());
+        printBestPositions();
         printResult();
         return 0;
     }
@@ -170,6 +171,13 @@ public class AntColony implements SwarmAlgorithm{
     @Override
     public double[] getBestPositions(){
         return this.globalPositions;
+    }
+
+    private void printBestPositions(){
+        double[] bestPos = getBestPositions();
+        for (int i = 0; i < bestPos.length; i++) {
+            System.out.println(bestPos[i]);
+        }
     }
 
     public double getFitness(){

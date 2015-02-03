@@ -77,6 +77,7 @@ public class BatSwarm implements SwarmAlgorithm{
             }
         }
         netTeacher.setWeightsToNetwork(getBestPositions());
+        printBestPositions();
         System.out.println("Najlepszy wskazany rezultat w fazie koncowej: " + getMinimumValue());
         return 0;
     }
@@ -89,6 +90,13 @@ public class BatSwarm implements SwarmAlgorithm{
     @Override
     public double[] getBestPositions(){
         return this.bestPositions;
+    }
+
+    private void printBestPositions(){
+        double[] bestPos = getBestPositions();
+        for (int i = 0; i < bestPos.length; i++) {
+            System.out.println(bestPos[i]);
+        }
     }
 
     private Bat getBatAtIndex(int index){

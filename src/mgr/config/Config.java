@@ -7,12 +7,12 @@ public class Config {
     public static final int NUM_OF_LAYERS = 2;
     public static int HIDD_NEURONS = 7;
     public final static int OUT_NEURONS = 1;
-    public static int INPUT_SIZE = 5;
+    public static int INPUT_SIZE = 4;
 
     public static int NUM_OF_WEIGHTS = (INPUT_SIZE*HIDD_NEURONS)+HIDD_NEURONS+1;
 
     public static int S = 0;
-    public static int P = 2000;
+    public static int P = 8000;
     public static int K = HIDD_NEURONS;
 
     //suma N1+N2 zawsze o jeden mniejsza niz INPUT_SIZE (bo 1 dla BIAS)
@@ -49,7 +49,7 @@ public class Config {
         N2 = value;
     }
 
-    public static final boolean STATIC_NET = false;
+    public static final boolean STATIC_NET = true;
 
 //    public static void setS(int value){
 //        S = value;

@@ -59,7 +59,7 @@ public class Gradient {
     }
 
     private void initZeroGradient(int t){
-        for (int t0=1; t0<=S-1; t0++){
+        for (int t0=1; t0<=S; t0++){
             for (int i=0; i<=HIDD_NEURONS; i++){
                 this.dYdW2[t-t0][i] = 0;
                 for (int j=0; j<INPUT_SIZE; j++){

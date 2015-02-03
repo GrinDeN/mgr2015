@@ -91,6 +91,7 @@ public class BeeColony implements SwarmAlgorithm{
             }
         }
         netTeacher.setWeightsToNetwork(getBestPositions());
+        printBestPositions();
         printResult();
         return 0;
     }
@@ -103,6 +104,13 @@ public class BeeColony implements SwarmAlgorithm{
     @Override
     public double[] getBestPositions(){
         return this.best_xPositions;
+    }
+
+    private void printBestPositions(){
+        double[] bestPos = getBestPositions();
+        for (int i = 0; i < bestPos.length; i++) {
+            System.out.println(bestPos[i]);
+        }
     }
 
     private Food getFoodAtIndex(int index){
