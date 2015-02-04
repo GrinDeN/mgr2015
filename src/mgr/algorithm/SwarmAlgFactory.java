@@ -16,9 +16,9 @@ public class SwarmAlgFactory {
             case ANT:
                 return new AntColony(netTeacher, 100);
             case BAT:
-                return new BatSwarm(netTeacher, 100, 20);
+                return new BatSwarm(netTeacher, 150, 25);
             case BEE:
-                return new BeeColony(netTeacher,500, 20);
+                return new BeeColony(netTeacher,70, 20);
             case FIREFLY:
                 return new FireflySwarm(netTeacher, 200);
             case WOLF:
@@ -26,7 +26,7 @@ public class SwarmAlgFactory {
             case PSO:
                 return new Swarm(netTeacher, 150, 30, Config.NUM_OF_WEIGHTS);
             case WEED:
-                return new WeedColony(netTeacher, 5.0, 0.001);
+                return new WeedColony(netTeacher, 2.0, 0.001);
         }
         return null;
     }

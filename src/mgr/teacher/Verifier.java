@@ -13,9 +13,9 @@ public class Verifier {
         this.netTeacher = new RecursiveNetworkTeacher(network, filename, params);
     }
 
-    public void verify() throws Exception{
-        double sumarizedVerifyError = netTeacher.getErrorOfNetwork(null);
-        System.out.println("Sumaryczny blad po danych werfyikacyjnych: " + sumarizedVerifyError);
+    public void verify(double[] netWeights) throws Exception{
+        double sumarizedVerifyError = netTeacher.getErrorOfNetwork(netWeights);
+        System.out.println("Sumaryczny blad dla zadanych wag: " + sumarizedVerifyError);
     }
 
     public void printActualNetworkWeights(){

@@ -27,7 +27,7 @@ public class FireflySwarm implements SwarmAlgorithm{
 
     private NetworkTeacher netTeacher;
 
-    private final static int NUM_OF_FIREFLIES = 20;
+    private final static int NUM_OF_FIREFLIES = 25;
 //    private final static int MAX_GENERATIONS = 500;
 
     private final static int DIMENSION = Config.NUM_OF_WEIGHTS;
