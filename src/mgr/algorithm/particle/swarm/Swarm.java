@@ -69,9 +69,20 @@ public class Swarm implements SwarmAlgorithm{
     }
 
     private void printBestPositions(){
-        for (int i = 0; i < bestPositionOfSwarm.length; i++) {
-            System.out.println(bestPositionOfSwarm[i]);
+        double[] alphaPositions = getBestPositions();
+        int rowCounter = 1;
+        for (int i = 0; i < alphaPositions.length; i++) {
+            if (i%Config.INPUT_SIZE <= Config.INPUT_SIZE && rowCounter <= Config.HIDD_NEURONS) {
+                System.out.print(alphaPositions[i] + " ");
+                if (i%Config.INPUT_SIZE == 4 ){
+                    System.out.println();
+                    rowCounter++;
+                }
+            } else {
+                System.out.print(alphaPositions[i] + " ");
+            }
         }
+        System.out.println();
     }
 
     private void initializeSwarm(){
