@@ -90,11 +90,13 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
     }
 
     @Override
-    public double getErrorOfNetwork(double[] weights) throws Exception{
+    public double getErrorOfNetwork(double[] weights, boolean czyPrintowac) throws Exception{
         if (weights != null){
             network.setWeights(weights);
         }
         resetErrorCounterNetOutputsList();
+        builder.resetNetOutputs();
+        builder.addStartingOutputsToNetOutputs();
         double[] input;
         for (int t = Config.S; t <= Config.P; t++){
             if (t == Config.S){
@@ -102,10 +104,18 @@ public class RecursiveNetworkTeacher implements NetworkTeacher{
             } else {
                 input = builder.build(t, network.getCurrentOutput());
             }
+            if (czyPrintowac){
+                System.out.print("Dla iteracji " + t + ": ");
+                for (int i = 0; i < input.length; i++) {
+                    System.out.print(input[i] + " ");
+                }
+            }
             network.setNetworkInput(input);
             network.calculateOutput();
-//            grad.computeAllGradients(t);
             errorCounter.addNetworkOutput(network.getCurrentOutput());
+            if (czyPrintowac){
+                System.out.println("Network output dla iteracji " + t + ": " + network.getCurrentOutput());
+            }
             if(gradient != null){
                 gradient.computeAllGradients(t);
             }

@@ -32,7 +32,7 @@ public class BFGSAlgorithm {
         double[] updates;
         double[][] vk;
         for (int t = 0; t <= Config.BFGS_ITERATIONS; t++) {
-            mainOuterTeacher.getErrorOfNetwork(null);
+            mainOuterTeacher.getErrorOfNetwork(null, false);
             mainOuterTeacher.printActualErrorNetwork(t);
             gradient.setCurrent_gW();
             bfgs.getVkMatrix(t);

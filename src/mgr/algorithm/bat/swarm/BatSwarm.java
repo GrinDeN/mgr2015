@@ -48,7 +48,7 @@ public class BatSwarm implements SwarmAlgorithm{
         for (int i = 0; i < getNumOfBats(); i++) {
             double[] eachBatPositions = getBatAtIndex(i).get_xBestPositions();
 //            result = testFunction.getResult(eachBatPositions);
-            result = netTeacher.getErrorOfNetwork(eachBatPositions);
+            result = netTeacher.getErrorOfNetwork(eachBatPositions, false);
             getBatAtIndex(i).setCurrentMinimum(result);
             if (i==0){
                 setBestMinimumValue(result);
@@ -69,7 +69,7 @@ public class BatSwarm implements SwarmAlgorithm{
                 getSomeRandomWalk(i);
                 double[] eachBatPositions = getBatAtIndex(i).get_xPositions();
 //                result = testFunction.getResult(eachBatPositions);
-                result = netTeacher.getErrorOfNetwork(eachBatPositions);
+                result = netTeacher.getErrorOfNetwork(eachBatPositions, false);
 //                batSwarm.updateSolutionIfBetter(result, eachBatPositions);
                 updateBatAtIndexIfBetterSol(i, result);
                 updateSolutionIfBetter(result, eachBatPositions);
@@ -124,7 +124,7 @@ public class BatSwarm implements SwarmAlgorithm{
     }
 
     private void setBestPositions(double[] best){
-        this.bestPositions = best;
+        System.arraycopy(best, 0, this.bestPositions, 0, best.length);
     }
 
     private void setBestMinimumValue(double value){

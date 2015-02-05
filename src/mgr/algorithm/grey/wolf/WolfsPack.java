@@ -62,7 +62,7 @@ public class WolfsPack implements SwarmAlgorithm{
                 correctPositionsAtIndex(i);
 //                fitness = TestFuncFactory.getResultOfAlgorithm(algorithm, globalPositions[i][0], globalPositions[i][1]);
 //                fitness = testFunction.getResult(globalPositions[i]);
-                fitness = networkTeacher.getErrorOfNetwork(globalPositions[i]);
+                fitness = networkTeacher.getErrorOfNetwork(globalPositions[i], false);
                 if (fitness < alpha.getScore()){
                     alpha.setScore(fitness);
                     alpha.setPositions(getGlobalPositionsAtIndex(i));

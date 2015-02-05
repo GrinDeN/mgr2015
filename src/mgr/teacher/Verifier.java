@@ -16,7 +16,7 @@ public class Verifier {
     }
 
     public void verify(double[] netWeights) throws Exception{
-        double sumarizedVerifyError = netTeacher.getErrorOfNetwork(netWeights);
+        double sumarizedVerifyError = netTeacher.getErrorOfNetwork(netWeights, false);
         System.out.println("Sumaryczny blad dla zadanych wag dla danych z pliku " + dataFilename + ": " + sumarizedVerifyError);
     }
 

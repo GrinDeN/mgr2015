@@ -61,7 +61,7 @@ public class BeeColony implements SwarmAlgorithm{
             getFoodAtIndex(i).initRandomlyFoodVector();
             double[] eachFoodPositions = getFoodAtIndex(i).getFoodPositions();
 //            result = testFunction.getResult(eachFoodPositions);
-            result = netTeacher.getErrorOfNetwork(eachFoodPositions);
+            result = netTeacher.getErrorOfNetwork(eachFoodPositions, false);
             getFoodAtIndex(i).init(result);
             if (i==0){
                 setBestxPositions(eachFoodPositions);
@@ -81,7 +81,7 @@ public class BeeColony implements SwarmAlgorithm{
                 double[] changedSolution = getChangedSolution();
 //                resultOfChangedSolution = EasomFunc.function(changedSolution[0], changedSolution[1]);
 //                resultOfChangedSolution = testFunction.getResult(changedSolution);
-                resultOfChangedSolution = netTeacher.getErrorOfNetwork(changedSolution);
+                resultOfChangedSolution = netTeacher.getErrorOfNetwork(changedSolution, false);
                 calculateFitness(resultOfChangedSolution);
                 checkFitnessAndUpdate(resultOfChangedSolution, i);
                 calculateProbabilities();
@@ -230,7 +230,7 @@ public class BeeColony implements SwarmAlgorithm{
                 correctSolutionValueAtIndexToBoundaries(param2change);
 //                this.objValueSolution = TestFuncFactory.getResultOfAlgorithm(enumArg, this.solutionToChange[0], this.solutionToChange[1]);
 //                this.objValueSolution = testFunction.getResult(solutionToChange);
-                this.objValueSolution = netTeacher.getErrorOfNetwork(solutionToChange);
+                this.objValueSolution = netTeacher.getErrorOfNetwork(solutionToChange, false);
                 calculateFitnessSolution();
                 checkFitnessAndUpdate(this.objValueSolution, i);
             }
@@ -254,7 +254,7 @@ public class BeeColony implements SwarmAlgorithm{
             double[] eachFoodPositions = getFoodAtIndex(maxTrialIndex).getFoodPositions();
 //            result = EasomFunc.function(eachFoodPositions[0], eachFoodPositions[1]);
 //            result = testFunction.getResult(eachFoodPositions);
-            result = netTeacher.getErrorOfNetwork(eachFoodPositions);
+            result = netTeacher.getErrorOfNetwork(eachFoodPositions, false);
             getFoodAtIndex(maxTrialIndex).init(result);
         }
     }

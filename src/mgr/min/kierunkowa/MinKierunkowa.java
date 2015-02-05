@@ -75,7 +75,7 @@ public class MinKierunkowa {
         double currentError;
         makeCandidateWeights(step);
         makeSumOfStartingAndCandidatesWeights();
-        currentError = recursiveTeacher.getErrorOfNetwork(sumOfStartingAndCandidates);
+        currentError = recursiveTeacher.getErrorOfNetwork(sumOfStartingAndCandidates, false);
 //        double[] input;
 //        for (int t = Config.S; t <= Config.P; t++){
 //            if (t == Config.S){

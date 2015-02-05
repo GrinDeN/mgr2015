@@ -16,7 +16,7 @@ public class SwarmAlgFactory {
             case ANT:
                 return new AntColony(netTeacher, 100);
             case BAT:
-                return new BatSwarm(netTeacher, 150, 25);
+                return new BatSwarm(netTeacher, 250, 25);
             case BEE:
                 return new BeeColony(netTeacher,70, 20);
             case FIREFLY:

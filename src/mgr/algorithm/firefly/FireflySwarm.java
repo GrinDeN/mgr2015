@@ -123,7 +123,7 @@ public class FireflySwarm implements SwarmAlgorithm{
             fireflyPositions = this.fireflies[i].getPositions();
 //            newLightness = TestFuncFactory.getResultOfAlgorithm(algorithm, fireflyPositions[0], fireflyPositions[1]);
 //            newLightness = testFunction.getResult(fireflyPositions);
-            newLightness = netTeacher.getErrorOfNetwork(fireflyPositions);
+            newLightness = netTeacher.getErrorOfNetwork(fireflyPositions, false);
             this.fireflies[i].setLightness(newLightness);
         }
     }

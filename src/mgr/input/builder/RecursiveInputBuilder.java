@@ -106,6 +106,11 @@ public class RecursiveInputBuilder{
         this.networkOutputs.addAll(startingOutputs);
     }
 
+    public void addStartingOutputsToNetOutputs(){
+        this.networkOutputs.clear();
+        this.networkOutputs.addAll(startingOutputs);
+    }
+
 //    public ArrayList<Double> getInput(){
 //        return this.input;
 //    }

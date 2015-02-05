@@ -5,13 +5,15 @@ import mgr.math.utils.ActivateFunc;
 public class Config {
 
     public static final int NUM_OF_LAYERS = 2;
-    public static int HIDD_NEURONS = 7;
+    public static int HIDD_NEURONS = 12;
     public final static int OUT_NEURONS = 1;
     public static int INPUT_SIZE = 5;
 
+    public static final boolean VERIFIER_ONLY = true;
+
     public static int NUM_OF_WEIGHTS = (INPUT_SIZE*HIDD_NEURONS)+HIDD_NEURONS+1;
 
-    public static int S = 0;
+    public static int S = 2;
     public static int P = 2000;
     public static int K = HIDD_NEURONS;
 
@@ -30,8 +32,8 @@ public class Config {
 
     public static final boolean DEBUG = false;
 
-    public static final double LOWER_BOUNDARY = -4.0;
-    public static final double UPPER_BOUNDARY = 4.0;
+    public static final double LOWER_BOUNDARY = -1.0;
+    public static final double UPPER_BOUNDARY = 1.0;
 
     public static void setINPUT_SIZE(){
         INPUT_SIZE = 1 + N1 + N2;
@@ -50,8 +52,6 @@ public class Config {
     }
 
     public static final boolean STATIC_NET = false;
-
-    public static final boolean VERIFIER_ONLY = true;
 
 //    public static void setS(int value){
 //        S = value;

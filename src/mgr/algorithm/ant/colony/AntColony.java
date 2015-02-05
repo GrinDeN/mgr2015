@@ -64,8 +64,8 @@ public class AntColony implements SwarmAlgorithm{
 
     public void setDirection() throws Exception{
         setMinusGlobalPositions();
-        double fitnessByMinus = netTeacher.getErrorOfNetwork(this.minusGlobalPositions);
-        double fitnessByBest = netTeacher.getErrorOfNetwork(this.globalPositions);
+        double fitnessByMinus = netTeacher.getErrorOfNetwork(this.minusGlobalPositions, false);
+        double fitnessByBest = netTeacher.getErrorOfNetwork(this.globalPositions, false);
         this.direction = (fitnessByMinus <= fitnessByBest) ? Direction.PLUS : Direction.MINUS;
     }
 
@@ -85,7 +85,7 @@ public class AntColony implements SwarmAlgorithm{
     public void calculateAllAntsFuncValue() throws Exception{
         for (int i = 0; i < this.ants.length; i++){
             double[] antPositions = this.ants[i].getPositions();
-            double antFuncValue = netTeacher.getErrorOfNetwork(antPositions);
+            double antFuncValue = netTeacher.getErrorOfNetwork(antPositions, false);
             this.ants[i].setFuncValue(antFuncValue); // ????
         }
     }

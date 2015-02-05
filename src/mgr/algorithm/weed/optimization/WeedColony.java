@@ -128,7 +128,7 @@ public class WeedColony implements SwarmAlgorithm{
             eachWeedPositions = weed.getPositions();
 //            eachWeedFitness = TestFuncFactory.getResultOfAlgorithm(algorithm, eachWeedPositions[0], eachWeedPositions[1]);
 //            eachWeedFitness = testFunction.getResult(eachWeedPositions);
-            eachWeedFitness = netTeacher.getErrorOfNetwork(eachWeedPositions);
+            eachWeedFitness = netTeacher.getErrorOfNetwork(eachWeedPositions, false);
             weed.setFitness(eachWeedFitness);
         }
     }

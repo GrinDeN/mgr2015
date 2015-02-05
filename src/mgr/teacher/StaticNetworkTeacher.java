@@ -65,7 +65,7 @@ public class StaticNetworkTeacher implements NetworkTeacher{
     }
 
     @Override
-    public double getErrorOfNetwork(double[] weights) throws Exception{
+    public double getErrorOfNetwork(double[] weights, boolean czyPrintowac) throws Exception{
         if (weights != null){
             network.setWeights(weights);
         }

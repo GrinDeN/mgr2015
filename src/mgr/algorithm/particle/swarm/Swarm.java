@@ -31,7 +31,7 @@ public class Swarm implements SwarmAlgorithm{
         for (int i = 0; i < getNumberOfParticles() ; i++){
             double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
 //            result = testFunction.getResult(particle_xPositions);
-            result = networkTeacher.getErrorOfNetwork(particle_xPositions);
+            result = networkTeacher.getErrorOfNetwork(particle_xPositions, false);
             getParticleAtIndex(i).setBestValueError(result);
             if (i==0){
                 setActualBestValueOfMinFunc(result);
@@ -46,13 +46,16 @@ public class Swarm implements SwarmAlgorithm{
                 updateParticlesAtIndex(i);
                 double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
 //                result = testFunction.getResult(particle_xPositions);
-                result = networkTeacher.getErrorOfNetwork(particle_xPositions);
+                result = networkTeacher.getErrorOfNetwork(particle_xPositions, false);
+//                System.out.println("Result dla iteracji: " + iter + " particle: " +i + " " + result);
                 getParticleAtIndex(i).setActualValueError(result);
                 getParticleAtIndex(i).checkErrorValues();
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
         networkTeacher.setWeightsToNetwork(getBestPositions());
+//        double errorNaKoncu = networkTeacher.getErrorOfNetwork(null, false);
+//        System.out.println("Error na koncu: " + errorNaKoncu);
         System.out.println("Najlepszy wynik bledu po koncowej fazie: " + actualBestValueOfMinFunc);
         printBestPositions();
         return 0;
@@ -74,6 +77,7 @@ public class Swarm implements SwarmAlgorithm{
         for (int i = 0; i < alphaPositions.length; i++) {
             if (i%Config.INPUT_SIZE <= Config.INPUT_SIZE && rowCounter <= Config.HIDD_NEURONS) {
                 System.out.print(alphaPositions[i] + " ");
+//               System.out.println(alphaPositions[i]);
                 if (i%Config.INPUT_SIZE == 4 ){
                     System.out.println();
                     rowCounter++;
@@ -120,6 +124,11 @@ public class Swarm implements SwarmAlgorithm{
         if (E < actualBestValueOfMinFunc){
             actualBestValueOfMinFunc = E;
             updateBestPositionOfSwarm(xPositions);
+
+//            System.out.println("Najlepszy obecnie result: "+ actualBestValueOfMinFunc);
+//            System.out.println("Jego wagi: ");
+//            printBestPositions();
+//            System.out.println();
         }
     }
 

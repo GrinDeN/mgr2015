@@ -52,8 +52,8 @@ public class Network {
     }
 
     public void setWeights(double[] weights){
-        getWeights();
-        setPreviousWeights();
+//        getWeights();
+//        setPreviousWeights();
         for (Layer eachLayer : layers){
             eachLayer.setWeights(weights);
         }
