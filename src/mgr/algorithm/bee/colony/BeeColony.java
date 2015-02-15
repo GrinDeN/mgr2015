@@ -60,7 +60,6 @@ public class BeeColony implements SwarmAlgorithm{
         for (int i = 0; i < getNumOfFood(); i++) {
             getFoodAtIndex(i).initRandomlyFoodVector();
             double[] eachFoodPositions = getFoodAtIndex(i).getFoodPositions();
-//            result = testFunction.getResult(eachFoodPositions);
             result = netTeacher.getErrorOfNetwork(eachFoodPositions, false);
             getFoodAtIndex(i).init(result);
             if (i==0){
@@ -70,17 +69,13 @@ public class BeeColony implements SwarmAlgorithm{
                 updateSolutionIfBetter(result, eachFoodPositions);
             }
         }
-//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
         System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getGlobalMinimum());
         //koniec fazy wstepnej
-
         double resultOfChangedSolution;
         for (int iter = 0; iter < iterations; iter++){
             for (int i = 0; i < getNumOfFood(); i++){
                 sendEmployedBees();
                 double[] changedSolution = getChangedSolution();
-//                resultOfChangedSolution = EasomFunc.function(changedSolution[0], changedSolution[1]);
-//                resultOfChangedSolution = testFunction.getResult(changedSolution);
                 resultOfChangedSolution = netTeacher.getErrorOfNetwork(changedSolution, false);
                 calculateFitness(resultOfChangedSolution);
                 checkFitnessAndUpdate(resultOfChangedSolution, i);
@@ -157,9 +152,7 @@ public class BeeColony implements SwarmAlgorithm{
     private void sendEmployedBees(){
         for (int i = 0; i < getNumOfFood(); i++){
             this.param2change = (int)(rand.nextDouble()*dim);
-//            System.out.println("param2change: "+param2change);
             this.neighbour = (int)(rand.nextDouble()*getNumOfFood());
-//            this.solutionToChange = getFoodAtIndex(i).getFoodPositions();
             System.arraycopy(getFoodAtIndex(i).getFoodPositions(), 0, this.solutionToChange, 0, this.solutionToChange.length);
             this.solutionToChange[param2change] = getFoodAtIndex(i).getFoodPositionAtIndex(param2change)-
                     getFoodAtIndex(neighbour).getFoodPositionAtIndex(param2change)*(rand.nextDouble()-0.5)*2;
@@ -228,8 +221,6 @@ public class BeeColony implements SwarmAlgorithm{
                 this.solutionToChange[param2change] = getFoodAtIndex(i).getFoodPositionAtIndex(param2change)-
                         getFoodAtIndex(neighbour).getFoodPositionAtIndex(param2change)*(rand.nextDouble()-0.5)*2;
                 correctSolutionValueAtIndexToBoundaries(param2change);
-//                this.objValueSolution = TestFuncFactory.getResultOfAlgorithm(enumArg, this.solutionToChange[0], this.solutionToChange[1]);
-//                this.objValueSolution = testFunction.getResult(solutionToChange);
                 this.objValueSolution = netTeacher.getErrorOfNetwork(solutionToChange, false);
                 calculateFitnessSolution();
                 checkFitnessAndUpdate(this.objValueSolution, i);
@@ -252,8 +243,6 @@ public class BeeColony implements SwarmAlgorithm{
         if (getFoodAtIndex(maxTrialIndex).getTrial() >= this.limit){
             getFoodAtIndex(maxTrialIndex).initRandomlyFoodVector();
             double[] eachFoodPositions = getFoodAtIndex(maxTrialIndex).getFoodPositions();
-//            result = EasomFunc.function(eachFoodPositions[0], eachFoodPositions[1]);
-//            result = testFunction.getResult(eachFoodPositions);
             result = netTeacher.getErrorOfNetwork(eachFoodPositions, false);
             getFoodAtIndex(maxTrialIndex).init(result);
         }

@@ -15,7 +15,7 @@ public class WeedColony implements SwarmAlgorithm{
     public static final int INITIAL_AGENTS = 7;
 //    public static final int MAX_NUMBER_OF_PLANT_POPULATION = 5*DIMENSION;
     public static final int MAX_NUMBER_OF_PLANT_POPULATION = 15;
-    public static final int MAX_ITERATIONS = 100;
+//    public static final int MAX_ITERATIONS = 200;
     public static final int MAX_NUMBER_OF_SEEDS = 5;
     public static final int MIN_NUMBER_OF_SEEDS = 0;
     public static final int NONLINEAR_MODULATION = 3;
@@ -44,10 +44,12 @@ public class WeedColony implements SwarmAlgorithm{
     private double lowerBoundary;
     private double upperBoundary;
 
+    private int iterations;
 
-    public WeedColony(NetworkTeacher teacher, double initValueOfStandardDev, double finalValueOfStandardDev){
+    public WeedColony(NetworkTeacher teacher, int numOfIters, double initValueOfStandardDev, double finalValueOfStandardDev){
         this.netTeacher = teacher;
         initBoundariesFromTestFunc();
+        this.iterations = numOfIters;
         this.initValueOfStandardDev = initValueOfStandardDev;
         this.finalValueOfStandardDev = finalValueOfStandardDev;
         this.bestWeeds = new ArrayList<Weed>();
@@ -66,9 +68,10 @@ public class WeedColony implements SwarmAlgorithm{
         System.arraycopy(bestWeed.getPositions(), 0, this.bestGlobalPositions, 0, bestWeed.getPositions().length);
     }*/
 
+    @Override
     public int getMinimum() throws Exception{
         initAgentsAtBeginning();
-        while(currentIteration <= MAX_ITERATIONS){
+        while(currentIteration <= iterations){
             setCurrentStandardDeviation();
             clearSeedCandidatesList();
             setNumberOfSeedsToProduce();
@@ -126,8 +129,6 @@ public class WeedColony implements SwarmAlgorithm{
         double eachWeedFitness;
         for (Weed weed : listOfWeeds){
             eachWeedPositions = weed.getPositions();
-//            eachWeedFitness = TestFuncFactory.getResultOfAlgorithm(algorithm, eachWeedPositions[0], eachWeedPositions[1]);
-//            eachWeedFitness = testFunction.getResult(eachWeedPositions);
             eachWeedFitness = netTeacher.getErrorOfNetwork(eachWeedPositions, false);
             weed.setFitness(eachWeedFitness);
         }
@@ -162,8 +163,8 @@ public class WeedColony implements SwarmAlgorithm{
     }
 
     private void setCurrentStandardDeviation(){
-        this.currentStandardDeviation = (Math.pow(MAX_ITERATIONS - currentIteration, NONLINEAR_MODULATION)
-                /Math.pow(MAX_ITERATIONS, NONLINEAR_MODULATION))*(initValueOfStandardDev-finalValueOfStandardDev)
+        this.currentStandardDeviation = (Math.pow(iterations - currentIteration, NONLINEAR_MODULATION)
+                /Math.pow(iterations, NONLINEAR_MODULATION))*(initValueOfStandardDev-finalValueOfStandardDev)
                 +finalValueOfStandardDev;
     }
 

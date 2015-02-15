@@ -26,6 +26,7 @@ public class DataFileReader {
             strValuesList = Files.readAllLines(dataFilePath, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("Niewłaściwa ścieżka pliku. Plik nie istnieje lub jest uszkodzony.");
+            System.exit(0);
         }
     }
 

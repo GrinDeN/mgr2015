@@ -75,7 +75,6 @@ public class StaticNetworkTeacher implements NetworkTeacher{
             input = builder.build(t);
             network.setNetworkInput(input);
             network.calculateOutput();
-//            grad.computeAllGradients(t);
             errorCounter.addNetworkOutput(network.getCurrentOutput());
         }
         double error = errorCounter.sumarizeErrors();

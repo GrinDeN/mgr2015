@@ -1,5 +1,7 @@
 package mgr.file.utils;
 
+import mgr.config.Config;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class DataFileExtractor {
 
     public DataFileExtractor(List<String> allData){
         allFileData = allData;
+        Config.setP(allFileData.size());
         dataValues = new ArrayList<ArrayList<Double>>();
         initializeDemandValues();
         numOfFileCols = getNumOfFileColumns();

@@ -68,6 +68,7 @@ public class FireflySwarm implements SwarmAlgorithm{
         }
     }
 
+    @Override
     public int getMinimum() throws Exception{
         for (int iter = 0; iter < iterations; iter++){
             getNewSolutions();
@@ -121,8 +122,6 @@ public class FireflySwarm implements SwarmAlgorithm{
         double newLightness;
         for (int i = 0; i < fireflies.length; i++) {
             fireflyPositions = this.fireflies[i].getPositions();
-//            newLightness = TestFuncFactory.getResultOfAlgorithm(algorithm, fireflyPositions[0], fireflyPositions[1]);
-//            newLightness = testFunction.getResult(fireflyPositions);
             newLightness = netTeacher.getErrorOfNetwork(fireflyPositions, false);
             this.fireflies[i].setLightness(newLightness);
         }

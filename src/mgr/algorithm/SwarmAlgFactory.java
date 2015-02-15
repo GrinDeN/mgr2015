@@ -12,21 +12,22 @@ import mgr.teacher.NetworkTeacher;
 
 public class SwarmAlgFactory {
     public static SwarmAlgorithm getSwarmAlgorithm(SwarmEnum alg, NetworkTeacher netTeacher){
+        int iters = Config.NUM_OF_ITERS;
         switch (alg){
             case ANT:
-                return new AntColony(netTeacher, 100);
+                return new AntColony(netTeacher, iters);
             case BAT:
-                return new BatSwarm(netTeacher, 250, 25);
+                return new BatSwarm(netTeacher, iters, 30);
             case BEE:
-                return new BeeColony(netTeacher,70, 20);
+                return new BeeColony(netTeacher, iters, 20);
             case FIREFLY:
-                return new FireflySwarm(netTeacher, 200);
+                return new FireflySwarm(netTeacher, iters);
             case WOLF:
-                return new WolfsPack(netTeacher, 150);
+                return new WolfsPack(netTeacher, iters);
             case PSO:
-                return new Swarm(netTeacher, 150, 30, Config.NUM_OF_WEIGHTS);
+                return new Swarm(netTeacher, iters, 30, Config.NUM_OF_WEIGHTS);
             case WEED:
-                return new WeedColony(netTeacher, 2.0, 0.001);
+                return new WeedColony(netTeacher, iters, 2.0, 0.1);
         }
         return null;
     }

@@ -30,7 +30,6 @@ public class Swarm implements SwarmAlgorithm{
         double result = 0;
         for (int i = 0; i < getNumberOfParticles() ; i++){
             double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
-//            result = testFunction.getResult(particle_xPositions);
             result = networkTeacher.getErrorOfNetwork(particle_xPositions, false);
             getParticleAtIndex(i).setBestValueError(result);
             if (i==0){
@@ -45,17 +44,13 @@ public class Swarm implements SwarmAlgorithm{
             for (int i = 0; i < getNumberOfParticles(); i++){
                 updateParticlesAtIndex(i);
                 double[] particle_xPositions = getParticleAtIndex(i).get_xPositions();
-//                result = testFunction.getResult(particle_xPositions);
                 result = networkTeacher.getErrorOfNetwork(particle_xPositions, false);
-//                System.out.println("Result dla iteracji: " + iter + " particle: " +i + " " + result);
                 getParticleAtIndex(i).setActualValueError(result);
                 getParticleAtIndex(i).checkErrorValues();
                 checkIfVectorIsBetter(result, particle_xPositions);
             }
         }
         networkTeacher.setWeightsToNetwork(getBestPositions());
-//        double errorNaKoncu = networkTeacher.getErrorOfNetwork(null, false);
-//        System.out.println("Error na koncu: " + errorNaKoncu);
         System.out.println("Najlepszy wynik bledu po koncowej fazie: " + actualBestValueOfMinFunc);
         printBestPositions();
         return 0;
@@ -124,11 +119,6 @@ public class Swarm implements SwarmAlgorithm{
         if (E < actualBestValueOfMinFunc){
             actualBestValueOfMinFunc = E;
             updateBestPositionOfSwarm(xPositions);
-
-//            System.out.println("Najlepszy obecnie result: "+ actualBestValueOfMinFunc);
-//            System.out.println("Jego wagi: ");
-//            printBestPositions();
-//            System.out.println();
         }
     }
 

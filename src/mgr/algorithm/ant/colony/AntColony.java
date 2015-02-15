@@ -86,7 +86,7 @@ public class AntColony implements SwarmAlgorithm{
         for (int i = 0; i < this.ants.length; i++){
             double[] antPositions = this.ants[i].getPositions();
             double antFuncValue = netTeacher.getErrorOfNetwork(antPositions, false);
-            this.ants[i].setFuncValue(antFuncValue); // ????
+            this.ants[i].setFuncValue(antFuncValue);
         }
     }
 
@@ -139,11 +139,11 @@ public class AntColony implements SwarmAlgorithm{
         this.alphaParam = 0.1*this.alphaParam;
     }
 
+    @Override
     public int getMinimum() throws Exception{
         calculateAllAntsFuncValue();
         memorizeBestFuncValue();
         setDirection();
-//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + this.globalPositions[0] + " y: " + this.globalPositions[1]);
         System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + this.fitness);
         int n = 10;
         int i = 0;

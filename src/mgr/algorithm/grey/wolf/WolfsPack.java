@@ -60,8 +60,6 @@ public class WolfsPack implements SwarmAlgorithm{
         while (iter < max_iter){
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 correctPositionsAtIndex(i);
-//                fitness = TestFuncFactory.getResultOfAlgorithm(algorithm, globalPositions[i][0], globalPositions[i][1]);
-//                fitness = testFunction.getResult(globalPositions[i]);
                 fitness = networkTeacher.getErrorOfNetwork(globalPositions[i], false);
                 if (fitness < alpha.getScore()){
                     alpha.setScore(fitness);
@@ -79,31 +77,9 @@ public class WolfsPack implements SwarmAlgorithm{
             double a = 2-iter*(2/max_iter);
             for (int i = 0; i < NUM_OF_AGENTS; i++){
                 for (int j = 0; j < Config.NUM_OF_WEIGHTS; j++){
-//                    r1 = rand.nextDouble();
-//                    r2 = rand.nextDouble();
-//                    double A1 = 2*a*r1-a;
-//                    double C1 = 2*r2;
-//                    double D_alpha = Math.abs(C1*alpha.getPositionAtIndex(j)-globalPositions[i][j]);
-//                    double X1 = alpha.getPositionAtIndex(j)-A1*D_alpha;
-//
-//                    r1 = rand.nextDouble();
-//                    r2 = rand.nextDouble();
-//                    double A2 = 2*a*r1-a;
-//                    double C2 = 2*r2;
-//                    double D_beta = Math.abs(C2*beta.getPositionAtIndex(j)-globalPositions[i][j]);
-//                    double X2 = alpha.getPositionAtIndex(j)-A2*D_beta;
-
-//                    r1 = rand.nextDouble();
-//                    r2 = rand.nextDouble();
-//                    double A3 = 2*a*r1-a;
-//                    double C3 = 2*r2;
-//                    double D_delta = Math.abs(C3*delta.getPositionAtIndex(j)-globalPositions[i][j]);
-//                    double X3 = delta.getPositionAtIndex(j)-A3*D_delta;
-
                     double X1 = calculateXParameter(alpha, a, i, j);
                     double X2 = calculateXParameter(beta, a, i, j);
                     double X3 = calculateXParameter(delta, a, i, j);
-
                     globalPositions[i][j] = (X1+X2+X3)/3;
                 }
             }

@@ -43,11 +43,11 @@ public class BatSwarm implements SwarmAlgorithm{
         }
     }
 
+    @Override
     public int getMinimum() throws Exception{
         double result;
         for (int i = 0; i < getNumOfBats(); i++) {
             double[] eachBatPositions = getBatAtIndex(i).get_xBestPositions();
-//            result = testFunction.getResult(eachBatPositions);
             result = netTeacher.getErrorOfNetwork(eachBatPositions, false);
             getBatAtIndex(i).setCurrentMinimum(result);
             if (i==0){
@@ -57,23 +57,16 @@ public class BatSwarm implements SwarmAlgorithm{
                 updateSolutionIfBetter(result, eachBatPositions);
             }
         }
-//        updateBestPositionsInAllBats();
-//        System.out.println("Najlepsze wskazane wspolrzedne w fazie wstepnej, x: " + getBestPosAtIndex(0) + " y: " + getBestPosAtIndex(1));
         System.out.println("Najlepszy wskazany rezultat w fazie wstepnej: " + getMinimumValue());
         //koniec fazy wstepnej
-
         for (int iter = 0; iter < iterations; iter++) {
             for (int i = 0; i < getNumOfBats(); i++){
                 getBatAtIndex(i).updateMovement();
-//                batSwarm.correctPositionsToBoundaries(i);
                 getSomeRandomWalk(i);
                 double[] eachBatPositions = getBatAtIndex(i).get_xPositions();
-//                result = testFunction.getResult(eachBatPositions);
                 result = netTeacher.getErrorOfNetwork(eachBatPositions, false);
-//                batSwarm.updateSolutionIfBetter(result, eachBatPositions);
                 updateBatAtIndexIfBetterSol(i, result);
                 updateSolutionIfBetter(result, eachBatPositions);
-//                batSwarm.updateBestPositionsInAllBats();
             }
         }
         netTeacher.setWeightsToNetwork(getBestPositions());

@@ -7,21 +7,20 @@ import java.util.ArrayList;
 
 public class Verifier {
 
-    private RecursiveNetworkTeacher netTeacher;
+    private NetworkTeacher netTeacher;
     private String dataFilename;
 
     public Verifier(Network network, String filename, ArrayList<ParamPair> params){
         this.dataFilename = filename;
-        this.netTeacher = new RecursiveNetworkTeacher(network, filename, params);
+        if (params != null){
+            this.netTeacher = new RecursiveNetworkTeacher(network, filename, params);
+        } else{
+            this.netTeacher = new StaticNetworkTeacher(network, filename);
+        }
     }
 
     public void verify(double[] netWeights) throws Exception{
         double sumarizedVerifyError = netTeacher.getErrorOfNetwork(netWeights, false);
         System.out.println("Sumaryczny blad dla zadanych wag dla danych z pliku " + dataFilename + ": " + sumarizedVerifyError);
     }
-
-    public void printActualNetworkWeights(){
-        netTeacher.printNetworkWeights();
-    }
-
 }

@@ -81,7 +81,6 @@ public class Bat {
                 newPositions[i] = lowerBoundary;
             }
         }
-//        this.best_xPositions = newPositions;
         System.arraycopy(newPositions, 0, best_xPositions, 0, best_xPositions.length);
     }
 
@@ -93,7 +92,6 @@ public class Bat {
 
     public void updatePositionsAndMinimumIfBetter(double result, double loudness){
         if (result < this.currentMinimum && this.getRandomFromRange(0, 1) < loudness){
-//            this.best_xPositions = this.current_xPositions;
             System.arraycopy(this.current_xPositions, 0, this.best_xPositions, 0, this.best_xPositions.length);
             this.currentMinimum = result;
         }
